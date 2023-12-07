@@ -2,10 +2,10 @@
 
 This is a template repository. Below is a checklist of things you should do to use it:
 
-- [ ] Run `setup_template.py` to set up the repository.
+- [x] Run `setup_template.py` to set up the repository.
 - [ ] Rewrite this `README` file.
 - [ ] Install the `pre-commit` hooks.
-- [ ] Update the `LICENSE` file to your desired license and set the year.
+- [x] Update the `LICENSE` file to your desired license and set the year.
 - [ ] Update the supported versions in `SECURITY.md` or, if not relevant, delete this file.
 - [ ] Remove the placeholder src and test files, these are there merely to show how the CI works.
 - [ ] Grant third-party app permissions (e.g. Codecov) [here](https://github.com/organizations/cmi-dair/settings/installations), if necessary.
@@ -15,12 +15,12 @@ This is a template repository. Below is a checklist of things you should do to u
 
 # Project name
 
-[![Build](https://github.com/cmi-dair/template-python-repository/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/cmi-dair/template-python-repository/actions/workflows/test.yaml?query=branch%3Amain)
-[![codecov](https://codecov.io/gh/cmi-dair/template-python-repository/branch/main/graph/badge.svg?token=22HWWFWPW5)](https://codecov.io/gh/cmi-dair/template-python-repository)
+[![Build](https://github.com/cmi-dair/cli-oai/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/cmi-dair/cli-oai/actions/workflows/test.yaml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/cmi-dair/cli-oai/branch/main/graph/badge.svg?token=22HWWFWPW5)](https://codecov.io/gh/cmi-dair/cli-oai)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cmi-dair/template-python-repository/blob/main/LICENSE)
-[![pages](https://img.shields.io/badge/api-docs-blue)](https://cmi-dair.github.io/template-python-repository)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cmi-dair/cli-oai/blob/main/LICENSE)
+[![pages](https://img.shields.io/badge/api-docs-blue)](https://cmi-dair.github.io/cli-oai)
 
 What problem does this tool solve?
 
@@ -35,13 +35,13 @@ What problem does this tool solve?
 Install this package via :
 
 ```sh
-pip install APP_NAME
+pip install oai
 ```
 
 Or get the newest development version via:
 
 ```sh
-pip install git+https://github.com/cmi-dair/template-python-repository
+pip install git+https://github.com/cmi-dair/cli-oai
 ```
 
 ## Quick start
@@ -49,9 +49,9 @@ pip install git+https://github.com/cmi-dair/template-python-repository
 Short tutorial, maybe with a
 
 ```Python
-import APP_NAME
+import oai
 
-APP_NAME.short_example()
+oai.short_example()
 ```
 
 ## Links or References
