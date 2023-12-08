@@ -50,7 +50,7 @@ async def test_text_to_speech(mock_openai: pytest_mock.MockFixture) -> None:
     """Tests the TextToSpeech class."""
     text_to_speech = openai_api.TextToSpeech()
 
-    await text_to_speech.run("")
+    await text_to_speech.run("", output_file="")
 
     assert text_to_speech.client is not None
     assert mock_openai.call_count == 1
