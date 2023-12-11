@@ -37,7 +37,7 @@ class OpenAIBaseClass(abc.ABC):
         self.client = openai.OpenAI(api_key=OPENAI_API_KEY.get_secret_value())
 
     @abc.abstractmethod
-    async def run(self, model: str, *_args: Any, **_kwargs: Any) -> Any:  # noqa: ANN401
+    async def run(self, *_args: Any, **_kwargs: Any) -> Any:  # noqa: ANN401
         """Runs the model."""
         ...
 
@@ -50,8 +50,8 @@ class TextToSpeech(OpenAIBaseClass):
         text: str,
         output_file: pathlib.Path | str,
         model: str = "tts-1",
-        voice: str = "onyx",
-    ) -> bytes:
+        voice: Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"] = "onyx",
+    ) -> None:
         """Runs the Text-To-Speech model.
 
         Args:
@@ -103,18 +103,17 @@ class ImageGeneration(OpenAIBaseClass):
         self,
         prompt: str,
         model: str = "dall-e-3",
-        width: int = 1024,
-        height: int = 1024,
-        quality: str = "standard",
-        n: int = 1,
-    ) -> list[str]:
+        size: Literal["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"]
+        | None = None,
+        quality: Literal["standard", "hd"] = "standard",
+        n: int | None = None,
+    ) -> list[str | None]:
         """Runs the Image Generation model.
 
         Args:
             prompt: The prompt to generate an image from.
             model: The name of the Image Generation model to use.
-            width: The width of the generated image.
-            height: The height of the generated image.
+            size: The size of the generated image.
             quality: The quality of the generated image.
             n: The number of images to generate.
 
@@ -124,7 +123,7 @@ class ImageGeneration(OpenAIBaseClass):
         response = self.client.images.generate(
             model=model,
             prompt=prompt,
-            size=f"{width}x{height}",
+            size=size,
             quality=quality,
             n=n,
         )

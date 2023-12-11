@@ -2,9 +2,10 @@
 import argparse
 import pathlib
 import sys
+from typing import Literal
 
 from oai.cli import commands
-from oai.core import config
+from oai.core import config, exceptions
 
 logger = config.get_logger()
 
@@ -20,7 +21,7 @@ async def parse_args() -> None:
     parser = argparse.ArgumentParser(
         prog="oai",
         description="CLI wrapper for OpenAI's API",
-        **PARSER_DEFAULTS,
+        **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     subparsers = parser.add_subparsers(dest="command")
     _add_stt_parser(subparsers)
@@ -39,7 +40,7 @@ async def parse_args() -> None:
         sys.stdout.write(result)
 
 
-async def run_command(args: argparse.ArgumentParser) -> str | bytes | None:
+async def run_command(args: argparse.Namespace) -> str | bytes | None:
     """Executes the specified command based on the provided arguments.
 
     Args:
@@ -49,35 +50,33 @@ async def run_command(args: argparse.ArgumentParser) -> str | bytes | None:
         str, bytes, None: The result of the executed command.
     """
     if args.command == "whisper":
-        result = await commands.speech_to_text(
+        return await commands.speech_to_text(
             filename=args.filename,
             model=args.model,
             clip=args.clip,
         )
-    elif args.command == "gpt":
+    if args.command == "gpt":
         raise NotImplementedError
-    elif args.command == "dalle":
-        result = await commands.image_generation(
+    if args.command == "dalle":
+        await commands.image_generation(
             prompt=args.prompt,
             output_base_name=args.base_image_name,
             model=args.model,
-            width=args.width,
-            height=args.height,
+            size=args.size,
             quality=args.quality,
             n=args.n,
         )
-    elif args.command == "tts":
-        result = await commands.text_to_speech(
+        return None
+    if args.command == "tts":
+        await commands.text_to_speech(
             text=args.text,
             model=args.model,
             voice=args.voice,
             output_file=args.output_file,
         )
-    else:
-        msg = f"Unknown command {args.command}."
-        logger.error(msg)
-        raise ValueError(msg)
-    return result
+        return None
+    msg = f"Unknown command {args.command}."
+    raise exceptions.InvalidArgumentError(msg)
 
 
 def _add_stt_parser(
@@ -95,7 +94,7 @@ def _add_stt_parser(
     stt_parser = subparsers.add_parser(
         "whisper",
         description="Transcribes audio files with OpenAI's Whisper.",
-        **PARSER_DEFAULTS,
+        **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     stt_parser.add_argument(
         "filename",
@@ -132,7 +131,7 @@ def _add_tts_parser(
     tts_parser = subparsers.add_parser(
         "tts",
         description="Generates audio files with OpenAI's Jukebox.",
-        **PARSER_DEFAULTS,
+        **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     tts_parser.add_argument(
         "text",
@@ -155,8 +154,8 @@ def _add_tts_parser(
     )
     tts_parser.add_argument(
         "--voice",
-        help="The voice to use.",
-        type=lambda x: x.lower(),
+        help="The voice to use. Valid values are 'alloy', 'echo', 'fable', 'onyx', 'nova', and 'shimmer'.",  # noqa: E501
+        type=Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
         default="onyx",
     )
 
@@ -167,7 +166,7 @@ def _add_image_generation_parser(
     image_generation_parser = subparsers.add_parser(
         "dalle",
         description="Generates images with OpenAI's DALL-E.",
-        **PARSER_DEFAULTS,
+        **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     image_generation_parser.add_argument(
         "prompt",
@@ -189,16 +188,10 @@ def _add_image_generation_parser(
         default="dall-e-3",
     )
     image_generation_parser.add_argument(
-        "--width",
-        help="The width of the generated image.",
-        type=_positive_int_or_none,
-        default=None,
-    )
-    image_generation_parser.add_argument(
-        "--height",
-        help="The height of the generated image.",
-        type=_positive_int_or_none,
-        default=None,
+        "--size",
+        help="The size of the generated image.",
+        type=Literal["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"],
+        default="1024x1024",
     )
     image_generation_parser.add_argument(
         "--quality",
@@ -214,7 +207,7 @@ def _add_image_generation_parser(
     )
 
 
-def _post_validation(args: argparse.ArgumentParser) -> argparse.ArgumentParser:
+def _post_validation(args: argparse.Namespace) -> argparse.Namespace:
     """Validate the parsed arguments.
 
     Validation across arguments is not possible with the built-in argparse
@@ -226,30 +219,18 @@ def _post_validation(args: argparse.ArgumentParser) -> argparse.ArgumentParser:
     Returns:
         argparse.ArgumentParser: The validated arguments.
     """
-    if args.command == "dalle":
-        if args.width is None and args.height is None:
-            args.width = 1024
-            args.height = 1024
-        elif args.width is None:
-            args.width = args.height
-        elif args.height is None:
-            args.height = args.width
+    if args.model == "dall-e-3" and args.size in ["256x256", "512x512"]:
+        msg = "The dall-e-3 model does not support 256x256 or 512x512 images."
+        raise exceptions.InvalidArgumentError(msg)
+
     return args
 
 
 def _positive_int(value: int) -> int:
+    if int(value) != value:
+        msg = f"{value} is not an integer."
+        raise exceptions.InvalidArgumentError(msg)
     if int(value) <= 0:
         msg = f"{value} is not a positive integer."
-        raise argparse.ArgumentTypeError(msg)
+        raise exceptions.InvalidArgumentError(msg)
     return int(value)
-
-
-def _positive_int_or_none(value: int) -> int | None:
-    """Converts the input to a positive integer or None.
-
-    Args:
-        value: The input to convert.
-    """
-    if value is None:
-        return None
-    return _positive_int(value)

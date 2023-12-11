@@ -1035,6 +1035,20 @@ slack = ["slack-sdk"]
 telegram = ["requests"]
 
 [[package]]
+name = "types-requests"
+version = "2.31.0.10"
+description = "Typing stubs for requests"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "types-requests-2.31.0.10.tar.gz", hash = "sha256:dc5852a76f1eaf60eafa81a2e50aefa3d1f015c34cf0cba130930866b1b22a92"},
+    {file = "types_requests-2.31.0.10-py3-none-any.whl", hash = "sha256:b32b9a86beffa876c0c3ac99a4cd3b8b51e973fb8e3bd4e0a6bb32c7efad80fc"},
+]
+
+[package.dependencies]
+urllib3 = ">=2"
+
+[[package]]
 name = "typing-extensions"
 version = "4.7.1"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1087,4 +1101,4 @@ docs = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "dd40064dfcd3cf2ae2b906cef8dee76cf2901baed0f4f7e8a5fdb962ebb6bdd0"
+content-hash = "b33ba0ffdf27b40197a312859ae63c0d906f2ed36ab70af7ccd4ebcea9fc82cc"

@@ -3,6 +3,7 @@ import asyncio
 import logging
 import pathlib
 import tempfile
+from typing import Literal
 
 import ffmpeg
 
@@ -34,7 +35,7 @@ async def speech_to_text(
         ffmpeg.input(filename).output(str(temp_file)).overwrite_output().run()
 
         if clip:
-            files = utils.clip_audio(temp_file, temp_dir, MAX_FILE_SIZE)
+            files = list(utils.clip_audio(temp_file, temp_dir, MAX_FILE_SIZE))
         else:
             files = [temp_file]
 
@@ -49,8 +50,8 @@ async def text_to_speech(
     text: str,
     output_file: str,
     model: str,
-    voice: str,
-) -> bytes:
+    voice: Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
+) -> None:
     """Converts text to speech with OpenAI's TTS models.
 
     Args:
@@ -60,16 +61,15 @@ async def text_to_speech(
         voice: The voice to use.
     """
     tts = openai_api.TextToSpeech()
-    return await tts.run(text, output_file, model=model, voice=voice)
+    await tts.run(text, output_file, model=model, voice=voice)
 
 
 async def image_generation(  # noqa: PLR0913
     prompt: str,
     output_base_name: str,
     model: str,
-    width: int,
-    height: int,
-    quality: str,
+    size: Literal["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"] | None,
+    quality: Literal["standard", "hd"],
     n: int,
 ) -> None:
     """Generates an image from text with OpenAI's Image Generation models.
@@ -78,8 +78,7 @@ async def image_generation(  # noqa: PLR0913
         prompt: The text to generate an image from.
         output_base_name: The base name of the output file.
         model: The model to use.
-        width: The width of the generated image. Defaults to 1024.
-        height: The height of the generated image. Defaults to 1024.
+        size: The size of the generated image. Defaults to None.
         quality: The quality of the generated image. Defaults to "standard".
         n: The number of images to generate. Defaults to 1.
 
@@ -90,12 +89,14 @@ async def image_generation(  # noqa: PLR0913
     urls = await image_generation.run(
         prompt,
         model=model,
-        width=width,
-        height=height,
+        size=size,
         quality=quality,
         n=n,
     )
 
     for index, url in enumerate(urls):
+        if url is None:
+            logger.warning("Image %s failed to generate, skipping.", index)
+            continue
         file = pathlib.Path(f"{output_base_name}_{index}.png")
         utils.download_file(file, url)

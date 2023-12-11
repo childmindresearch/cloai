@@ -1,6 +1,7 @@
 """Unit tests for the OpenAI API module."""
 import tempfile
 from typing import Any
+from unittest import mock
 
 import pytest
 import pytest_mock
@@ -9,7 +10,7 @@ from oai import openai_api
 
 
 @pytest.fixture()
-def mock_openai(mocker: pytest_mock.MockerFixture) -> pytest_mock.MockFixture:
+def mock_openai(mocker: pytest_mock.MockFixture) -> mock.MagicMock:
     """Mocks the OpenAI client."""
     mock_speech_create = mocker.MagicMock()
     mock_transcriptions_create = mocker.MagicMock()
@@ -36,7 +37,7 @@ class ConcreteOpenAiBaseClass(openai_api.OpenAIBaseClass):
 
 
 @pytest.mark.asyncio()
-async def test_openai_base_class(mock_openai: pytest_mock.MockFixture) -> None:
+async def test_openai_base_class(mock_openai: mock.MagicMock) -> None:
     """Tests the OpenAIBaseClass."""
     concrete_openai_base_class = ConcreteOpenAiBaseClass()
 
@@ -46,7 +47,7 @@ async def test_openai_base_class(mock_openai: pytest_mock.MockFixture) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_text_to_speech(mock_openai: pytest_mock.MockFixture) -> None:
+async def test_text_to_speech(mock_openai: mock.MagicMock) -> None:
     """Tests the TextToSpeech class."""
     text_to_speech = openai_api.TextToSpeech()
 
@@ -58,7 +59,7 @@ async def test_text_to_speech(mock_openai: pytest_mock.MockFixture) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_speech_to_text(mock_openai: pytest_mock.MockFixture) -> None:
+async def test_speech_to_text(mock_openai: mock.MagicMock) -> None:
     """Tests the SpeechToText class."""
     speech_to_text = openai_api.SpeechToText()
 
@@ -71,7 +72,7 @@ async def test_speech_to_text(mock_openai: pytest_mock.MockFixture) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_image_generation(mock_openai: pytest_mock.MockFixture) -> None:
+async def test_image_generation(mock_openai: mock.MagicMock) -> None:
     """Tests the ImageGeneration class."""
     image_generation = openai_api.ImageGeneration()
 

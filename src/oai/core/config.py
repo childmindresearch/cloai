@@ -32,7 +32,7 @@ def get_settings() -> Settings:
     return Settings()  # type: ignore[call-arg]
 
 
-def initialize_logger() -> None:
+def initialize_logger() -> logging.Logger:
     """Initializes the logger for the API."""
     settings = get_settings()
     logger = logging.getLogger(settings.LOGGER_NAME)

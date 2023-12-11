@@ -13,9 +13,13 @@ class LoggedException(BaseException):
         Args:
             message: The message to display.
         """
-        logger.error(message)
+        logger.exception(message)
         super().__init__(message)
 
 
 class FileSizeError(LoggedException):
     """Raised when the file is too large."""
+
+
+class InvalidArgumentError(LoggedException):
+    """Raised when the arguments are invalid."""

@@ -62,7 +62,6 @@ def download_file(filename: str | pathlib.Path, url: str) -> None:
     response.raise_for_status()
 
     with pathlib.Path(filename).open("wb") as file:
-        # Write bytes to file
         file.write(response.content)
 
 

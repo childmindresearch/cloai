@@ -1,9 +1,9 @@
 """Tests for the parser module."""
-import argparse
 
 import pytest
 
 from oai.cli import parser
+from oai.core import exceptions
 
 
 @pytest.mark.parametrize(
@@ -15,10 +15,10 @@ from oai.cli import parser
         (1.0, False),
     ],
 )
-def test__positive_int(value: float, will_raise: bool) -> None:
+def test__positive_int(value: float | int, will_raise: bool) -> None:  # noqa: PYI041
     """Tests that the input is a positive integer."""
     if will_raise:
-        with pytest.raises(argparse.ArgumentTypeError):
-            parser._positive_int(value)
+        with pytest.raises(exceptions.InvalidArgumentError):
+            parser._positive_int(value)  # type: ignore[arg-type]
     else:
-        assert parser._positive_int(value) == int(value)
+        assert parser._positive_int(value) == int(value)  # type: ignore[arg-type]
