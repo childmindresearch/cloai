@@ -2,7 +2,6 @@
 import argparse
 import pathlib
 import sys
-from typing import Literal
 
 from oai.cli import commands
 from oai.core import config, exceptions
@@ -111,10 +110,9 @@ def _add_stt_parser(
     )
     stt_parser.add_argument(
         "--model",
-        help=(
-            "The transcription model to use. Consult OpenAI's documentation for an"
-            " up-to-date list of models."
-        ),
+        help=("The transcription model to use."),
+        type=lambda x: x.lower(),
+        choices=["whisper-1"],
         default="whisper-1",
     )
 
@@ -149,17 +147,14 @@ def _add_tts_parser(
     )
     tts_parser.add_argument(
         "--model",
-        help=(
-            "The model to use. Consult OpenAI's documentation for an up-to-date list"
-            " of models."
-        ),
-        type=lambda x: x.lower(),
+        help=("The model to use."),
+        choices=["tts-1"],
         default="tts-1",
     )
     tts_parser.add_argument(
         "--voice",
-        help="The voice to use. Valid values are 'alloy', 'echo', 'fable', 'onyx', 'nova', and 'shimmer'.",  # noqa: E501
-        type=Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
+        help="The voice to use.",
+        choices=["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
         default="onyx",
     )
 
@@ -195,13 +190,15 @@ def _add_image_generation_parser(
     image_generation_parser.add_argument(
         "--size",
         help="The size of the generated image.",
-        type=Literal["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"],
+        type=lambda x: x.lower(),
+        choices=["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"],
         default="1024x1024",
     )
     image_generation_parser.add_argument(
         "--quality",
         help="The quality of the generated image.",
         type=lambda x: x.lower(),
+        choices=["standard", "hd"],
         default="standard",
     )
     image_generation_parser.add_argument(
