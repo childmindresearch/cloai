@@ -20,7 +20,9 @@ async def parse_args() -> None:
     """Parse command line arguments and execute the corresponding command."""
     parser = argparse.ArgumentParser(
         prog="oai",
-        description="CLI wrapper for OpenAI's API",
+        description="""
+        CLI wrapper for OpenAI's API. All commands require the OPENAI_API_KEY
+        environment variable to be set to a valid OpenAI API key.""",
         **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     subparsers = parser.add_subparsers(dest="command")
@@ -93,7 +95,8 @@ def _add_stt_parser(
     """
     stt_parser = subparsers.add_parser(
         "whisper",
-        description="Transcribes audio files with OpenAI's Whisper.",
+        description="Transcribes audio files with OpenAI's STT models.",
+        help="Transcribes audio files with OpenAI's STT models.",
         **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     stt_parser.add_argument(
@@ -131,6 +134,7 @@ def _add_tts_parser(
     tts_parser = subparsers.add_parser(
         "tts",
         description="Generates audio files with OpenAI's Jukebox.",
+        help="Generates audio files with OpenAI's TTS models.",
         **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     tts_parser.add_argument(
@@ -166,6 +170,7 @@ def _add_image_generation_parser(
     image_generation_parser = subparsers.add_parser(
         "dalle",
         description="Generates images with OpenAI's DALL-E.",
+        help="Generates images with OpenAI's image generation models.",
         **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
     image_generation_parser.add_argument(
