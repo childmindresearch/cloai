@@ -17,6 +17,7 @@ from oai.core import exceptions
         (0, True),
         (-1, True),
         (1.0, False),
+        (1.2, True),
     ],
 )
 def test__positive_int(value: float | int, will_raise: bool) -> None:  # noqa: PYI041
@@ -261,3 +262,22 @@ async def test_parse_args_with_command_no_other_arguments(
     with pytest.raises(SystemExit) as excinfo:
         await parser.parse_args()
     assert excinfo.value.code == expected_error_code
+
+
+@pytest.mark.parametrize(
+    "size",
+    [
+        "256x256",
+        "512x512",
+    ],
+)
+def test__arg_validation_invalid_dalle_size(size: str) -> None:
+    """Tests the _arg_validation function with an invalid dalle size."""
+    args = argparse.Namespace(
+        command="dalle",
+        model="dall-e-3",
+        size="256x256",
+    )
+
+    with pytest.raises(exceptions.InvalidArgumentError):
+        parser._arg_validation(args)
