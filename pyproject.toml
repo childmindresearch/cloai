@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "oai"
-version = "0.1.0"
+version = "0.0.1a1"
 description = "A CLI for OpenAI's API"
 authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 license = "LGPL-2.1"
@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "oai", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">3.9"
 pydantic-settings = "^2.1.0"
 pydantic = "^2.5.2"
 ffmpeg-python = "^0.2.0"
