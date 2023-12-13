@@ -1,59 +1,39 @@
-# CMI-DAIR Template Python Repository
+# CLI-OAI
 
-This is a template repository. Below is a checklist of things you should do to use it:
-
-- [x] Run `setup_template.py` to set up the repository.
-- [ ] Rewrite this `README` file.
-- [ ] Install the `pre-commit` hooks.
-- [x] Update the `LICENSE` file to your desired license and set the year.
-- [ ] Update the supported versions in `SECURITY.md` or, if not relevant, delete this file.
-- [ ] Remove the placeholder src and test files, these are there merely to show how the CI works.
-- [ ] Grant third-party app permissions (e.g. Codecov) [here](https://github.com/organizations/cmi-dair/settings/installations), if necessary.
-- [ ] Either generate a `CODECOV_TOKEN` secret [here](https://github.com/cmi-dair/flowdump/blob/main/.github/workflows/python_tests.yaml) (if its a private repository) or remove the line `token: ${{ secrets.CODECOV_TOKEN }}`
-- [ ] API docs website: After the first successful build, go to the `Settings` tab of your repository, scroll down to the `GitHub Pages` section, and select `gh-pages` as the source. This will generate a link to your API docs.
-- [ ] Update stability badge in `README.md` to reflect the current state of the project. A list of stability badges to copy can be found [here](https://github.com/orangemug/stability-badges). The [node documentation](https://nodejs.org/docs/latest-v20.x/api/documentation.html#documentation_stability_index) can be used as a reference for the stability levels.
-
-# Project name
-
-[![Build](https://github.com/cmi-dair/cli-oai/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/cmi-dair/cli-oai/actions/workflows/test.yaml?query=branch%3Amain)
-[![codecov](https://codecov.io/gh/cmi-dair/cli-oai/branch/main/graph/badge.svg?token=22HWWFWPW5)](https://codecov.io/gh/cmi-dair/cli-oai)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cmi-dair/cli-oai/blob/main/LICENSE)
-[![pages](https://img.shields.io/badge/api-docs-blue)](https://cmi-dair.github.io/cli-oai)
-
-What problem does this tool solve?
-
-## Features
-
-- A few
-- Cool
-- Things
+CLI-OAI is a Python command-line interface for interacting with the OpenAI API. It provides a set of commands to interact with various OpenAI services such as Speech-to-Text (STT), Text-to-Speech (TTS), and Image Generation.
 
 ## Installation
 
-Install this package via :
+To install CLI-OAI, you can use the following command:
 
 ```sh
-pip install oai
+poetry add git+https://github.com/cmi-dair/cli-oai
 ```
 
-Or get the newest development version via:
+## Usage
 
-```sh
-pip install git+https://github.com/cmi-dair/cli-oai
-```
+Before running CLI-OAI, make sure the environment variable `OPENAI_API_KEY` is set to your OpenAI API key.
 
-## Quick start
+To use the CLI, run `oai --help` in your terminal. This will display a list of available commands and their descriptions.
 
-Short tutorial, maybe with a
+Here is a brief overview of the main commands:
 
-```Python
-import oai
+- `oai stt <filename>`: Transcribes audio files with OpenAI's STT models. The `filename` argument is the file to transcribe. It can be any format that ffmpeg supports. Use the `--clip` option to clip the file if it is too large.
 
-oai.short_example()
-```
+- `oai tts <text>`: Generates audio files with OpenAI's Text to Speech models. The `text` argument is the text to convert to speech.
 
-## Links or References
+- `oai image <prompt>`: Generates images with OpenAI's DALL-E. The `prompt` argument is the text prompt to generate the image from.
 
-- [https://www.wikipedia.de](https://www.wikipedia.de)
+Each command has additional options that can be viewed by running `oai <command> --help`.
+
+## Contributing
+
+Contributions are welcome! Please see the [contributing guidelines](CONTRIBUTING.md) for more information.
+
+## License
+
+CLI-OAI is licensed under the terms of the [L-GPLv2.1 license](LICENSE).
+
+## Support
+
+If you encounter any issues or have any questions, please report them on our [issues page](https://github.com/cmi-dair/cli-oai/issues).
