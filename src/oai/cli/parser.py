@@ -85,7 +85,7 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
 
 
 def _add_stt_parser(
-    subparsers: argparse._SubParsersAction,  # noqa: SLF001
+    subparsers: argparse._SubParsersAction,
 ) -> None:
     """Get the argument parser for the 'whisper' command.
 
@@ -122,7 +122,7 @@ def _add_stt_parser(
 
 
 def _add_tts_parser(
-    subparsers: argparse._SubParsersAction,  # noqa: SLF001
+    subparsers: argparse._SubParsersAction,
 ) -> None:
     """Get the argument parser for the 'tts' command.
 
@@ -164,7 +164,7 @@ def _add_tts_parser(
 
 
 def _add_image_generation_parser(
-    subparsers: argparse._SubParsersAction,  # noqa: SLF001
+    subparsers: argparse._SubParsersAction,
 ) -> None:
     image_generation_parser = subparsers.add_parser(
         "dalle",
