@@ -1,13 +1,18 @@
 """Contains the core business logic of the OpenAI CLI."""
+from __future__ import annotations
+
 import math
 import pathlib
 import uuid
-from collections.abc import Generator
+from typing import TYPE_CHECKING
 
 import ffmpeg
 import requests
 
 from oai.core import config
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 logger = config.get_logger()
 

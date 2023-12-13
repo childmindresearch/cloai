@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "oai", from = "src"}]
 
 [tool.poetry.dependencies]
-python = ">3.9"
+python = ">3.9, <4.0"
 pydantic-settings = "^2.1.0"
 pydantic = "^2.5.2"
 ffmpeg-python = "^0.2.0"
@@ -24,6 +24,8 @@ ruff = "^0.1.7"
 pytest-mock = "^3.12.0"
 pytest-asyncio = "^0.23.2"
 types-requests = "^2.31.0.10"
+tox = "^4.11.4"
+tox-poetry-installer = "1.0.0b1"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.1.0"
@@ -38,6 +40,19 @@ pythonpath = [
 
 [tool.poetry.scripts]
 oai = 'oai.__main__:main'
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py39, py310, py311, py312
+
+[testenv]
+allowlist_externals = poetry
+deps = tox-poetry-installer
+commands =
+    poetry install -v
+    pytest
+"""
 
 [tool.mypy]
 ignore_missing_imports = true

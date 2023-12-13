@@ -1,13 +1,18 @@
 """Tests for the parser module."""
+from __future__ import annotations
+
 import argparse
 import pathlib
 import sys
+from typing import TYPE_CHECKING
 
 import pytest
-import pytest_mock
 
 from oai.cli import parser
 from oai.core import exceptions
+
+if TYPE_CHECKING:
+    import pytest_mock
 
 
 @pytest.mark.parametrize(
