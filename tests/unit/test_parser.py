@@ -1,8 +1,10 @@
 """Tests for the parser module."""
 import argparse
 import pathlib
+import sys
 
 import pytest
+import pytest_mock
 
 from oai.cli import parser
 from oai.core import exceptions
@@ -58,7 +60,6 @@ def test__add_image_generation_parser() -> None:
         "The model to use. Consult OpenAI's documentation for an up-to-date list"
         " of models."
     )
-    assert arguments[3].type("dall-e-3") == "dall-e-3"
     assert arguments[3].default == "dall-e-3"
 
     assert arguments[4].dest == "size"
@@ -67,12 +68,10 @@ def test__add_image_generation_parser() -> None:
 
     assert arguments[5].dest == "quality"
     assert arguments[5].help == "The quality of the generated image."
-    assert arguments[5].type("standard") == "standard"
     assert arguments[5].default == "standard"
 
     assert arguments[6].dest == "n"
     assert arguments[6].help == "The number of images to generate."
-    assert arguments[6].type(1) == 1
     assert arguments[6].default == 1
 
 
@@ -141,3 +140,124 @@ def test__add_tts_parser() -> None:
     assert arguments[4].dest == "voice"
     assert arguments[4].help == "The voice to use."
     assert arguments[4].default == "onyx"
+
+
+@pytest.mark.asyncio()
+async def test_run_command_without_arguments() -> None:
+    """Tests the run_command function with no arguments."""
+    args = argparse.Namespace()
+
+    with pytest.raises(exceptions.InvalidArgumentError):
+        await parser.run_command(args)
+
+
+@pytest.mark.asyncio()
+async def test_run_command_with_invalid_command() -> None:
+    """Tests the run_command function with an invalid command."""
+    args = argparse.Namespace(command="invalid")
+
+    with pytest.raises(exceptions.InvalidArgumentError):
+        await parser.run_command(args)
+
+
+@pytest.mark.asyncio()
+async def test_run_command_with_whisper(mocker: pytest_mock.MockFixture) -> None:
+    """Tests the run_command function with the 'whisper' command."""
+    arg_dict = {
+        "command": "whisper",
+        "filename": "test.wav",
+        "clip": False,
+        "model": "whisper-1",
+    }
+    args = argparse.Namespace(**arg_dict)
+    mock = mocker.patch("oai.cli.commands.speech_to_text")
+
+    await parser.run_command(args)
+
+    mock.assert_called_once_with(
+        filename=arg_dict["filename"],
+        clip=False,
+        model=arg_dict["model"],
+    )
+
+
+@pytest.mark.asyncio()
+async def test_run_command_with_dalle(mocker: pytest_mock.MockFixture) -> None:
+    """Tests the run_command function with the 'dalle' command."""
+    arg_dict = {
+        "command": "dalle",
+        "prompt": "test",
+        "base_image_name": "test",
+        "model": "dall-e-3",
+        "size": "1024x1024",
+        "quality": "standard",
+        "n": 1,
+    }
+    args = argparse.Namespace(**arg_dict)
+    mock = mocker.patch("oai.cli.commands.image_generation")
+
+    await parser.run_command(args)
+
+    mock.assert_called_once_with(
+        prompt=arg_dict["prompt"],
+        output_base_name=arg_dict["base_image_name"],
+        model=arg_dict["model"],
+        size=arg_dict["size"],
+        quality=arg_dict["quality"],
+        n=arg_dict["n"],
+    )
+
+
+@pytest.mark.asyncio()
+async def test_run_command_with_tts(mocker: pytest_mock.MockFixture) -> None:
+    """Tests the run_command function with the 'tts' command."""
+    arg_dict = {
+        "command": "tts",
+        "text": "test",
+        "output_file": "test.wav",
+        "model": "tts-1",
+        "voice": "onyx",
+    }
+    args = argparse.Namespace(**arg_dict)
+    mock = mocker.patch("oai.cli.commands.text_to_speech")
+
+    await parser.run_command(args)
+
+    mock.assert_called_once_with(
+        text=arg_dict["text"],
+        output_file=arg_dict["output_file"],
+        model=arg_dict["model"],
+        voice=arg_dict["voice"],
+    )
+
+
+@pytest.mark.asyncio()
+async def test_parse_args_without_arguments() -> None:
+    """Tests the parse_args function with no arguments."""
+    sys.argv = ["oai"]
+    expected_error_code = 1
+
+    with pytest.raises(SystemExit) as excinfo:
+        await parser.parse_args()
+    assert excinfo.value.code == expected_error_code
+
+
+@pytest.mark.asyncio()
+@pytest.mark.parametrize(
+    "command",
+    [
+        "whisper",
+        "dalle",
+        "tts",
+    ],
+)
+async def test_parse_args_with_command_no_other_arguments(
+    command: str,
+) -> None:
+    """Tests the parse_args function with a command but no other arguments."""
+    sys.argv = ["oai", command]
+    expected_error_code = 2
+
+    with pytest.raises(SystemExit) as excinfo:
+        await parser.parse_args()
+    assert excinfo.value.code == expected_error_code

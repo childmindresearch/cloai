@@ -30,10 +30,10 @@ async def parse_args() -> None:
     _add_image_generation_parser(subparsers)
 
     args = parser.parse_args()
-    validated_args = _post_validation(args)
-    if validated_args.command is None:
+    if args.command is None:
         parser.print_usage()
         sys.exit(1)
+    validated_args = _arg_validation(args)
 
     result = await run_command(validated_args)
 
@@ -50,6 +50,10 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
     Returns:
         str, bytes, None: The result of the executed command.
     """
+    if getattr(args, "command", None) is None:
+        msg = "No command provided."
+        raise exceptions.InvalidArgumentError(msg)
+
     if args.command == "whisper":
         return await commands.speech_to_text(
             filename=args.filename,
@@ -209,7 +213,7 @@ def _add_image_generation_parser(
     )
 
 
-def _post_validation(args: argparse.Namespace) -> argparse.Namespace:
+def _arg_validation(args: argparse.Namespace) -> argparse.Namespace:
     """Validate the parsed arguments.
 
     Validation across arguments is not possible with the built-in argparse
@@ -221,9 +225,10 @@ def _post_validation(args: argparse.Namespace) -> argparse.Namespace:
     Returns:
         argparse.ArgumentParser: The validated arguments.
     """
-    if args.model == "dall-e-3" and args.size in ["256x256", "512x512"]:
-        msg = "The dall-e-3 model does not support 256x256 or 512x512 images."
-        raise exceptions.InvalidArgumentError(msg)
+    if args.command == "dalle":  # noqa: SIM102 # Allows logical expansion across commands.
+        if args.model == "dall-e-3" and args.size in ["256x256", "512x512"]:
+            msg = "The dall-e-3 model does not support 256x256 or 512x512 images."
+            raise exceptions.InvalidArgumentError(msg)
 
     return args
 
