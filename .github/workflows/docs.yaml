@@ -3,6 +3,9 @@ name: Build and publish docs
 permissions:
   contents: write
 
+env:
+  OPENAI_API_KEY: fake_key
+
 on:
   workflow_run:
     workflows: [Python Tests]
