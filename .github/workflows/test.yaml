@@ -9,13 +9,16 @@ on:
 jobs:
   unit:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
     - uses: actions/checkout@v4
     - name: Install poetry
       run: pipx install poetry
     - uses: actions/setup-python@v5
       with:
-        python-version-file: pyproject.toml
+        python-version: ${{ matrix.python_version }}
         cache: poetry
     - name: Install dependencies
       run: |
