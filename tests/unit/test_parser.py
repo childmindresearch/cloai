@@ -15,6 +15,12 @@ if TYPE_CHECKING:
     import pytest_mock
 
 
+@pytest.fixture()
+def _mock_package_metadata(mocker: pytest_mock.MockFixture) -> None:
+    """Mocks the package metadata."""
+    mocker.patch("oai.cli.parser.metadata.version", return_value="0.0.0")
+
+
 @pytest.mark.parametrize(
     ("value", "will_raise"),
     [
@@ -238,6 +244,7 @@ async def test_run_command_with_tts(mocker: pytest_mock.MockFixture) -> None:
 
 
 @pytest.mark.asyncio()
+@pytest.mark.usefixtures("_mock_package_metadata")
 async def test_parse_args_without_arguments() -> None:
     """Tests the parse_args function with no arguments."""
     sys.argv = ["oai"]
@@ -257,6 +264,7 @@ async def test_parse_args_without_arguments() -> None:
         "tts",
     ],
 )
+@pytest.mark.usefixtures("_mock_package_metadata")
 async def test_parse_args_with_command_no_other_arguments(
     command: str,
 ) -> None:
