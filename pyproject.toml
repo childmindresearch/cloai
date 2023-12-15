@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cmi-oai-cli"
-version = "0.0.1a4"
+version = "0.0.1a5"
 description = "A CLI for OpenAI's API"
 authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 license = "LGPL-2.1"
@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "oai", from = "src"}]
 
 [tool.poetry.dependencies]
-python = ">3.9, <4.0"
+python = ">3.8, <4.0"
 pydantic-settings = "^2.1.0"
 pydantic = "^2.5.2"
 ffmpeg-python = "^0.2.0"
@@ -18,7 +18,7 @@ requests = "^2.31.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
 mypy = "^1.7.1"
-pre-commit = "^3.5.0"
+pre-commit = "^3.4.0"
 pytest-cov = "^4.1.0"
 ruff = "^0.1.7"
 pytest-mock = "^3.12.0"
@@ -44,7 +44,7 @@ oai = 'oai.__main__:main'
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py39, py310, py311, py312
+envlist = py38, py39, py310, py311, py312
 
 [testenv]
 allowlist_externals = poetry
