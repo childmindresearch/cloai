@@ -1,11 +1,17 @@
 """Entry point of the OAI package."""
 import asyncio
-
-from oai.cli import parser
+import os
+import sys
 
 
 def main() -> None:
     """Entry point for the CLI."""
+    if "OPENAI_API_KEY" not in os.environ:
+        sys.stderr.write("Error: Please set the OPENAI_API_KEY environment variable.")
+        sys.exit(1)
+
+    from oai.cli import parser
+
     asyncio.run(parser.parse_args())
 
 
