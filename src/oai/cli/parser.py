@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import pathlib
 import sys
+from importlib import metadata
 
 from oai.cli import commands
 from oai.core import config, exceptions
@@ -26,6 +27,8 @@ async def parse_args() -> None:
         environment variable to be set to a valid OpenAI API key.""",
         **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
+    version = metadata.version(__package__ or __name__)
+    parser.add_argument("--version", action="version", version=f"%(prog)s {version}")
     subparsers = parser.add_subparsers(dest="command")
     _add_stt_parser(subparsers)
     _add_tts_parser(subparsers)
@@ -236,6 +239,18 @@ def _arg_validation(args: argparse.Namespace) -> argparse.Namespace:
 
 
 def _positive_int(value: int) -> int:
+    """Ensures the value is a positive integer.
+
+    Args:
+        value: The value.
+
+    Returns:
+        int: The positive integer.
+
+    Raises:
+        exceptions.InvalidArgumentError: If the value is not an integer or not a
+        positive integer.
+    """
     if int(value) != value:
         msg = f"{value} is not an integer."
         raise exceptions.InvalidArgumentError(msg)
