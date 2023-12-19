@@ -53,7 +53,8 @@ def clip_audio(
     logger.warning("Running ffmpeg: %s", " ".join(stream.compile()))
     stream.run()
 
-    files = list(pathlib.Path(out_dir).glob(f"*{uuid_id}*.mp3")).sort()
+    files = list(pathlib.Path(out_dir).glob(f"*{uuid_id}*.mp3"))
+    files.sort()
     yield from files
 
 
