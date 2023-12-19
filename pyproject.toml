@@ -34,16 +34,13 @@ tox-poetry-installer = "1.0.0b1"
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.1.0"
 
-[tool.poetry.extras]
-docs = ["pdoc"]
+[tool.poetry.scripts]
+cloai = 'cloai.__main__:main'
 
 [tool.pytest.ini_options]
 pythonpath = [
   "src"
 ]
-
-[tool.poetry.scripts]
-cloai = 'cloai.__main__:main'
 
 [tool.tox]
 legacy_tox_ini = """
@@ -63,40 +60,39 @@ ignore_missing_imports = true
 
 [tool.ruff]
 exclude = [
-    ".bzr",
-    ".direnv",
-    ".eggs",
-    ".git",
-    ".git-rewrite",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".pytype",
-    ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "node_modules",
-    "venv",
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "node_modules",
+  "venv"
 ]
 line-length = 88
 indent-width = 4
-src=["src"]
-
+src = ["src"]
 target-version = "py311"
 
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-  "ANN101", # Self should never be type annotated.
-  "ANN102", # cls should never be type annotated.
-  "B008", # Allow function call in arguments; this is common in FastAPI.
+  "ANN101",  # Self should never be type annotated.
+  "ANN102",  # cls should never be type annotated.
+  "B008"  # Allow function call in arguments; this is common in FastAPI.
 ]
 fixable = ["ALL"]
 unfixable = []
@@ -113,15 +109,15 @@ convention = "google"
 
 [tool.ruff.per-file-ignores]
 "tests/**/*.py" = [
-    "S101", # Allow assets
-    "ARG", # Unused arguments are common in tests (fixtures).
-    "FBT", #Allow positional booleans
-    "SLF001", # Allow private member access.
-    "INP001", # No need for namespace packages in tests.
+  "S101",  # Allow assets
+  "ARG",  # Unused arguments are common in tests (fixtures).
+  "FBT",  # Allow positional booleans
+  "SLF001",  # Allow private member access.
+  "INP001"  # No need for namespace packages in tests.
 ]
 "src/**/models.py" = [
-    "A003", # Allow id as a field name.
+  "A003"  # Allow id as a field name.
 ]
 "src/**/schemas.py" = [
-    "A003", # Allow id as a field name.
+  "A003"  # Allow id as a field name.
 ]
