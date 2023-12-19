@@ -3,13 +3,13 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "cmi-oai-cli"
-version = "0.0.1a6"
+name = "cloai"
+version = "0.0.1a7"
 description = "A CLI for OpenAI's API"
 authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 license = "LGPL-2.1"
 readme = "README.md"
-packages = [{include = "oai", from = "src"}]
+packages = [{include = "cloai", from = "src"}]
 
 [tool.poetry.dependencies]
 python = ">3.8, <4.0"
@@ -43,7 +43,7 @@ pythonpath = [
 ]
 
 [tool.poetry.scripts]
-oai = 'oai.__main__:main'
+cloai = 'cloai.__main__:main'
 
 [tool.tox]
 legacy_tox_ini = """

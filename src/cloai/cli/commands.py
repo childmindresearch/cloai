@@ -9,9 +9,9 @@ from typing import Literal
 
 import ffmpeg
 
-from oai import openai_api
-from oai.cli import utils
-from oai.core import config
+from cloai import openai_api
+from cloai.cli import utils
+from cloai.core import config
 
 settings = config.get_settings()
 logger = logging.getLogger(settings.LOGGER_NAME)

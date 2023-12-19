@@ -6,7 +6,7 @@ from unittest import mock
 import pytest
 import pytest_mock
 
-from oai import openai_api
+from cloai import openai_api
 
 
 @pytest.fixture()
@@ -25,7 +25,10 @@ def mock_openai(mocker: pytest_mock.MockFixture) -> mock.MagicMock:
         audio=mock_audio,
         images=mock_images,
     )
-    return mocker.patch("oai.openai_api.openai.OpenAI", return_value=mock_client)
+    return mocker.patch(
+        "cloai.openai_api.openai.OpenAI",
+        return_value=mock_client,
+    )
 
 
 class ConcreteOpenAiBaseClass(openai_api.OpenAIBaseClass):

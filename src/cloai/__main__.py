@@ -1,4 +1,4 @@
-"""Entry point of the OAI package."""
+"""Entry point of the cloai package."""
 import asyncio
 import os
 import sys
@@ -10,7 +10,7 @@ def main() -> None:
         sys.stderr.write("Error: Please set the OPENAI_API_KEY environment variable.")
         sys.exit(1)
 
-    from oai.cli import parser
+    from cloai.cli import parser
 
     asyncio.run(parser.parse_args())
 
