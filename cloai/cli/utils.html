@@ -123,46 +123,48 @@
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Running ffmpeg: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">compile</span><span class="p">()))</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="n">stream</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="k">yield from</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">uuid_id</span><span class="si">}</span><span class="s2">*.mp3&quot;</span><span class="p">)</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">    Args:</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        filename: The name of the file to download.</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">        url: The URL to download the file from.</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">    Args:</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">        filename: The name of the audio file.</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">    Returns:</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="sd">        float: The duration of the audio file.</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a><span class="sd">    Args:</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a><span class="sd">        filename: The name of the file.</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a><span class="sd">    Returns:</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a><span class="sd">        int: The size of the file.</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">uuid_id</span><span class="si">}</span><span class="s2">*.mp3&quot;</span><span class="p">))</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">yield from</span> <span class="n">files</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">    Args:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        filename: The name of the file to download.</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        url: The URL to download the file from.</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">    Args:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">        filename: The name of the audio file.</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a><span class="sd">    Returns:</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="sd">        float: The duration of the audio file.</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="sd">    Args:</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a><span class="sd">        filename: The name of the file.</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a><span class="sd">    Returns:</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a><span class="sd">        int: The size of the file.</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos">96</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos">97</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
 </span></pre></div>
 
 
@@ -226,7 +228,9 @@
 </span><span id="clip_audio-54"><a href="#clip_audio-54"><span class="linenos">54</span></a>    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Running ffmpeg: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">compile</span><span class="p">()))</span>
 </span><span id="clip_audio-55"><a href="#clip_audio-55"><span class="linenos">55</span></a>    <span class="n">stream</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </span><span id="clip_audio-56"><a href="#clip_audio-56"><span class="linenos">56</span></a>
-</span><span id="clip_audio-57"><a href="#clip_audio-57"><span class="linenos">57</span></a>    <span class="k">yield from</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">uuid_id</span><span class="si">}</span><span class="s2">*.mp3&quot;</span><span class="p">)</span>
+</span><span id="clip_audio-57"><a href="#clip_audio-57"><span class="linenos">57</span></a>    <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">out_dir</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">uuid_id</span><span class="si">}</span><span class="s2">*.mp3&quot;</span><span class="p">))</span>
+</span><span id="clip_audio-58"><a href="#clip_audio-58"><span class="linenos">58</span></a>    <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</span><span id="clip_audio-59"><a href="#clip_audio-59"><span class="linenos">59</span></a>    <span class="k">yield from</span> <span class="n">files</span>
 </span></pre></div>
 
 
@@ -254,18 +258,18 @@
 
     </div>
     <a class="headerlink" href="#download_file"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="download_file-60"><a href="#download_file-60"><span class="linenos">60</span></a><span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="download_file-61"><a href="#download_file-61"><span class="linenos">61</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
-</span><span id="download_file-62"><a href="#download_file-62"><span class="linenos">62</span></a>
-</span><span id="download_file-63"><a href="#download_file-63"><span class="linenos">63</span></a><span class="sd">    Args:</span>
-</span><span id="download_file-64"><a href="#download_file-64"><span class="linenos">64</span></a><span class="sd">        filename: The name of the file to download.</span>
-</span><span id="download_file-65"><a href="#download_file-65"><span class="linenos">65</span></a><span class="sd">        url: The URL to download the file from.</span>
-</span><span id="download_file-66"><a href="#download_file-66"><span class="linenos">66</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="download_file-67"><a href="#download_file-67"><span class="linenos">67</span></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span id="download_file-68"><a href="#download_file-68"><span class="linenos">68</span></a>    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-</span><span id="download_file-69"><a href="#download_file-69"><span class="linenos">69</span></a>
-</span><span id="download_file-70"><a href="#download_file-70"><span class="linenos">70</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="download_file-71"><a href="#download_file-71"><span class="linenos">71</span></a>        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="download_file-62"><a href="#download_file-62"><span class="linenos">62</span></a><span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="download_file-63"><a href="#download_file-63"><span class="linenos">63</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
+</span><span id="download_file-64"><a href="#download_file-64"><span class="linenos">64</span></a>
+</span><span id="download_file-65"><a href="#download_file-65"><span class="linenos">65</span></a><span class="sd">    Args:</span>
+</span><span id="download_file-66"><a href="#download_file-66"><span class="linenos">66</span></a><span class="sd">        filename: The name of the file to download.</span>
+</span><span id="download_file-67"><a href="#download_file-67"><span class="linenos">67</span></a><span class="sd">        url: The URL to download the file from.</span>
+</span><span id="download_file-68"><a href="#download_file-68"><span class="linenos">68</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="download_file-69"><a href="#download_file-69"><span class="linenos">69</span></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="download_file-70"><a href="#download_file-70"><span class="linenos">70</span></a>    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span id="download_file-71"><a href="#download_file-71"><span class="linenos">71</span></a>
+</span><span id="download_file-72"><a href="#download_file-72"><span class="linenos">72</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="download_file-73"><a href="#download_file-73"><span class="linenos">73</span></a>        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -292,17 +296,17 @@
 
     </div>
     <a class="headerlink" href="#get_audio_duration"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_audio_duration-74"><a href="#get_audio_duration-74"><span class="linenos">74</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="get_audio_duration-75"><a href="#get_audio_duration-75"><span class="linenos">75</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
-</span><span id="get_audio_duration-76"><a href="#get_audio_duration-76"><span class="linenos">76</span></a>
-</span><span id="get_audio_duration-77"><a href="#get_audio_duration-77"><span class="linenos">77</span></a><span class="sd">    Args:</span>
-</span><span id="get_audio_duration-78"><a href="#get_audio_duration-78"><span class="linenos">78</span></a><span class="sd">        filename: The name of the audio file.</span>
-</span><span id="get_audio_duration-79"><a href="#get_audio_duration-79"><span class="linenos">79</span></a>
-</span><span id="get_audio_duration-80"><a href="#get_audio_duration-80"><span class="linenos">80</span></a><span class="sd">    Returns:</span>
-</span><span id="get_audio_duration-81"><a href="#get_audio_duration-81"><span class="linenos">81</span></a><span class="sd">        float: The duration of the audio file.</span>
-</span><span id="get_audio_duration-82"><a href="#get_audio_duration-82"><span class="linenos">82</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_audio_duration-83"><a href="#get_audio_duration-83"><span class="linenos">83</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="get_audio_duration-84"><a href="#get_audio_duration-84"><span class="linenos">84</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_audio_duration-76"><a href="#get_audio_duration-76"><span class="linenos">76</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="get_audio_duration-77"><a href="#get_audio_duration-77"><span class="linenos">77</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
+</span><span id="get_audio_duration-78"><a href="#get_audio_duration-78"><span class="linenos">78</span></a>
+</span><span id="get_audio_duration-79"><a href="#get_audio_duration-79"><span class="linenos">79</span></a><span class="sd">    Args:</span>
+</span><span id="get_audio_duration-80"><a href="#get_audio_duration-80"><span class="linenos">80</span></a><span class="sd">        filename: The name of the audio file.</span>
+</span><span id="get_audio_duration-81"><a href="#get_audio_duration-81"><span class="linenos">81</span></a>
+</span><span id="get_audio_duration-82"><a href="#get_audio_duration-82"><span class="linenos">82</span></a><span class="sd">    Returns:</span>
+</span><span id="get_audio_duration-83"><a href="#get_audio_duration-83"><span class="linenos">83</span></a><span class="sd">        float: The duration of the audio file.</span>
+</span><span id="get_audio_duration-84"><a href="#get_audio_duration-84"><span class="linenos">84</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_audio_duration-85"><a href="#get_audio_duration-85"><span class="linenos">85</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="get_audio_duration-86"><a href="#get_audio_duration-86"><span class="linenos">86</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
 </span></pre></div>
 
 
@@ -334,16 +338,16 @@
 
     </div>
     <a class="headerlink" href="#get_file_size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_file_size-87"><a href="#get_file_size-87"><span class="linenos">87</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="get_file_size-88"><a href="#get_file_size-88"><span class="linenos">88</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
-</span><span id="get_file_size-89"><a href="#get_file_size-89"><span class="linenos">89</span></a>
-</span><span id="get_file_size-90"><a href="#get_file_size-90"><span class="linenos">90</span></a><span class="sd">    Args:</span>
-</span><span id="get_file_size-91"><a href="#get_file_size-91"><span class="linenos">91</span></a><span class="sd">        filename: The name of the file.</span>
-</span><span id="get_file_size-92"><a href="#get_file_size-92"><span class="linenos">92</span></a>
-</span><span id="get_file_size-93"><a href="#get_file_size-93"><span class="linenos">93</span></a><span class="sd">    Returns:</span>
-</span><span id="get_file_size-94"><a href="#get_file_size-94"><span class="linenos">94</span></a><span class="sd">        int: The size of the file.</span>
-</span><span id="get_file_size-95"><a href="#get_file_size-95"><span class="linenos">95</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_file_size-96"><a href="#get_file_size-96"><span class="linenos">96</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_file_size-89"><a href="#get_file_size-89"><span class="linenos">89</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="get_file_size-90"><a href="#get_file_size-90"><span class="linenos">90</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
+</span><span id="get_file_size-91"><a href="#get_file_size-91"><span class="linenos">91</span></a>
+</span><span id="get_file_size-92"><a href="#get_file_size-92"><span class="linenos">92</span></a><span class="sd">    Args:</span>
+</span><span id="get_file_size-93"><a href="#get_file_size-93"><span class="linenos">93</span></a><span class="sd">        filename: The name of the file.</span>
+</span><span id="get_file_size-94"><a href="#get_file_size-94"><span class="linenos">94</span></a>
+</span><span id="get_file_size-95"><a href="#get_file_size-95"><span class="linenos">95</span></a><span class="sd">    Returns:</span>
+</span><span id="get_file_size-96"><a href="#get_file_size-96"><span class="linenos">96</span></a><span class="sd">        int: The size of the file.</span>
+</span><span id="get_file_size-97"><a href="#get_file_size-97"><span class="linenos">97</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_file_size-98"><a href="#get_file_size-98"><span class="linenos">98</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
 </span></pre></div>
 
 
