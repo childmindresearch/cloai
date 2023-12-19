@@ -8,7 +8,7 @@ from typing import Any, Literal, TypedDict
 
 import openai
 
-from oai.core import config
+from cloai.core import config
 
 settings = config.get_settings()
 OPENAI_API_KEY = settings.OPENAI_API_KEY

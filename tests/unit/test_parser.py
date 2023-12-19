@@ -2,23 +2,23 @@
 from __future__ import annotations
 
 import argparse
+import os
 import pathlib
 import sys
 from typing import TYPE_CHECKING
 
 import pytest
 
-from oai.cli import parser
-from oai.core import exceptions
+from cloai.cli import parser
+from cloai.core import exceptions
 
 if TYPE_CHECKING:
     import pytest_mock
 
 
-@pytest.fixture()
-def _mock_package_metadata(mocker: pytest_mock.MockFixture) -> None:
-    """Mocks the package metadata."""
-    mocker.patch("oai.cli.parser.metadata.version", return_value="0.0.0")
+@pytest.fixture(autouse=True)
+def _set_environment() -> None:
+    os.environ["OPENAI_API_KEY"] = "test"
 
 
 @pytest.mark.parametrize(
@@ -182,7 +182,7 @@ async def test_run_command_with_whisper(mocker: pytest_mock.MockFixture) -> None
         "model": "whisper-1",
     }
     args = argparse.Namespace(**arg_dict)
-    mock = mocker.patch("oai.cli.commands.speech_to_text")
+    mock = mocker.patch("cloai.cli.commands.speech_to_text")
 
     await parser.run_command(args)
 
@@ -206,7 +206,7 @@ async def test_run_command_with_dalle(mocker: pytest_mock.MockFixture) -> None:
         "n": 1,
     }
     args = argparse.Namespace(**arg_dict)
-    mock = mocker.patch("oai.cli.commands.image_generation")
+    mock = mocker.patch("cloai.cli.commands.image_generation")
 
     await parser.run_command(args)
 
@@ -231,7 +231,7 @@ async def test_run_command_with_tts(mocker: pytest_mock.MockFixture) -> None:
         "voice": "onyx",
     }
     args = argparse.Namespace(**arg_dict)
-    mock = mocker.patch("oai.cli.commands.text_to_speech")
+    mock = mocker.patch("cloai.cli.commands.text_to_speech")
 
     await parser.run_command(args)
 
@@ -244,10 +244,9 @@ async def test_run_command_with_tts(mocker: pytest_mock.MockFixture) -> None:
 
 
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures("_mock_package_metadata")
 async def test_parse_args_without_arguments() -> None:
     """Tests the parse_args function with no arguments."""
-    sys.argv = ["oai"]
+    sys.argv = ["cloai"]
     expected_error_code = 1
 
     with pytest.raises(SystemExit) as excinfo:
@@ -264,12 +263,11 @@ async def test_parse_args_without_arguments() -> None:
         "tts",
     ],
 )
-@pytest.mark.usefixtures("_mock_package_metadata")
 async def test_parse_args_with_command_no_other_arguments(
     command: str,
 ) -> None:
     """Tests the parse_args function with a command but no other arguments."""
-    sys.argv = ["oai", command]
+    sys.argv = ["cloai", command]
     expected_error_code = 2
 
     with pytest.raises(SystemExit) as excinfo:

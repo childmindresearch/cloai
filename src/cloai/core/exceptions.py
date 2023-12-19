@@ -1,5 +1,5 @@
 """Custom exceptions."""
-from oai.core import config
+from cloai.core import config
 
 logger = config.get_logger()
 

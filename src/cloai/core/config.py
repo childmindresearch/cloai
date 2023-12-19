@@ -1,16 +1,25 @@
-"""Configuration for the oai module."""
+"""Configuration for the cloai module."""
 import functools
 import logging
+from importlib import metadata
 from typing import Literal
 
 import pydantic
 import pydantic_settings
 
 
-class Settings(pydantic_settings.BaseSettings):
-    """Represents the settings for the oai module."""
+def get_version() -> str:
+    """Return the version of the package."""
+    try:
+        return metadata.version("cloai")
+    except metadata.PackageNotFoundError:
+        return "unknown"
 
-    LOGGER_NAME: str = "oai"
+
+class Settings(pydantic_settings.BaseSettings):
+    """Represents the settings for the cloai module."""
+
+    LOGGER_NAME: str = "cloai"
     LOGGER_VERBOSITY: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "DEBUG"
 
     OPENAI_API_KEY: pydantic.SecretStr = pydantic.Field(

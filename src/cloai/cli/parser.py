@@ -4,16 +4,15 @@ from __future__ import annotations
 import argparse
 import pathlib
 import sys
-from importlib import metadata
 
-from oai.cli import commands
-from oai.core import config, exceptions
+from cloai.cli import commands
+from cloai.core import config, exceptions
 
 logger = config.get_logger()
 
 
 PARSER_DEFAULTS = {
-    "epilog": "Please report issues at https://github.com/cmi-dair/cli-oai.",
+    "epilog": "Please report issues at https://github.com/cmi-dair/cli-cloai.",
     "formatter_class": argparse.ArgumentDefaultsHelpFormatter,
 }
 
@@ -21,14 +20,16 @@ PARSER_DEFAULTS = {
 async def parse_args() -> None:
     """Parse command line arguments and execute the corresponding command."""
     parser = argparse.ArgumentParser(
-        prog="oai",
+        prog="cloai",
         description="""
         CLI wrapper for OpenAI's API. All commands require the OPENAI_API_KEY
         environment variable to be set to a valid OpenAI API key.""",
         **PARSER_DEFAULTS,  # type: ignore[arg-type]
     )
-    version = metadata.version(__package__ or __name__)
+
+    version = config.get_version()
     parser.add_argument("--version", action="version", version=f"%(prog)s {version}")
+
     subparsers = parser.add_subparsers(dest="command")
     _add_stt_parser(subparsers)
     _add_tts_parser(subparsers)

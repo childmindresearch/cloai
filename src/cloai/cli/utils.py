@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 import ffmpeg
 import requests
 
-from oai.core import config
+from cloai.core import config
 
 if TYPE_CHECKING:
     from collections.abc import Generator
