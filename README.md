@@ -1,18 +1,18 @@
-# CLI-cloai
+# cloai
 
-CLI-cloai is a Python command-line interface for interacting with the OpenAI API. It provides a set of commands to interact with various OpenAI services such as Speech-to-Text (STT), Text-to-Speech (TTS), and Image Generation.
+cloai is a Python command-line interface for interacting with the OpenAI API. It provides a set of commands to interact with various OpenAI services such as Speech-to-Text (STT), Text-to-Speech (TTS), and Image Generation.
 
 ## Installation
 
-To install CLI-cloai, you can use the following command:
+To install cloai, you can use the following command:
 
 ```sh
-poetry add git+https://github.com/cmi-dair/cli-cloai
+poetry add git+https://github.com/cmi-dair/cloai
 ```
 
 ## Usage
 
-Before running CLI-cloai, make sure the environment variable `OPENAI_API_KEY` is set to your OpenAI API key.
+Before running cloai, make sure the environment variable `OPENAI_API_KEY` is set to your OpenAI API key.
 
 To use the CLI, run `cloai --help` in your terminal. This will display a list of available commands and their descriptions.
 
@@ -32,8 +32,8 @@ Contributions are welcome! Please see the [contributing guidelines](CONTRIBUTING
 
 ## License
 
-CLI-cloai is licensed under the terms of the [L-GPLv2.1 license](LICENSE).
+cloai is licensed under the terms of the [L-GPLv2.1 license](LICENSE).
 
 ## Support
 
-If you encounter any issues or have any questions, please report them on our [issues page](https://github.com/cmi-dair/cli-cloai/issues).
+If you encounter any issues or have any questions, please report them on our [issues page](https://github.com/cmi-dair/cloai/issues).
