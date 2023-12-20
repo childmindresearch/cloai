@@ -80,22 +80,31 @@ async def image_generation(  # noqa: PLR0913
         prompt: The text to generate an image from.
         output_base_name: The base name of the output file.
         model: The model to use.
-        size: The size of the generated image. Defaults to None.
-        quality: The quality of the generated image. Defaults to "standard".
-        n: The number of images to generate. Defaults to 1.
+        size: The size of the generated image.
+        quality: The quality of the generated
+        image. Defaults to "standard".
+        n: The number of images to generate.
 
     Returns:
         bytes: The generated image as bytes.
+
+    Notes:
+        At present, the image generation API of dalle-3 only supports generating
+        one image at a time. Instead, we call the API once for each image we want
+        to generate.
     """
     image_generation = openai_api.ImageGeneration()
-    urls = await image_generation.run(
-        prompt,
-        model=model,
-        size=size,
-        quality=quality,
-        n=n,
-    )
-
+    url_promises = [
+        image_generation.run(
+            prompt,
+            model=model,
+            size=size,
+            quality=quality,
+            n=1,
+        )
+        for _ in range(n)
+    ]
+    urls = [url[0] for url in await asyncio.gather(*url_promises)]
     for index, url in enumerate(urls):
         if url is None:
             logger.warning("Image %s failed to generate, skipping.", index)

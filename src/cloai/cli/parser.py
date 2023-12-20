@@ -189,6 +189,7 @@ def _add_image_generation_parser(
         type=str,
     )
     image_generation_parser.add_argument(
+        "-m",
         "--model",
         help=(
             "The model to use. Consult OpenAI's documentation for an up-to-date list"
@@ -198,6 +199,7 @@ def _add_image_generation_parser(
         default="dall-e-3",
     )
     image_generation_parser.add_argument(
+        "-s",
         "--size",
         help="The size of the generated image.",
         type=lambda x: x.lower(),
@@ -205,6 +207,7 @@ def _add_image_generation_parser(
         default="1024x1024",
     )
     image_generation_parser.add_argument(
+        "-q",
         "--quality",
         help="The quality of the generated image.",
         type=lambda x: x.lower(),
@@ -212,7 +215,8 @@ def _add_image_generation_parser(
         default="standard",
     )
     image_generation_parser.add_argument(
-        "--n",
+        "-n",
+        "--number",
         help="The number of images to generate.",
         type=_positive_int,
         default=1,
@@ -239,7 +243,7 @@ def _arg_validation(args: argparse.Namespace) -> argparse.Namespace:
     return args
 
 
-def _positive_int(value: int) -> int:
+def _positive_int(value: int | str) -> int:
     """Ensures the value is a positive integer.
 
     Args:
@@ -252,7 +256,7 @@ def _positive_int(value: int) -> int:
         exceptions.InvalidArgumentError: If the value is not an integer or not a
         positive integer.
     """
-    if int(value) != value:
+    if int(value) != float(value):
         msg = f"{value} is not an integer."
         raise exceptions.InvalidArgumentError(msg)
     if int(value) <= 0:

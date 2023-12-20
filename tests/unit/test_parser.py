@@ -275,6 +275,39 @@ async def test_parse_args_with_command_no_other_arguments(
     assert excinfo.value.code == expected_error_code
 
 
+@pytest.mark.asyncio()
+async def test_parse_args_from_cli_with_dalle_all_arguments(
+    mocker: pytest_mock.MockFixture,
+) -> None:
+    """Tests the parse_args function with the 'dalle' command and all arguments."""
+    command = mocker.patch("cloai.cli.commands.image_generation")
+    sys.argv = [
+        "cloai",
+        "dalle",
+        "test",
+        "test",
+        "--model",
+        "dall-e-3",
+        "--size",
+        "1024x1024",
+        "--quality",
+        "standard",
+        "--n",
+        "1",
+    ]
+
+    await parser.parse_args()
+
+    command.assert_called_once_with(
+        prompt="test",
+        output_base_name="test",
+        model="dall-e-3",
+        size="1024x1024",
+        quality="standard",
+        n=1,
+    )
+
+
 @pytest.mark.parametrize(
     "size",
     [
