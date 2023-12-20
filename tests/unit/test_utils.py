@@ -9,7 +9,7 @@ from cloai.core import utils
 def test_clip_audio(mocker: pytest_mock.MockerFixture) -> None:
     """Tests that the audio file is clipped."""
     magic = mocker.MagicMock()
-    mock_ffmpeg = mocker.patch("cloai.cli.utils.ffmpeg", magic)
+    mock_ffmpeg = mocker.patch("cloai.core.utils.ffmpeg", magic)
     mock_ffmpeg.input.return_value = magic
     mock_ffmpeg.output.return_value = magic
     target_size = 100000
@@ -28,7 +28,7 @@ def test_clip_audio(mocker: pytest_mock.MockerFixture) -> None:
 def test_download_audio(mocker: pytest_mock.MockerFixture) -> None:
     """Tests that a file is downloaded."""
     magic = mocker.MagicMock()
-    mock_requests = mocker.patch("cloai.cli.utils.requests")
+    mock_requests = mocker.patch("cloai.core.utils.requests")
     mock_requests.get.return_value = magic
     magic.raise_for_status.return_value = None
     magic.content = b"mock_content"

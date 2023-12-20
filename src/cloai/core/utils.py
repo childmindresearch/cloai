@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 import docx
 import ffmpeg
-import PyPDF2
+import pypdf
 import requests
 
 from cloai.core import config
@@ -109,7 +109,7 @@ def pdf_to_str(file_path: str | pathlib.Path) -> str:
         str: The extracted text from the PDF file.
     """
     with pathlib.Path(file_path).open("rb") as file:
-        reader = PyPDF2.PdfReader(file)
+        reader = pypdf.PdfReader(file)
         return " ".join(
             [
                 reader.pages[page_num].extract_text()
