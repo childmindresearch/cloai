@@ -1,6 +1,7 @@
 """Configuration for the cloai module."""
 import functools
 import logging
+import pathlib
 from importlib import metadata
 from typing import Literal
 
@@ -28,6 +29,10 @@ class Settings(pydantic_settings.BaseSettings):
             "env": "OPENAI_API_KEY",
             "description": "The API key for OpenAI.",
         },
+    )
+
+    PROMPT_FILE: pydantic.FilePath = pydantic.Field(
+        pathlib.Path(__file__).parent.parent / "prompts.yaml",
     )
 
 

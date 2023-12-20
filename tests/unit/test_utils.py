@@ -3,7 +3,7 @@ import tempfile
 
 import pytest_mock
 
-from cloai.cli import utils
+from cloai.core import utils
 
 
 def test_clip_audio(mocker: pytest_mock.MockerFixture) -> None:
