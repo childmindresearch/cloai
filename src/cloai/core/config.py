@@ -21,7 +21,7 @@ class Settings(pydantic_settings.BaseSettings):
     """Represents the settings for the cloai module."""
 
     LOGGER_NAME: str = "cloai"
-    LOGGER_VERBOSITY: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "DEBUG"
+    LOGGER_VERBOSITY: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
     OPENAI_API_KEY: pydantic.SecretStr = pydantic.Field(
         ...,
