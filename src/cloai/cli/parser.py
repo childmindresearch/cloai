@@ -19,6 +19,38 @@ PARSER_DEFAULTS = {
 
 async def parse_args() -> None:
     """Parse command line arguments and execute the corresponding command."""
+    parser = create_parser()
+    validated_args = get_args(parser)
+    result = await run_command(validated_args)
+    if isinstance(result, str):
+        sys.stdout.write(result)
+
+
+def get_args(parser: argparse.ArgumentParser) -> argparse.Namespace:
+    """Parse the command line arguments using the provided ArgumentParser object.
+
+    Args:
+        parser: The ArgumentParser object to parse the arguments.
+
+    Returns:
+        argparse.Namespace: The parsed command line arguments.
+
+    Raises:
+        SystemExit: If the command is not specified.
+    """
+    args = parser.parse_args()
+    if args.command is None:
+        parser.print_usage()
+        sys.exit(1)
+    return _arg_validation(args)
+
+
+def create_parser() -> argparse.ArgumentParser:
+    """Create and configure the argument parser for the CLI.
+
+    Returns:
+        argparse.ArgumentParser: The configured argument parser.
+    """
     parser = argparse.ArgumentParser(
         prog="cloai",
         description="""
@@ -28,23 +60,18 @@ async def parse_args() -> None:
     )
 
     version = config.get_version()
-    parser.add_argument("--version", action="version", version=f"%(prog)s {version}")
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"%(prog)s {version}",
+    )
 
     subparsers = parser.add_subparsers(dest="command")
     _add_stt_parser(subparsers)
     _add_tts_parser(subparsers)
     _add_image_generation_parser(subparsers)
-
-    args = parser.parse_args()
-    if args.command is None:
-        parser.print_usage()
-        sys.exit(1)
-    validated_args = _arg_validation(args)
-
-    result = await run_command(validated_args)
-
-    if isinstance(result, str):
-        sys.stdout.write(result)
+    return parser
 
 
 async def run_command(args: argparse.Namespace) -> str | bytes | None:
@@ -114,11 +141,13 @@ def _add_stt_parser(
         type=pathlib.Path,
     )
     stt_parser.add_argument(
+        "-c",
         "--clip",
         help="Clip the file if it is too large.",
         action="store_true",
     )
     stt_parser.add_argument(
+        "-m",
         "--model",
         help=("The transcription model to use."),
         type=lambda x: x.lower(),
@@ -156,12 +185,14 @@ def _add_tts_parser(
         type=pathlib.Path,
     )
     tts_parser.add_argument(
+        "-m",
         "--model",
         help=("The model to use."),
         choices=["tts-1"],
         default="tts-1",
     )
     tts_parser.add_argument(
+        "-v",
         "--voice",
         help="The voice to use.",
         choices=["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
