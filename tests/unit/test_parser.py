@@ -272,6 +272,7 @@ async def test_parse_args_with_command_no_other_arguments(
 
     with pytest.raises(SystemExit) as excinfo:
         await parser.parse_args()
+
     assert excinfo.value.code == expected_error_code
 
 
@@ -320,7 +321,7 @@ def test__arg_validation_invalid_dalle_size(size: str) -> None:
     args = argparse.Namespace(
         command="dalle",
         model="dall-e-3",
-        size="256x256",
+        size=size,
     )
 
     with pytest.raises(exceptions.InvalidArgumentError):
