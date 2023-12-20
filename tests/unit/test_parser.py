@@ -82,7 +82,7 @@ def test__add_image_generation_parser() -> None:
     assert arguments[5].help == "The quality of the generated image."
     assert arguments[5].default == "standard"
 
-    assert arguments[6].dest == "n"
+    assert arguments[6].dest == "number"
     assert arguments[6].help == "The number of images to generate."
     assert arguments[6].default == 1
 
@@ -203,7 +203,7 @@ async def test_run_command_with_dalle(mocker: pytest_mock.MockFixture) -> None:
         "model": "dall-e-3",
         "size": "1024x1024",
         "quality": "standard",
-        "n": 1,
+        "number": 1,
     }
     args = argparse.Namespace(**arg_dict)
     mock = mocker.patch("cloai.cli.commands.image_generation")
@@ -216,7 +216,7 @@ async def test_run_command_with_dalle(mocker: pytest_mock.MockFixture) -> None:
         model=arg_dict["model"],
         size=arg_dict["size"],
         quality=arg_dict["quality"],
-        n=arg_dict["n"],
+        n=arg_dict["number"],
     )
 
 
@@ -273,6 +273,39 @@ async def test_parse_args_with_command_no_other_arguments(
     with pytest.raises(SystemExit) as excinfo:
         await parser.parse_args()
     assert excinfo.value.code == expected_error_code
+
+
+@pytest.mark.asyncio()
+async def test_parse_args_from_cli_with_dalle_all_arguments(
+    mocker: pytest_mock.MockFixture,
+) -> None:
+    """Tests the parse_args function with the 'dalle' command and all arguments."""
+    command = mocker.patch("cloai.cli.commands.image_generation")
+    sys.argv = [
+        "cloai",
+        "dalle",
+        "test",
+        "test",
+        "--model",
+        "dall-e-3",
+        "--size",
+        "1024x1024",
+        "--quality",
+        "standard",
+        "-n",
+        "1",
+    ]
+
+    await parser.parse_args()
+
+    command.assert_called_once_with(
+        prompt="test",
+        output_base_name="test",
+        model="dall-e-3",
+        size="1024x1024",
+        quality="standard",
+        n=1,
+    )
 
 
 @pytest.mark.parametrize(
