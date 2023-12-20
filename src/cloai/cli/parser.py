@@ -75,7 +75,7 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
             model=args.model,
             size=args.size,
             quality=args.quality,
-            n=args.n,
+            n=args.number,
         )
         return None
     if args.command == "tts":
