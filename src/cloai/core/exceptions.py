@@ -23,3 +23,11 @@ class FileSizeError(LoggedException):
 
 class InvalidArgumentError(LoggedException):
     """Raised when the arguments are invalid."""
+
+
+class LoggedValueError(LoggedException):
+    """Raised when a value is invalid."""
+
+
+class OpenAIError(LoggedException):
+    """Raised when an OpenAI error occurs."""

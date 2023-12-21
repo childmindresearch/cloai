@@ -1,6 +1,7 @@
 """Configuration for the cloai module."""
 import functools
 import logging
+import pathlib
 from importlib import metadata
 from typing import Literal
 
@@ -20,7 +21,7 @@ class Settings(pydantic_settings.BaseSettings):
     """Represents the settings for the cloai module."""
 
     LOGGER_NAME: str = "cloai"
-    LOGGER_VERBOSITY: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "DEBUG"
+    LOGGER_VERBOSITY: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
     OPENAI_API_KEY: pydantic.SecretStr = pydantic.Field(
         ...,
@@ -28,6 +29,10 @@ class Settings(pydantic_settings.BaseSettings):
             "env": "OPENAI_API_KEY",
             "description": "The API key for OpenAI.",
         },
+    )
+
+    PROMPT_FILE: pydantic.FilePath = pydantic.Field(
+        pathlib.Path(__file__).parent.parent / "prompts.yaml",
     )
 
 

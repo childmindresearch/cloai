@@ -1,4 +1,4 @@
-"""Contains the core business logic of the OpenAI CLI."""
+"""Utility functions for cloai."""
 from __future__ import annotations
 
 import math
@@ -6,7 +6,9 @@ import pathlib
 import uuid
 from typing import TYPE_CHECKING
 
+import docx
 import ffmpeg
+import pypdf
 import requests
 
 from cloai.core import config
@@ -95,3 +97,48 @@ def get_file_size(filename: str | pathlib.Path) -> int:
         int: The size of the file.
     """
     return pathlib.Path(filename).stat().st_size
+
+
+def pdf_to_str(file_path: str | pathlib.Path) -> str:
+    """Convert a PDF file to text.
+
+    Args:
+        file_path: The path to the PDF file.
+
+    Returns:
+        str: The extracted text from the PDF file.
+    """
+    with pathlib.Path(file_path).open("rb") as file:
+        reader = pypdf.PdfReader(file)
+        return " ".join(
+            [
+                reader.pages[page_num].extract_text()
+                for page_num in range(len(reader.pages))
+            ],
+        )
+
+
+def docx_to_str(file_path: str | pathlib.Path) -> str:
+    """Convert a docx file to text.
+
+    Args:
+        file_path: The path to the docx file.
+
+    Returns:
+        str: The extracted text from the docx file.
+    """
+    document = docx.Document(file_path)
+    return " ".join([paragraph.text for paragraph in document.paragraphs])
+
+
+def txt_to_str(file_path: str | pathlib.Path) -> str:
+    """Convert a txt file to text.
+
+    Args:
+        file_path: The path to the txt file.
+
+    Returns:
+        str: The extracted text from the txt file.
+    """
+    with pathlib.Path(file_path).open() as file:
+        return file.read()

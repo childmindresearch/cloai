@@ -68,6 +68,7 @@ def create_parser() -> argparse.ArgumentParser:
     )
 
     subparsers = parser.add_subparsers(dest="command")
+    _add_chat_completion_parser(subparsers)
     _add_stt_parser(subparsers)
     _add_tts_parser(subparsers)
     _add_image_generation_parser(subparsers)
@@ -87,14 +88,6 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
         msg = "No command provided."
         raise exceptions.InvalidArgumentError(msg)
 
-    if args.command == "whisper":
-        return await commands.speech_to_text(
-            filename=args.filename,
-            model=args.model,
-            clip=args.clip,
-        )
-    if args.command == "gpt":
-        raise NotImplementedError
     if args.command == "dalle":
         await commands.image_generation(
             prompt=args.prompt,
@@ -105,6 +98,15 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
             n=args.number,
         )
         return None
+    if args.command == "gpt":
+        return await commands.ChatCompletion(
+            user_prompt=args.user_prompt,
+            user_prompt_file=args.user_prompt_file,
+            system_prompt=args.system_prompt,
+            system_prompt_file=args.system_prompt_file,
+            system_preset=args.system_preset,
+            model=args.model,
+        ).run()
     if args.command == "tts":
         await commands.text_to_speech(
             text=args.text,
@@ -113,21 +115,100 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
             output_file=args.output_file,
         )
         return None
+    if args.command == "whisper":
+        return await commands.speech_to_text(
+            filename=args.filename,
+            model=args.model,
+            clip=args.clip,
+        )
     msg = f"Unknown command {args.command}."
     raise exceptions.InvalidArgumentError(msg)
+
+
+def _add_chat_completion_parser(
+    subparsers: argparse._SubParsersAction,
+) -> None:
+    """Get the argument parser for the 'gpt' command.
+
+    Args:
+        subparsers: The subparsers object to add the 'gpt' command to.
+
+    Returns:
+        argparse.ArgumentParser: The argument parser for the 'gpt' command.
+    """
+    chat_parser = subparsers.add_parser(
+        "gpt",
+        description="Completes text with OpenAI's GPT models.",
+        help="Completes text with OpenAI's GPT models.",
+        **PARSER_DEFAULTS,  # type: ignore[arg-type]
+    )
+
+    user_group = chat_parser.add_argument_group(
+        "User Prompts",
+        """The prompts povided by the user. One must be provided and these
+        arguments are mutually exclusive.""",
+    )
+    user_group_exclusive = user_group.add_mutually_exclusive_group(required=True)
+    user_group_exclusive.add_argument(
+        "-p",
+        "--user-prompt",
+        help="The user prompt to complete.",
+        type=str,
+    )
+    user_group_exclusive.add_argument(
+        "-f",
+        "--user-prompt-file",
+        help="The file containing the prompt to complete.",
+        type=pathlib.Path,
+    )
+
+    system_group = chat_parser.add_argument_group(
+        "System Prompts",
+        """The prompts povided to the system. One must be provided and these
+        arguments are mutually exclusive.""",
+    )
+    system_group_exclusive = system_group.add_mutually_exclusive_group(required=True)
+    system_group_exclusive.add_argument(
+        "-s",
+        "--system-prompt",
+        help="The system prompt.",
+    )
+    system_group_exclusive.add_argument(
+        "-t",
+        "--system-prompt-file",
+        help="The file containing the system prompt.",
+        type=pathlib.Path,
+    )
+    system_group_exclusive.add_argument(
+        "-r",
+        "--system-preset",
+        help="""The preset system prompt. The following prompts are available:
+        1) "summary": Summarizes the user prompt; 2) "transcript": Edits a
+         audio transcript for coherence; 3) "simplify": Simplifies the reading
+         level of the user prompt.""",
+        choices=("summary", "transcript", "simplify"),
+    )
+
+    chat_parser.add_argument(
+        "-m",
+        "--model",
+        help="The model to use.",
+        choices=("gpt-4", "gpt-3.5-turbo", "gpt-4-1106-preview"),
+        default="gpt-4",
+    )
 
 
 def _add_stt_parser(
     subparsers: argparse._SubParsersAction,
 ) -> None:
-    """Get the argument parser for the 'whisper' command.
+    """Get the argument parser for the "whisper" command.
 
     Args:
-        subparsers (argparse._SubParsersAction): The subparsers object to add the
-            'whisper' command to.
+        subparsers: The subparsers object to add the
+            "whisper" command to.
 
     Returns:
-        argparse.ArgumentParser: The argument parser for the 'whisper' command.
+        argparse.ArgumentParser: The argument parser for the "whisper" command.
     """
     stt_parser = subparsers.add_parser(
         "whisper",
@@ -159,14 +240,14 @@ def _add_stt_parser(
 def _add_tts_parser(
     subparsers: argparse._SubParsersAction,
 ) -> None:
-    """Get the argument parser for the 'tts' command.
+    """Get the argument parser for the "tts" command.
 
     Args:
         subparsers (argparse._SubParsersAction): The subparsers object to add the
-            'tts' command to.
+            "tts" command to.
 
     Returns:
-        argparse.ArgumentParser: The argument parser for the 'tts' command.
+        argparse.ArgumentParser: The argument parser for the "tts" command.
     """
     tts_parser = subparsers.add_parser(
         "tts",

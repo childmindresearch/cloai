@@ -8,7 +8,7 @@ from typing import Any, Literal, TypedDict
 
 import openai
 
-from cloai.core import config
+from cloai.core import config, exceptions
 
 settings = config.get_settings()
 OPENAI_API_KEY = settings.OPENAI_API_KEY
@@ -42,6 +42,37 @@ class OpenAIBaseClass(abc.ABC):
     async def run(self, *_args: Any, **_kwargs: Any) -> Any:  # noqa: ANN401
         """Runs the model."""
         ...
+
+
+class ChatCompletion(OpenAIBaseClass):
+    """A class for running the Chat Completion models."""
+
+    async def run(
+        self,
+        user_prompt: str,
+        system_prompt: str,
+        model: Literal["gpt-4", "gpt-3.5-turbo", "gpt-4-1106-preview"] = "gpt-4",
+    ) -> str:
+        """Runs the Chat Completion model.
+
+        Args:
+            user_prompt: The user's prompt.
+            system_prompt: The system's prompt.
+            model: The name of the Chat Completion model to use.
+
+        Returns:
+            The model's response.
+        """
+        system_message = Message(role="system", content=system_prompt)
+        user_message = Message(role="user", content=user_prompt)
+        response = self.client.chat.completions.create(
+            model=model,
+            messages=[system_message, user_message],  # type: ignore[list-item]
+        )
+        if not response.choices[0].message.content:
+            msg = "No response from OpenAI."
+            raise exceptions.OpenAIError(msg)
+        return response.choices[0].message.content
 
 
 class TextToSpeech(OpenAIBaseClass):
