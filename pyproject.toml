@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "cloai"
-version = "0.0.1a8"
+version = "0.0.1a9"
 description = "A CLI for OpenAI's API"
 authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 license = "LGPL-2.1"
