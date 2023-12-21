@@ -4,31 +4,8 @@ from typing import Any
 from unittest import mock
 
 import pytest
-import pytest_mock
 
 from cloai import openai_api
-
-
-@pytest.fixture()
-def mock_openai(mocker: pytest_mock.MockFixture) -> mock.MagicMock:
-    """Mocks the OpenAI client."""
-    mock_speech_create = mocker.MagicMock()
-    mock_transcriptions_create = mocker.MagicMock()
-    mock_audio_speech = mocker.MagicMock(
-        speech=mocker.MagicMock(create=mock_speech_create),
-        transcriptions=mocker.MagicMock(create=mock_transcriptions_create),
-    )
-    mock_audio = mocker.MagicMock(audio=mock_audio_speech)
-    mock_images = mocker.MagicMock(generate=mocker.MagicMock())
-    mock_client = mocker.MagicMock(
-        spec=openai_api.openai.OpenAI,
-        audio=mock_audio,
-        images=mock_images,
-    )
-    return mocker.patch(
-        "cloai.openai_api.openai.OpenAI",
-        return_value=mock_client,
-    )
 
 
 class ConcreteOpenAiBaseClass(openai_api.OpenAIBaseClass):

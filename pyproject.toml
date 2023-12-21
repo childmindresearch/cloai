@@ -34,6 +34,7 @@ types-requests = "^2.31.0.10"
 tox = "^4.11.4"
 tox-poetry-installer = "1.0.0b1"
 types-pyyaml = "^6.0.12.12"
+pytest-dotenv = "^0.5.2"
 
 [tool.poetry.group.docs.dependencies]
 pdoc = "^14.1.0"
@@ -44,6 +45,9 @@ cloai = 'cloai.__main__:main'
 [tool.pytest.ini_options]
 pythonpath = [
   "src"
+]
+env_files = [
+  "./tests/.test.env"
 ]
 
 [tool.tox]

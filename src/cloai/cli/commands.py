@@ -30,13 +30,13 @@ class ChatCompletion:
 
     def __init__(  # noqa: PLR0913
         self,
+        model: Literal["gpt-4", "gpt-3.5-turbo", "gpt-4-1106-preview"],
         *,
         user_prompt: str | None = None,
         user_prompt_file: pathlib.Path | None = None,
         system_prompt: str | None = None,
         system_prompt_file: pathlib.Path | None = None,
         system_preset: str | None = None,
-        model: Literal["gpt-4", "gpt-3.5-turbo", "gpt-4-1106-preview"],
     ) -> None:
         """Initializes a ChatCompletion object.
 
@@ -82,17 +82,17 @@ class ChatCompletion:
 
     @staticmethod
     def _validate_initialization(
-        prompt: str | None,
-        prompt_file: pathlib.Path | None,
-        system_prompt: str | None,
-        system_prompt_file: pathlib.Path | None,
-        system_preset: str | None,
+        user_prompt: str | None = None,
+        user_prompt_file: pathlib.Path | None = None,
+        system_prompt: str | None = None,
+        system_prompt_file: pathlib.Path | None = None,
+        system_preset: str | None = None,
     ) -> None:
         """Validates the arguments passed to the constructor.
 
         Args:
-            prompt: The prompt to use.
-            prompt_file: The file containing the prompt to use.
+            user_prompt: The prompt to use.
+            user_prompt_file: The file containing the prompt to use.
             system_prompt: The system prompt to use.
             system_prompt_file: The file containing the system prompt to use.
             system_preset: The preset system prompt to use.
@@ -102,11 +102,12 @@ class ChatCompletion:
             ValueError: If not just one of system_prompt, system_prompt_file,
                 and system_preset are provided.
         """
-        if prompt is None and prompt_file is None:
+        user_args = (user_prompt, user_prompt_file)
+        if sum(arg is not None for arg in user_args) != 1:
             msg = "Either prompt or prompt_file must be provided."
             raise exceptions.LoggedValueError(msg)
 
-        system_args = [system_prompt, system_prompt_file, system_preset]
+        system_args = (system_prompt, system_prompt_file, system_preset)
         if sum(arg is not None for arg in system_args) != 1:
             msg = (
                 "Exactly one of system_prompt, system_prompt_file,"
@@ -137,9 +138,9 @@ class ChatCompletion:
 
     def _determine_system_prompt(
         self,
-        system_prompt: str | None,
-        system_prompt_file: pathlib.Path | None,
-        system_preset: str | None,
+        system_prompt: str | None = None,
+        system_prompt_file: pathlib.Path | None = None,
+        system_preset: str | None = None,
     ) -> str:
         """Determines the system prompt to use.
 

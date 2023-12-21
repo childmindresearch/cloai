@@ -152,7 +152,7 @@ def _add_chat_completion_parser(
     user_group_exclusive.add_argument(
         "-p",
         "--user-prompt",
-        help="The prompt to complete.",
+        help="The user prompt to complete.",
         type=str,
     )
     user_group_exclusive.add_argument(
