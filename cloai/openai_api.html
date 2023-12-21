@@ -70,6 +70,15 @@
 
             </li>
             <li>
+                    <a class="class" href="#ChatCompletion">ChatCompletion</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#ChatCompletion.run">run</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#TextToSpeech">TextToSpeech</a>
                             <ul class="memberlist">
                         <li>
@@ -129,7 +138,7 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span> <span class="nn">openai</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span> <span class="nn">cloai.core</span> <span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span> <span class="nn">cloai.core</span> <span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">exceptions</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="n">settings</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="n">OPENAI_API_KEY</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">OPENAI_API_KEY</span>
@@ -165,93 +174,124 @@
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>        <span class="o">...</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="k">class</span> <span class="nc">TextToSpeech</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Text-To-Speech models.&quot;&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="k">class</span> <span class="nc">ChatCompletion</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Chat Completion models.&quot;&quot;&quot;</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="n">output_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tts-1&quot;</span><span class="p">,</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>        <span class="n">voice</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;fable&quot;</span><span class="p">,</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span> <span class="s2">&quot;nova&quot;</span><span class="p">,</span> <span class="s2">&quot;shimmer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Text-To-Speech model.</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">        Args:</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">            text: The text to convert to speech.</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">            output_file: The name of the output file.</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">            model: The name of the Text-To-Speech model to use.</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">            voice: The voice to use.</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        Returns:</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">            The model&#39;s response.</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">speech</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>        <span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-4-1106-preview&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Chat Completion model.</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">        Args:</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">            user_prompt: The user&#39;s prompt.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">            system_prompt: The system&#39;s prompt.</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">            model: The name of the Chat Completion model to use.</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">        Returns:</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="n">system_message</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">)</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>        <span class="n">user_message</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">user_prompt</span><span class="p">)</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>            <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="p">)</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">stream_to_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="k">class</span> <span class="nc">SpeechToText</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Speech-To-Text models.&quot;&quot;&quot;</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>        <span class="n">audio_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Speech-To-Text model.</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        Args:</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">            audio_file: The audio to convert to text.</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">            model: The name of the Speech-To-Text model to use.</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="n">system_message</span><span class="p">,</span> <span class="n">user_message</span><span class="p">],</span>  <span class="c1"># type: ignore[list-item]</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>        <span class="p">)</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No response from OpenAI.&quot;</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">OpenAIError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="k">class</span> <span class="nc">TextToSpeech</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Text-To-Speech models.&quot;&quot;&quot;</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>        <span class="n">output_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tts-1&quot;</span><span class="p">,</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="n">voice</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;fable&quot;</span><span class="p">,</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span> <span class="s2">&quot;nova&quot;</span><span class="p">,</span> <span class="s2">&quot;shimmer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Text-To-Speech model.</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        Returns:</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">            The model&#39;s response.</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio</span><span class="p">:</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcriptions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>                <span class="n">file</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>                <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>            <span class="p">)</span>  <span class="c1"># type: ignore[return-value] # response_format overrides output type.</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="k">class</span> <span class="nc">ImageGeneration</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Image Generation models.&quot;&quot;&quot;</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="n">size</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;256x256&quot;</span><span class="p">,</span> <span class="s2">&quot;512x512&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1792x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1792&quot;</span><span class="p">]</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="n">quality</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;hd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Image Generation model.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">        Args:</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">            prompt: The prompt to generate an image from.</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">            model: The name of the Image Generation model to use.</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">            size: The size of the generated image.</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">            quality: The quality of the generated image.</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">            n: The number of images to generate.</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">        Returns:</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">            str: The image urls.</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>            <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="p">)</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        Args:</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">            text: The text to convert to speech.</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">            output_file: The name of the output file.</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">            model: The name of the Text-To-Speech model to use.</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">            voice: The voice to use.</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        Returns:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">speech</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>            <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="p">)</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">stream_to_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="k">class</span> <span class="nc">SpeechToText</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Speech-To-Text models.&quot;&quot;&quot;</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>        <span class="n">audio_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Speech-To-Text model.</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">        Args:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">            audio_file: The audio to convert to text.</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">            model: The name of the Speech-To-Text model to use.</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        Returns:</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>        <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio</span><span class="p">:</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcriptions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>                <span class="n">file</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>                <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="p">)</span>  <span class="c1"># type: ignore[return-value] # response_format overrides output type.</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="k">class</span> <span class="nc">ImageGeneration</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Image Generation models.&quot;&quot;&quot;</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>        <span class="n">size</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;256x256&quot;</span><span class="p">,</span> <span class="s2">&quot;512x512&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1792x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1792&quot;</span><span class="p">]</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>        <span class="n">quality</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;hd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Image Generation model.</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        Args:</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">            prompt: The prompt to generate an image from.</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">            model: The name of the Image Generation model to use.</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">            size: The size of the generated image.</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">            quality: The quality of the generated image.</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">            n: The number of images to generate.</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        Returns:</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">            str: The image urls.</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>            <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>            <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>        <span class="p">)</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -259,7 +299,8 @@
                 <section id="settings">
                     <div class="attr variable">
             <span class="name">settings</span>        =
-<span class="default_value">Settings(LOGGER_NAME=&#39;cloai&#39;, LOGGER_VERBOSITY=&#39;DEBUG&#39;, OPENAI_API_KEY=SecretStr(&#39;**********&#39;))</span>
+<input id="settings-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+            <label class="view-value-button pdoc-button" for="settings-view-value"></label><span class="default_value">Settings(LOGGER_NAME=&#39;cloai&#39;, LOGGER_VERBOSITY=&#39;INFO&#39;, OPENAI_API_KEY=SecretStr(&#39;**********&#39;), PROMPT_FILE=PosixPath(&#39;/home/runner/work/cloai/cloai/src/cloai/prompts.yaml&#39;))</span>
 
         
     </div>
@@ -295,7 +336,7 @@
                 <section id="logger">
                     <div class="attr variable">
             <span class="name">logger</span>        =
-<span class="default_value">&lt;Logger cloai (DEBUG)&gt;</span>
+<span class="default_value">&lt;Logger cloai (INFO)&gt;</span>
 
         
     </div>
@@ -452,6 +493,123 @@ implemented.</p>
 
                             </div>
                 </section>
+                <section id="ChatCompletion">
+                            <input id="ChatCompletion-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">ChatCompletion</span><wbr>(<span class="base"><a href="#OpenAIBaseClass">OpenAIBaseClass</a></span>):
+
+                <label class="view-source-button" for="ChatCompletion-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#ChatCompletion"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ChatCompletion-48"><a href="#ChatCompletion-48"><span class="linenos">48</span></a><span class="k">class</span> <span class="nc">ChatCompletion</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="ChatCompletion-49"><a href="#ChatCompletion-49"><span class="linenos">49</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Chat Completion models.&quot;&quot;&quot;</span>
+</span><span id="ChatCompletion-50"><a href="#ChatCompletion-50"><span class="linenos">50</span></a>
+</span><span id="ChatCompletion-51"><a href="#ChatCompletion-51"><span class="linenos">51</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="ChatCompletion-52"><a href="#ChatCompletion-52"><span class="linenos">52</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="ChatCompletion-53"><a href="#ChatCompletion-53"><span class="linenos">53</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="ChatCompletion-54"><a href="#ChatCompletion-54"><span class="linenos">54</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="ChatCompletion-55"><a href="#ChatCompletion-55"><span class="linenos">55</span></a>        <span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-4-1106-preview&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span>
+</span><span id="ChatCompletion-56"><a href="#ChatCompletion-56"><span class="linenos">56</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="ChatCompletion-57"><a href="#ChatCompletion-57"><span class="linenos">57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Chat Completion model.</span>
+</span><span id="ChatCompletion-58"><a href="#ChatCompletion-58"><span class="linenos">58</span></a>
+</span><span id="ChatCompletion-59"><a href="#ChatCompletion-59"><span class="linenos">59</span></a><span class="sd">        Args:</span>
+</span><span id="ChatCompletion-60"><a href="#ChatCompletion-60"><span class="linenos">60</span></a><span class="sd">            user_prompt: The user&#39;s prompt.</span>
+</span><span id="ChatCompletion-61"><a href="#ChatCompletion-61"><span class="linenos">61</span></a><span class="sd">            system_prompt: The system&#39;s prompt.</span>
+</span><span id="ChatCompletion-62"><a href="#ChatCompletion-62"><span class="linenos">62</span></a><span class="sd">            model: The name of the Chat Completion model to use.</span>
+</span><span id="ChatCompletion-63"><a href="#ChatCompletion-63"><span class="linenos">63</span></a>
+</span><span id="ChatCompletion-64"><a href="#ChatCompletion-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
+</span><span id="ChatCompletion-65"><a href="#ChatCompletion-65"><span class="linenos">65</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="ChatCompletion-66"><a href="#ChatCompletion-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ChatCompletion-67"><a href="#ChatCompletion-67"><span class="linenos">67</span></a>        <span class="n">system_message</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">)</span>
+</span><span id="ChatCompletion-68"><a href="#ChatCompletion-68"><span class="linenos">68</span></a>        <span class="n">user_message</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">user_prompt</span><span class="p">)</span>
+</span><span id="ChatCompletion-69"><a href="#ChatCompletion-69"><span class="linenos">69</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="ChatCompletion-70"><a href="#ChatCompletion-70"><span class="linenos">70</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="ChatCompletion-71"><a href="#ChatCompletion-71"><span class="linenos">71</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="n">system_message</span><span class="p">,</span> <span class="n">user_message</span><span class="p">],</span>  <span class="c1"># type: ignore[list-item]</span>
+</span><span id="ChatCompletion-72"><a href="#ChatCompletion-72"><span class="linenos">72</span></a>        <span class="p">)</span>
+</span><span id="ChatCompletion-73"><a href="#ChatCompletion-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+</span><span id="ChatCompletion-74"><a href="#ChatCompletion-74"><span class="linenos">74</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No response from OpenAI.&quot;</span>
+</span><span id="ChatCompletion-75"><a href="#ChatCompletion-75"><span class="linenos">75</span></a>            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">OpenAIError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span id="ChatCompletion-76"><a href="#ChatCompletion-76"><span class="linenos">76</span></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>A class for running the Chat Completion models.</p>
+</div>
+
+
+                            <div id="ChatCompletion.run" class="classattr">
+                                        <input id="ChatCompletion.run-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">async def</span>
+        <span class="name">run</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;gpt-4&#39;</span><span class="p">,</span> <span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="s1">&#39;gpt-4-1106-preview&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gpt-4&#39;</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <label class="view-source-button" for="ChatCompletion.run-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#ChatCompletion.run"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ChatCompletion.run-51"><a href="#ChatCompletion.run-51"><span class="linenos">51</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="ChatCompletion.run-52"><a href="#ChatCompletion.run-52"><span class="linenos">52</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="ChatCompletion.run-53"><a href="#ChatCompletion.run-53"><span class="linenos">53</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="ChatCompletion.run-54"><a href="#ChatCompletion.run-54"><span class="linenos">54</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="ChatCompletion.run-55"><a href="#ChatCompletion.run-55"><span class="linenos">55</span></a>        <span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-4-1106-preview&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span>
+</span><span id="ChatCompletion.run-56"><a href="#ChatCompletion.run-56"><span class="linenos">56</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="ChatCompletion.run-57"><a href="#ChatCompletion.run-57"><span class="linenos">57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Chat Completion model.</span>
+</span><span id="ChatCompletion.run-58"><a href="#ChatCompletion.run-58"><span class="linenos">58</span></a>
+</span><span id="ChatCompletion.run-59"><a href="#ChatCompletion.run-59"><span class="linenos">59</span></a><span class="sd">        Args:</span>
+</span><span id="ChatCompletion.run-60"><a href="#ChatCompletion.run-60"><span class="linenos">60</span></a><span class="sd">            user_prompt: The user&#39;s prompt.</span>
+</span><span id="ChatCompletion.run-61"><a href="#ChatCompletion.run-61"><span class="linenos">61</span></a><span class="sd">            system_prompt: The system&#39;s prompt.</span>
+</span><span id="ChatCompletion.run-62"><a href="#ChatCompletion.run-62"><span class="linenos">62</span></a><span class="sd">            model: The name of the Chat Completion model to use.</span>
+</span><span id="ChatCompletion.run-63"><a href="#ChatCompletion.run-63"><span class="linenos">63</span></a>
+</span><span id="ChatCompletion.run-64"><a href="#ChatCompletion.run-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
+</span><span id="ChatCompletion.run-65"><a href="#ChatCompletion.run-65"><span class="linenos">65</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="ChatCompletion.run-66"><a href="#ChatCompletion.run-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ChatCompletion.run-67"><a href="#ChatCompletion.run-67"><span class="linenos">67</span></a>        <span class="n">system_message</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">)</span>
+</span><span id="ChatCompletion.run-68"><a href="#ChatCompletion.run-68"><span class="linenos">68</span></a>        <span class="n">user_message</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">user_prompt</span><span class="p">)</span>
+</span><span id="ChatCompletion.run-69"><a href="#ChatCompletion.run-69"><span class="linenos">69</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="ChatCompletion.run-70"><a href="#ChatCompletion.run-70"><span class="linenos">70</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="ChatCompletion.run-71"><a href="#ChatCompletion.run-71"><span class="linenos">71</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="n">system_message</span><span class="p">,</span> <span class="n">user_message</span><span class="p">],</span>  <span class="c1"># type: ignore[list-item]</span>
+</span><span id="ChatCompletion.run-72"><a href="#ChatCompletion.run-72"><span class="linenos">72</span></a>        <span class="p">)</span>
+</span><span id="ChatCompletion.run-73"><a href="#ChatCompletion.run-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+</span><span id="ChatCompletion.run-74"><a href="#ChatCompletion.run-74"><span class="linenos">74</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No response from OpenAI.&quot;</span>
+</span><span id="ChatCompletion.run-75"><a href="#ChatCompletion.run-75"><span class="linenos">75</span></a>            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">OpenAIError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span id="ChatCompletion.run-76"><a href="#ChatCompletion.run-76"><span class="linenos">76</span></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Runs the Chat Completion model.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>user_prompt:</strong>  The user's prompt.</li>
+<li><strong>system_prompt:</strong>  The system's prompt.</li>
+<li><strong>model:</strong>  The name of the Chat Completion model to use.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>The model's response.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#OpenAIBaseClass">OpenAIBaseClass</a></dt>
+                                <dd id="ChatCompletion.__init__" class="function"><a href="#OpenAIBaseClass.__init__">OpenAIBaseClass</a></dd>
+                <dd id="ChatCompletion.client" class="variable"><a href="#OpenAIBaseClass.client">client</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
                 <section id="TextToSpeech">
                             <input id="TextToSpeech-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -463,33 +621,33 @@ implemented.</p>
 
     </div>
     <a class="headerlink" href="#TextToSpeech"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TextToSpeech-48"><a href="#TextToSpeech-48"><span class="linenos">48</span></a><span class="k">class</span> <span class="nc">TextToSpeech</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
-</span><span id="TextToSpeech-49"><a href="#TextToSpeech-49"><span class="linenos">49</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Text-To-Speech models.&quot;&quot;&quot;</span>
-</span><span id="TextToSpeech-50"><a href="#TextToSpeech-50"><span class="linenos">50</span></a>
-</span><span id="TextToSpeech-51"><a href="#TextToSpeech-51"><span class="linenos">51</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-</span><span id="TextToSpeech-52"><a href="#TextToSpeech-52"><span class="linenos">52</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="TextToSpeech-53"><a href="#TextToSpeech-53"><span class="linenos">53</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="TextToSpeech-54"><a href="#TextToSpeech-54"><span class="linenos">54</span></a>        <span class="n">output_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="TextToSpeech-55"><a href="#TextToSpeech-55"><span class="linenos">55</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tts-1&quot;</span><span class="p">,</span>
-</span><span id="TextToSpeech-56"><a href="#TextToSpeech-56"><span class="linenos">56</span></a>        <span class="n">voice</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;fable&quot;</span><span class="p">,</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span> <span class="s2">&quot;nova&quot;</span><span class="p">,</span> <span class="s2">&quot;shimmer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span>
-</span><span id="TextToSpeech-57"><a href="#TextToSpeech-57"><span class="linenos">57</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="TextToSpeech-58"><a href="#TextToSpeech-58"><span class="linenos">58</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Text-To-Speech model.</span>
-</span><span id="TextToSpeech-59"><a href="#TextToSpeech-59"><span class="linenos">59</span></a>
-</span><span id="TextToSpeech-60"><a href="#TextToSpeech-60"><span class="linenos">60</span></a><span class="sd">        Args:</span>
-</span><span id="TextToSpeech-61"><a href="#TextToSpeech-61"><span class="linenos">61</span></a><span class="sd">            text: The text to convert to speech.</span>
-</span><span id="TextToSpeech-62"><a href="#TextToSpeech-62"><span class="linenos">62</span></a><span class="sd">            output_file: The name of the output file.</span>
-</span><span id="TextToSpeech-63"><a href="#TextToSpeech-63"><span class="linenos">63</span></a><span class="sd">            model: The name of the Text-To-Speech model to use.</span>
-</span><span id="TextToSpeech-64"><a href="#TextToSpeech-64"><span class="linenos">64</span></a><span class="sd">            voice: The voice to use.</span>
-</span><span id="TextToSpeech-65"><a href="#TextToSpeech-65"><span class="linenos">65</span></a>
-</span><span id="TextToSpeech-66"><a href="#TextToSpeech-66"><span class="linenos">66</span></a><span class="sd">        Returns:</span>
-</span><span id="TextToSpeech-67"><a href="#TextToSpeech-67"><span class="linenos">67</span></a><span class="sd">            The model&#39;s response.</span>
-</span><span id="TextToSpeech-68"><a href="#TextToSpeech-68"><span class="linenos">68</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TextToSpeech-69"><a href="#TextToSpeech-69"><span class="linenos">69</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">speech</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="TextToSpeech-70"><a href="#TextToSpeech-70"><span class="linenos">70</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="TextToSpeech-71"><a href="#TextToSpeech-71"><span class="linenos">71</span></a>            <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span>
-</span><span id="TextToSpeech-72"><a href="#TextToSpeech-72"><span class="linenos">72</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
-</span><span id="TextToSpeech-73"><a href="#TextToSpeech-73"><span class="linenos">73</span></a>        <span class="p">)</span>
-</span><span id="TextToSpeech-74"><a href="#TextToSpeech-74"><span class="linenos">74</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">stream_to_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TextToSpeech-79"><a href="#TextToSpeech-79"><span class="linenos"> 79</span></a><span class="k">class</span> <span class="nc">TextToSpeech</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="TextToSpeech-80"><a href="#TextToSpeech-80"><span class="linenos"> 80</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Text-To-Speech models.&quot;&quot;&quot;</span>
+</span><span id="TextToSpeech-81"><a href="#TextToSpeech-81"><span class="linenos"> 81</span></a>
+</span><span id="TextToSpeech-82"><a href="#TextToSpeech-82"><span class="linenos"> 82</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="TextToSpeech-83"><a href="#TextToSpeech-83"><span class="linenos"> 83</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="TextToSpeech-84"><a href="#TextToSpeech-84"><span class="linenos"> 84</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="TextToSpeech-85"><a href="#TextToSpeech-85"><span class="linenos"> 85</span></a>        <span class="n">output_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="TextToSpeech-86"><a href="#TextToSpeech-86"><span class="linenos"> 86</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tts-1&quot;</span><span class="p">,</span>
+</span><span id="TextToSpeech-87"><a href="#TextToSpeech-87"><span class="linenos"> 87</span></a>        <span class="n">voice</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;fable&quot;</span><span class="p">,</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span> <span class="s2">&quot;nova&quot;</span><span class="p">,</span> <span class="s2">&quot;shimmer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span>
+</span><span id="TextToSpeech-88"><a href="#TextToSpeech-88"><span class="linenos"> 88</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="TextToSpeech-89"><a href="#TextToSpeech-89"><span class="linenos"> 89</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Text-To-Speech model.</span>
+</span><span id="TextToSpeech-90"><a href="#TextToSpeech-90"><span class="linenos"> 90</span></a>
+</span><span id="TextToSpeech-91"><a href="#TextToSpeech-91"><span class="linenos"> 91</span></a><span class="sd">        Args:</span>
+</span><span id="TextToSpeech-92"><a href="#TextToSpeech-92"><span class="linenos"> 92</span></a><span class="sd">            text: The text to convert to speech.</span>
+</span><span id="TextToSpeech-93"><a href="#TextToSpeech-93"><span class="linenos"> 93</span></a><span class="sd">            output_file: The name of the output file.</span>
+</span><span id="TextToSpeech-94"><a href="#TextToSpeech-94"><span class="linenos"> 94</span></a><span class="sd">            model: The name of the Text-To-Speech model to use.</span>
+</span><span id="TextToSpeech-95"><a href="#TextToSpeech-95"><span class="linenos"> 95</span></a><span class="sd">            voice: The voice to use.</span>
+</span><span id="TextToSpeech-96"><a href="#TextToSpeech-96"><span class="linenos"> 96</span></a>
+</span><span id="TextToSpeech-97"><a href="#TextToSpeech-97"><span class="linenos"> 97</span></a><span class="sd">        Returns:</span>
+</span><span id="TextToSpeech-98"><a href="#TextToSpeech-98"><span class="linenos"> 98</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="TextToSpeech-99"><a href="#TextToSpeech-99"><span class="linenos"> 99</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="TextToSpeech-100"><a href="#TextToSpeech-100"><span class="linenos">100</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">speech</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="TextToSpeech-101"><a href="#TextToSpeech-101"><span class="linenos">101</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="TextToSpeech-102"><a href="#TextToSpeech-102"><span class="linenos">102</span></a>            <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span>
+</span><span id="TextToSpeech-103"><a href="#TextToSpeech-103"><span class="linenos">103</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+</span><span id="TextToSpeech-104"><a href="#TextToSpeech-104"><span class="linenos">104</span></a>        <span class="p">)</span>
+</span><span id="TextToSpeech-105"><a href="#TextToSpeech-105"><span class="linenos">105</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">stream_to_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -508,30 +666,30 @@ implemented.</p>
 
     </div>
     <a class="headerlink" href="#TextToSpeech.run"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TextToSpeech.run-51"><a href="#TextToSpeech.run-51"><span class="linenos">51</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-</span><span id="TextToSpeech.run-52"><a href="#TextToSpeech.run-52"><span class="linenos">52</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-53"><a href="#TextToSpeech.run-53"><span class="linenos">53</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-54"><a href="#TextToSpeech.run-54"><span class="linenos">54</span></a>        <span class="n">output_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-55"><a href="#TextToSpeech.run-55"><span class="linenos">55</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tts-1&quot;</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-56"><a href="#TextToSpeech.run-56"><span class="linenos">56</span></a>        <span class="n">voice</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;fable&quot;</span><span class="p">,</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span> <span class="s2">&quot;nova&quot;</span><span class="p">,</span> <span class="s2">&quot;shimmer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-57"><a href="#TextToSpeech.run-57"><span class="linenos">57</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="TextToSpeech.run-58"><a href="#TextToSpeech.run-58"><span class="linenos">58</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Text-To-Speech model.</span>
-</span><span id="TextToSpeech.run-59"><a href="#TextToSpeech.run-59"><span class="linenos">59</span></a>
-</span><span id="TextToSpeech.run-60"><a href="#TextToSpeech.run-60"><span class="linenos">60</span></a><span class="sd">        Args:</span>
-</span><span id="TextToSpeech.run-61"><a href="#TextToSpeech.run-61"><span class="linenos">61</span></a><span class="sd">            text: The text to convert to speech.</span>
-</span><span id="TextToSpeech.run-62"><a href="#TextToSpeech.run-62"><span class="linenos">62</span></a><span class="sd">            output_file: The name of the output file.</span>
-</span><span id="TextToSpeech.run-63"><a href="#TextToSpeech.run-63"><span class="linenos">63</span></a><span class="sd">            model: The name of the Text-To-Speech model to use.</span>
-</span><span id="TextToSpeech.run-64"><a href="#TextToSpeech.run-64"><span class="linenos">64</span></a><span class="sd">            voice: The voice to use.</span>
-</span><span id="TextToSpeech.run-65"><a href="#TextToSpeech.run-65"><span class="linenos">65</span></a>
-</span><span id="TextToSpeech.run-66"><a href="#TextToSpeech.run-66"><span class="linenos">66</span></a><span class="sd">        Returns:</span>
-</span><span id="TextToSpeech.run-67"><a href="#TextToSpeech.run-67"><span class="linenos">67</span></a><span class="sd">            The model&#39;s response.</span>
-</span><span id="TextToSpeech.run-68"><a href="#TextToSpeech.run-68"><span class="linenos">68</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TextToSpeech.run-69"><a href="#TextToSpeech.run-69"><span class="linenos">69</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">speech</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="TextToSpeech.run-70"><a href="#TextToSpeech.run-70"><span class="linenos">70</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-71"><a href="#TextToSpeech.run-71"><span class="linenos">71</span></a>            <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-72"><a href="#TextToSpeech.run-72"><span class="linenos">72</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
-</span><span id="TextToSpeech.run-73"><a href="#TextToSpeech.run-73"><span class="linenos">73</span></a>        <span class="p">)</span>
-</span><span id="TextToSpeech.run-74"><a href="#TextToSpeech.run-74"><span class="linenos">74</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">stream_to_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TextToSpeech.run-82"><a href="#TextToSpeech.run-82"><span class="linenos"> 82</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="TextToSpeech.run-83"><a href="#TextToSpeech.run-83"><span class="linenos"> 83</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-84"><a href="#TextToSpeech.run-84"><span class="linenos"> 84</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-85"><a href="#TextToSpeech.run-85"><span class="linenos"> 85</span></a>        <span class="n">output_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-86"><a href="#TextToSpeech.run-86"><span class="linenos"> 86</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tts-1&quot;</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-87"><a href="#TextToSpeech.run-87"><span class="linenos"> 87</span></a>        <span class="n">voice</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="s2">&quot;echo&quot;</span><span class="p">,</span> <span class="s2">&quot;fable&quot;</span><span class="p">,</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span> <span class="s2">&quot;nova&quot;</span><span class="p">,</span> <span class="s2">&quot;shimmer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;onyx&quot;</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-88"><a href="#TextToSpeech.run-88"><span class="linenos"> 88</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="TextToSpeech.run-89"><a href="#TextToSpeech.run-89"><span class="linenos"> 89</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Text-To-Speech model.</span>
+</span><span id="TextToSpeech.run-90"><a href="#TextToSpeech.run-90"><span class="linenos"> 90</span></a>
+</span><span id="TextToSpeech.run-91"><a href="#TextToSpeech.run-91"><span class="linenos"> 91</span></a><span class="sd">        Args:</span>
+</span><span id="TextToSpeech.run-92"><a href="#TextToSpeech.run-92"><span class="linenos"> 92</span></a><span class="sd">            text: The text to convert to speech.</span>
+</span><span id="TextToSpeech.run-93"><a href="#TextToSpeech.run-93"><span class="linenos"> 93</span></a><span class="sd">            output_file: The name of the output file.</span>
+</span><span id="TextToSpeech.run-94"><a href="#TextToSpeech.run-94"><span class="linenos"> 94</span></a><span class="sd">            model: The name of the Text-To-Speech model to use.</span>
+</span><span id="TextToSpeech.run-95"><a href="#TextToSpeech.run-95"><span class="linenos"> 95</span></a><span class="sd">            voice: The voice to use.</span>
+</span><span id="TextToSpeech.run-96"><a href="#TextToSpeech.run-96"><span class="linenos"> 96</span></a>
+</span><span id="TextToSpeech.run-97"><a href="#TextToSpeech.run-97"><span class="linenos"> 97</span></a><span class="sd">        Returns:</span>
+</span><span id="TextToSpeech.run-98"><a href="#TextToSpeech.run-98"><span class="linenos"> 98</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="TextToSpeech.run-99"><a href="#TextToSpeech.run-99"><span class="linenos"> 99</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="TextToSpeech.run-100"><a href="#TextToSpeech.run-100"><span class="linenos">100</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">speech</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="TextToSpeech.run-101"><a href="#TextToSpeech.run-101"><span class="linenos">101</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-102"><a href="#TextToSpeech.run-102"><span class="linenos">102</span></a>            <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-103"><a href="#TextToSpeech.run-103"><span class="linenos">103</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+</span><span id="TextToSpeech.run-104"><a href="#TextToSpeech.run-104"><span class="linenos">104</span></a>        <span class="p">)</span>
+</span><span id="TextToSpeech.run-105"><a href="#TextToSpeech.run-105"><span class="linenos">105</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">stream_to_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -577,29 +735,29 @@ implemented.</p>
 
     </div>
     <a class="headerlink" href="#SpeechToText"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpeechToText-77"><a href="#SpeechToText-77"><span class="linenos">77</span></a><span class="k">class</span> <span class="nc">SpeechToText</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
-</span><span id="SpeechToText-78"><a href="#SpeechToText-78"><span class="linenos">78</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Speech-To-Text models.&quot;&quot;&quot;</span>
-</span><span id="SpeechToText-79"><a href="#SpeechToText-79"><span class="linenos">79</span></a>
-</span><span id="SpeechToText-80"><a href="#SpeechToText-80"><span class="linenos">80</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-</span><span id="SpeechToText-81"><a href="#SpeechToText-81"><span class="linenos">81</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="SpeechToText-82"><a href="#SpeechToText-82"><span class="linenos">82</span></a>        <span class="n">audio_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="SpeechToText-83"><a href="#SpeechToText-83"><span class="linenos">83</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span>
-</span><span id="SpeechToText-84"><a href="#SpeechToText-84"><span class="linenos">84</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="SpeechToText-85"><a href="#SpeechToText-85"><span class="linenos">85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Speech-To-Text model.</span>
-</span><span id="SpeechToText-86"><a href="#SpeechToText-86"><span class="linenos">86</span></a>
-</span><span id="SpeechToText-87"><a href="#SpeechToText-87"><span class="linenos">87</span></a><span class="sd">        Args:</span>
-</span><span id="SpeechToText-88"><a href="#SpeechToText-88"><span class="linenos">88</span></a><span class="sd">            audio_file: The audio to convert to text.</span>
-</span><span id="SpeechToText-89"><a href="#SpeechToText-89"><span class="linenos">89</span></a><span class="sd">            model: The name of the Speech-To-Text model to use.</span>
-</span><span id="SpeechToText-90"><a href="#SpeechToText-90"><span class="linenos">90</span></a>
-</span><span id="SpeechToText-91"><a href="#SpeechToText-91"><span class="linenos">91</span></a><span class="sd">        Returns:</span>
-</span><span id="SpeechToText-92"><a href="#SpeechToText-92"><span class="linenos">92</span></a><span class="sd">            The model&#39;s response.</span>
-</span><span id="SpeechToText-93"><a href="#SpeechToText-93"><span class="linenos">93</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SpeechToText-94"><a href="#SpeechToText-94"><span class="linenos">94</span></a>        <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio</span><span class="p">:</span>
-</span><span id="SpeechToText-95"><a href="#SpeechToText-95"><span class="linenos">95</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcriptions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="SpeechToText-96"><a href="#SpeechToText-96"><span class="linenos">96</span></a>                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="SpeechToText-97"><a href="#SpeechToText-97"><span class="linenos">97</span></a>                <span class="n">file</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
-</span><span id="SpeechToText-98"><a href="#SpeechToText-98"><span class="linenos">98</span></a>                <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
-</span><span id="SpeechToText-99"><a href="#SpeechToText-99"><span class="linenos">99</span></a>            <span class="p">)</span>  <span class="c1"># type: ignore[return-value] # response_format overrides output type.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpeechToText-108"><a href="#SpeechToText-108"><span class="linenos">108</span></a><span class="k">class</span> <span class="nc">SpeechToText</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="SpeechToText-109"><a href="#SpeechToText-109"><span class="linenos">109</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Speech-To-Text models.&quot;&quot;&quot;</span>
+</span><span id="SpeechToText-110"><a href="#SpeechToText-110"><span class="linenos">110</span></a>
+</span><span id="SpeechToText-111"><a href="#SpeechToText-111"><span class="linenos">111</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="SpeechToText-112"><a href="#SpeechToText-112"><span class="linenos">112</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="SpeechToText-113"><a href="#SpeechToText-113"><span class="linenos">113</span></a>        <span class="n">audio_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="SpeechToText-114"><a href="#SpeechToText-114"><span class="linenos">114</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span>
+</span><span id="SpeechToText-115"><a href="#SpeechToText-115"><span class="linenos">115</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="SpeechToText-116"><a href="#SpeechToText-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Speech-To-Text model.</span>
+</span><span id="SpeechToText-117"><a href="#SpeechToText-117"><span class="linenos">117</span></a>
+</span><span id="SpeechToText-118"><a href="#SpeechToText-118"><span class="linenos">118</span></a><span class="sd">        Args:</span>
+</span><span id="SpeechToText-119"><a href="#SpeechToText-119"><span class="linenos">119</span></a><span class="sd">            audio_file: The audio to convert to text.</span>
+</span><span id="SpeechToText-120"><a href="#SpeechToText-120"><span class="linenos">120</span></a><span class="sd">            model: The name of the Speech-To-Text model to use.</span>
+</span><span id="SpeechToText-121"><a href="#SpeechToText-121"><span class="linenos">121</span></a>
+</span><span id="SpeechToText-122"><a href="#SpeechToText-122"><span class="linenos">122</span></a><span class="sd">        Returns:</span>
+</span><span id="SpeechToText-123"><a href="#SpeechToText-123"><span class="linenos">123</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="SpeechToText-124"><a href="#SpeechToText-124"><span class="linenos">124</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SpeechToText-125"><a href="#SpeechToText-125"><span class="linenos">125</span></a>        <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio</span><span class="p">:</span>
+</span><span id="SpeechToText-126"><a href="#SpeechToText-126"><span class="linenos">126</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcriptions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="SpeechToText-127"><a href="#SpeechToText-127"><span class="linenos">127</span></a>                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="SpeechToText-128"><a href="#SpeechToText-128"><span class="linenos">128</span></a>                <span class="n">file</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
+</span><span id="SpeechToText-129"><a href="#SpeechToText-129"><span class="linenos">129</span></a>                <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="SpeechToText-130"><a href="#SpeechToText-130"><span class="linenos">130</span></a>            <span class="p">)</span>  <span class="c1"># type: ignore[return-value] # response_format overrides output type.</span>
 </span></pre></div>
 
 
@@ -618,26 +776,26 @@ implemented.</p>
 
     </div>
     <a class="headerlink" href="#SpeechToText.run"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpeechToText.run-80"><a href="#SpeechToText.run-80"><span class="linenos">80</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-</span><span id="SpeechToText.run-81"><a href="#SpeechToText.run-81"><span class="linenos">81</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="SpeechToText.run-82"><a href="#SpeechToText.run-82"><span class="linenos">82</span></a>        <span class="n">audio_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="SpeechToText.run-83"><a href="#SpeechToText.run-83"><span class="linenos">83</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span>
-</span><span id="SpeechToText.run-84"><a href="#SpeechToText.run-84"><span class="linenos">84</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="SpeechToText.run-85"><a href="#SpeechToText.run-85"><span class="linenos">85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Speech-To-Text model.</span>
-</span><span id="SpeechToText.run-86"><a href="#SpeechToText.run-86"><span class="linenos">86</span></a>
-</span><span id="SpeechToText.run-87"><a href="#SpeechToText.run-87"><span class="linenos">87</span></a><span class="sd">        Args:</span>
-</span><span id="SpeechToText.run-88"><a href="#SpeechToText.run-88"><span class="linenos">88</span></a><span class="sd">            audio_file: The audio to convert to text.</span>
-</span><span id="SpeechToText.run-89"><a href="#SpeechToText.run-89"><span class="linenos">89</span></a><span class="sd">            model: The name of the Speech-To-Text model to use.</span>
-</span><span id="SpeechToText.run-90"><a href="#SpeechToText.run-90"><span class="linenos">90</span></a>
-</span><span id="SpeechToText.run-91"><a href="#SpeechToText.run-91"><span class="linenos">91</span></a><span class="sd">        Returns:</span>
-</span><span id="SpeechToText.run-92"><a href="#SpeechToText.run-92"><span class="linenos">92</span></a><span class="sd">            The model&#39;s response.</span>
-</span><span id="SpeechToText.run-93"><a href="#SpeechToText.run-93"><span class="linenos">93</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SpeechToText.run-94"><a href="#SpeechToText.run-94"><span class="linenos">94</span></a>        <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio</span><span class="p">:</span>
-</span><span id="SpeechToText.run-95"><a href="#SpeechToText.run-95"><span class="linenos">95</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcriptions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="SpeechToText.run-96"><a href="#SpeechToText.run-96"><span class="linenos">96</span></a>                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="SpeechToText.run-97"><a href="#SpeechToText.run-97"><span class="linenos">97</span></a>                <span class="n">file</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
-</span><span id="SpeechToText.run-98"><a href="#SpeechToText.run-98"><span class="linenos">98</span></a>                <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
-</span><span id="SpeechToText.run-99"><a href="#SpeechToText.run-99"><span class="linenos">99</span></a>            <span class="p">)</span>  <span class="c1"># type: ignore[return-value] # response_format overrides output type.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpeechToText.run-111"><a href="#SpeechToText.run-111"><span class="linenos">111</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="SpeechToText.run-112"><a href="#SpeechToText.run-112"><span class="linenos">112</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="SpeechToText.run-113"><a href="#SpeechToText.run-113"><span class="linenos">113</span></a>        <span class="n">audio_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="SpeechToText.run-114"><a href="#SpeechToText.run-114"><span class="linenos">114</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span>
+</span><span id="SpeechToText.run-115"><a href="#SpeechToText.run-115"><span class="linenos">115</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="SpeechToText.run-116"><a href="#SpeechToText.run-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Speech-To-Text model.</span>
+</span><span id="SpeechToText.run-117"><a href="#SpeechToText.run-117"><span class="linenos">117</span></a>
+</span><span id="SpeechToText.run-118"><a href="#SpeechToText.run-118"><span class="linenos">118</span></a><span class="sd">        Args:</span>
+</span><span id="SpeechToText.run-119"><a href="#SpeechToText.run-119"><span class="linenos">119</span></a><span class="sd">            audio_file: The audio to convert to text.</span>
+</span><span id="SpeechToText.run-120"><a href="#SpeechToText.run-120"><span class="linenos">120</span></a><span class="sd">            model: The name of the Speech-To-Text model to use.</span>
+</span><span id="SpeechToText.run-121"><a href="#SpeechToText.run-121"><span class="linenos">121</span></a>
+</span><span id="SpeechToText.run-122"><a href="#SpeechToText.run-122"><span class="linenos">122</span></a><span class="sd">        Returns:</span>
+</span><span id="SpeechToText.run-123"><a href="#SpeechToText.run-123"><span class="linenos">123</span></a><span class="sd">            The model&#39;s response.</span>
+</span><span id="SpeechToText.run-124"><a href="#SpeechToText.run-124"><span class="linenos">124</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SpeechToText.run-125"><a href="#SpeechToText.run-125"><span class="linenos">125</span></a>        <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">audio_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">audio</span><span class="p">:</span>
+</span><span id="SpeechToText.run-126"><a href="#SpeechToText.run-126"><span class="linenos">126</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcriptions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="SpeechToText.run-127"><a href="#SpeechToText.run-127"><span class="linenos">127</span></a>                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="SpeechToText.run-128"><a href="#SpeechToText.run-128"><span class="linenos">128</span></a>                <span class="n">file</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
+</span><span id="SpeechToText.run-129"><a href="#SpeechToText.run-129"><span class="linenos">129</span></a>                <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="SpeechToText.run-130"><a href="#SpeechToText.run-130"><span class="linenos">130</span></a>            <span class="p">)</span>  <span class="c1"># type: ignore[return-value] # response_format overrides output type.</span>
 </span></pre></div>
 
 
@@ -681,39 +839,39 @@ implemented.</p>
 
     </div>
     <a class="headerlink" href="#ImageGeneration"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ImageGeneration-102"><a href="#ImageGeneration-102"><span class="linenos">102</span></a><span class="k">class</span> <span class="nc">ImageGeneration</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
-</span><span id="ImageGeneration-103"><a href="#ImageGeneration-103"><span class="linenos">103</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Image Generation models.&quot;&quot;&quot;</span>
-</span><span id="ImageGeneration-104"><a href="#ImageGeneration-104"><span class="linenos">104</span></a>
-</span><span id="ImageGeneration-105"><a href="#ImageGeneration-105"><span class="linenos">105</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
-</span><span id="ImageGeneration-106"><a href="#ImageGeneration-106"><span class="linenos">106</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="ImageGeneration-107"><a href="#ImageGeneration-107"><span class="linenos">107</span></a>        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="ImageGeneration-108"><a href="#ImageGeneration-108"><span class="linenos">108</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span>
-</span><span id="ImageGeneration-109"><a href="#ImageGeneration-109"><span class="linenos">109</span></a>        <span class="n">size</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;256x256&quot;</span><span class="p">,</span> <span class="s2">&quot;512x512&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1792x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1792&quot;</span><span class="p">]</span>
-</span><span id="ImageGeneration-110"><a href="#ImageGeneration-110"><span class="linenos">110</span></a>        <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="ImageGeneration-111"><a href="#ImageGeneration-111"><span class="linenos">111</span></a>        <span class="n">quality</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;hd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
-</span><span id="ImageGeneration-112"><a href="#ImageGeneration-112"><span class="linenos">112</span></a>        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="ImageGeneration-113"><a href="#ImageGeneration-113"><span class="linenos">113</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-</span><span id="ImageGeneration-114"><a href="#ImageGeneration-114"><span class="linenos">114</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Image Generation model.</span>
-</span><span id="ImageGeneration-115"><a href="#ImageGeneration-115"><span class="linenos">115</span></a>
-</span><span id="ImageGeneration-116"><a href="#ImageGeneration-116"><span class="linenos">116</span></a><span class="sd">        Args:</span>
-</span><span id="ImageGeneration-117"><a href="#ImageGeneration-117"><span class="linenos">117</span></a><span class="sd">            prompt: The prompt to generate an image from.</span>
-</span><span id="ImageGeneration-118"><a href="#ImageGeneration-118"><span class="linenos">118</span></a><span class="sd">            model: The name of the Image Generation model to use.</span>
-</span><span id="ImageGeneration-119"><a href="#ImageGeneration-119"><span class="linenos">119</span></a><span class="sd">            size: The size of the generated image.</span>
-</span><span id="ImageGeneration-120"><a href="#ImageGeneration-120"><span class="linenos">120</span></a><span class="sd">            quality: The quality of the generated image.</span>
-</span><span id="ImageGeneration-121"><a href="#ImageGeneration-121"><span class="linenos">121</span></a><span class="sd">            n: The number of images to generate.</span>
-</span><span id="ImageGeneration-122"><a href="#ImageGeneration-122"><span class="linenos">122</span></a>
-</span><span id="ImageGeneration-123"><a href="#ImageGeneration-123"><span class="linenos">123</span></a><span class="sd">        Returns:</span>
-</span><span id="ImageGeneration-124"><a href="#ImageGeneration-124"><span class="linenos">124</span></a><span class="sd">            str: The image urls.</span>
-</span><span id="ImageGeneration-125"><a href="#ImageGeneration-125"><span class="linenos">125</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ImageGeneration-126"><a href="#ImageGeneration-126"><span class="linenos">126</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-</span><span id="ImageGeneration-127"><a href="#ImageGeneration-127"><span class="linenos">127</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="ImageGeneration-128"><a href="#ImageGeneration-128"><span class="linenos">128</span></a>            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
-</span><span id="ImageGeneration-129"><a href="#ImageGeneration-129"><span class="linenos">129</span></a>            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
-</span><span id="ImageGeneration-130"><a href="#ImageGeneration-130"><span class="linenos">130</span></a>            <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span>
-</span><span id="ImageGeneration-131"><a href="#ImageGeneration-131"><span class="linenos">131</span></a>            <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
-</span><span id="ImageGeneration-132"><a href="#ImageGeneration-132"><span class="linenos">132</span></a>        <span class="p">)</span>
-</span><span id="ImageGeneration-133"><a href="#ImageGeneration-133"><span class="linenos">133</span></a>
-</span><span id="ImageGeneration-134"><a href="#ImageGeneration-134"><span class="linenos">134</span></a>        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ImageGeneration-133"><a href="#ImageGeneration-133"><span class="linenos">133</span></a><span class="k">class</span> <span class="nc">ImageGeneration</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="ImageGeneration-134"><a href="#ImageGeneration-134"><span class="linenos">134</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Image Generation models.&quot;&quot;&quot;</span>
+</span><span id="ImageGeneration-135"><a href="#ImageGeneration-135"><span class="linenos">135</span></a>
+</span><span id="ImageGeneration-136"><a href="#ImageGeneration-136"><span class="linenos">136</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+</span><span id="ImageGeneration-137"><a href="#ImageGeneration-137"><span class="linenos">137</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="ImageGeneration-138"><a href="#ImageGeneration-138"><span class="linenos">138</span></a>        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="ImageGeneration-139"><a href="#ImageGeneration-139"><span class="linenos">139</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span>
+</span><span id="ImageGeneration-140"><a href="#ImageGeneration-140"><span class="linenos">140</span></a>        <span class="n">size</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;256x256&quot;</span><span class="p">,</span> <span class="s2">&quot;512x512&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1792x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1792&quot;</span><span class="p">]</span>
+</span><span id="ImageGeneration-141"><a href="#ImageGeneration-141"><span class="linenos">141</span></a>        <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="ImageGeneration-142"><a href="#ImageGeneration-142"><span class="linenos">142</span></a>        <span class="n">quality</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;hd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+</span><span id="ImageGeneration-143"><a href="#ImageGeneration-143"><span class="linenos">143</span></a>        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="ImageGeneration-144"><a href="#ImageGeneration-144"><span class="linenos">144</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span id="ImageGeneration-145"><a href="#ImageGeneration-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Image Generation model.</span>
+</span><span id="ImageGeneration-146"><a href="#ImageGeneration-146"><span class="linenos">146</span></a>
+</span><span id="ImageGeneration-147"><a href="#ImageGeneration-147"><span class="linenos">147</span></a><span class="sd">        Args:</span>
+</span><span id="ImageGeneration-148"><a href="#ImageGeneration-148"><span class="linenos">148</span></a><span class="sd">            prompt: The prompt to generate an image from.</span>
+</span><span id="ImageGeneration-149"><a href="#ImageGeneration-149"><span class="linenos">149</span></a><span class="sd">            model: The name of the Image Generation model to use.</span>
+</span><span id="ImageGeneration-150"><a href="#ImageGeneration-150"><span class="linenos">150</span></a><span class="sd">            size: The size of the generated image.</span>
+</span><span id="ImageGeneration-151"><a href="#ImageGeneration-151"><span class="linenos">151</span></a><span class="sd">            quality: The quality of the generated image.</span>
+</span><span id="ImageGeneration-152"><a href="#ImageGeneration-152"><span class="linenos">152</span></a><span class="sd">            n: The number of images to generate.</span>
+</span><span id="ImageGeneration-153"><a href="#ImageGeneration-153"><span class="linenos">153</span></a>
+</span><span id="ImageGeneration-154"><a href="#ImageGeneration-154"><span class="linenos">154</span></a><span class="sd">        Returns:</span>
+</span><span id="ImageGeneration-155"><a href="#ImageGeneration-155"><span class="linenos">155</span></a><span class="sd">            str: The image urls.</span>
+</span><span id="ImageGeneration-156"><a href="#ImageGeneration-156"><span class="linenos">156</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ImageGeneration-157"><a href="#ImageGeneration-157"><span class="linenos">157</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+</span><span id="ImageGeneration-158"><a href="#ImageGeneration-158"><span class="linenos">158</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="ImageGeneration-159"><a href="#ImageGeneration-159"><span class="linenos">159</span></a>            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+</span><span id="ImageGeneration-160"><a href="#ImageGeneration-160"><span class="linenos">160</span></a>            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+</span><span id="ImageGeneration-161"><a href="#ImageGeneration-161"><span class="linenos">161</span></a>            <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span>
+</span><span id="ImageGeneration-162"><a href="#ImageGeneration-162"><span class="linenos">162</span></a>            <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
+</span><span id="ImageGeneration-163"><a href="#ImageGeneration-163"><span class="linenos">163</span></a>        <span class="p">)</span>
+</span><span id="ImageGeneration-164"><a href="#ImageGeneration-164"><span class="linenos">164</span></a>
+</span><span id="ImageGeneration-165"><a href="#ImageGeneration-165"><span class="linenos">165</span></a>        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -732,36 +890,36 @@ implemented.</p>
 
     </div>
     <a class="headerlink" href="#ImageGeneration.run"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ImageGeneration.run-105"><a href="#ImageGeneration.run-105"><span class="linenos">105</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
-</span><span id="ImageGeneration.run-106"><a href="#ImageGeneration.run-106"><span class="linenos">106</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-107"><a href="#ImageGeneration.run-107"><span class="linenos">107</span></a>        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-108"><a href="#ImageGeneration.run-108"><span class="linenos">108</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-109"><a href="#ImageGeneration.run-109"><span class="linenos">109</span></a>        <span class="n">size</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;256x256&quot;</span><span class="p">,</span> <span class="s2">&quot;512x512&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1792x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1792&quot;</span><span class="p">]</span>
-</span><span id="ImageGeneration.run-110"><a href="#ImageGeneration.run-110"><span class="linenos">110</span></a>        <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-111"><a href="#ImageGeneration.run-111"><span class="linenos">111</span></a>        <span class="n">quality</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;hd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-112"><a href="#ImageGeneration.run-112"><span class="linenos">112</span></a>        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-113"><a href="#ImageGeneration.run-113"><span class="linenos">113</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-</span><span id="ImageGeneration.run-114"><a href="#ImageGeneration.run-114"><span class="linenos">114</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Image Generation model.</span>
-</span><span id="ImageGeneration.run-115"><a href="#ImageGeneration.run-115"><span class="linenos">115</span></a>
-</span><span id="ImageGeneration.run-116"><a href="#ImageGeneration.run-116"><span class="linenos">116</span></a><span class="sd">        Args:</span>
-</span><span id="ImageGeneration.run-117"><a href="#ImageGeneration.run-117"><span class="linenos">117</span></a><span class="sd">            prompt: The prompt to generate an image from.</span>
-</span><span id="ImageGeneration.run-118"><a href="#ImageGeneration.run-118"><span class="linenos">118</span></a><span class="sd">            model: The name of the Image Generation model to use.</span>
-</span><span id="ImageGeneration.run-119"><a href="#ImageGeneration.run-119"><span class="linenos">119</span></a><span class="sd">            size: The size of the generated image.</span>
-</span><span id="ImageGeneration.run-120"><a href="#ImageGeneration.run-120"><span class="linenos">120</span></a><span class="sd">            quality: The quality of the generated image.</span>
-</span><span id="ImageGeneration.run-121"><a href="#ImageGeneration.run-121"><span class="linenos">121</span></a><span class="sd">            n: The number of images to generate.</span>
-</span><span id="ImageGeneration.run-122"><a href="#ImageGeneration.run-122"><span class="linenos">122</span></a>
-</span><span id="ImageGeneration.run-123"><a href="#ImageGeneration.run-123"><span class="linenos">123</span></a><span class="sd">        Returns:</span>
-</span><span id="ImageGeneration.run-124"><a href="#ImageGeneration.run-124"><span class="linenos">124</span></a><span class="sd">            str: The image urls.</span>
-</span><span id="ImageGeneration.run-125"><a href="#ImageGeneration.run-125"><span class="linenos">125</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ImageGeneration.run-126"><a href="#ImageGeneration.run-126"><span class="linenos">126</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-</span><span id="ImageGeneration.run-127"><a href="#ImageGeneration.run-127"><span class="linenos">127</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-128"><a href="#ImageGeneration.run-128"><span class="linenos">128</span></a>            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-129"><a href="#ImageGeneration.run-129"><span class="linenos">129</span></a>            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-130"><a href="#ImageGeneration.run-130"><span class="linenos">130</span></a>            <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-131"><a href="#ImageGeneration.run-131"><span class="linenos">131</span></a>            <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
-</span><span id="ImageGeneration.run-132"><a href="#ImageGeneration.run-132"><span class="linenos">132</span></a>        <span class="p">)</span>
-</span><span id="ImageGeneration.run-133"><a href="#ImageGeneration.run-133"><span class="linenos">133</span></a>
-</span><span id="ImageGeneration.run-134"><a href="#ImageGeneration.run-134"><span class="linenos">134</span></a>        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ImageGeneration.run-136"><a href="#ImageGeneration.run-136"><span class="linenos">136</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+</span><span id="ImageGeneration.run-137"><a href="#ImageGeneration.run-137"><span class="linenos">137</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-138"><a href="#ImageGeneration.run-138"><span class="linenos">138</span></a>        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-139"><a href="#ImageGeneration.run-139"><span class="linenos">139</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-140"><a href="#ImageGeneration.run-140"><span class="linenos">140</span></a>        <span class="n">size</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;256x256&quot;</span><span class="p">,</span> <span class="s2">&quot;512x512&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1792x1024&quot;</span><span class="p">,</span> <span class="s2">&quot;1024x1792&quot;</span><span class="p">]</span>
+</span><span id="ImageGeneration.run-141"><a href="#ImageGeneration.run-141"><span class="linenos">141</span></a>        <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-142"><a href="#ImageGeneration.run-142"><span class="linenos">142</span></a>        <span class="n">quality</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;hd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-143"><a href="#ImageGeneration.run-143"><span class="linenos">143</span></a>        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-144"><a href="#ImageGeneration.run-144"><span class="linenos">144</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span id="ImageGeneration.run-145"><a href="#ImageGeneration.run-145"><span class="linenos">145</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Image Generation model.</span>
+</span><span id="ImageGeneration.run-146"><a href="#ImageGeneration.run-146"><span class="linenos">146</span></a>
+</span><span id="ImageGeneration.run-147"><a href="#ImageGeneration.run-147"><span class="linenos">147</span></a><span class="sd">        Args:</span>
+</span><span id="ImageGeneration.run-148"><a href="#ImageGeneration.run-148"><span class="linenos">148</span></a><span class="sd">            prompt: The prompt to generate an image from.</span>
+</span><span id="ImageGeneration.run-149"><a href="#ImageGeneration.run-149"><span class="linenos">149</span></a><span class="sd">            model: The name of the Image Generation model to use.</span>
+</span><span id="ImageGeneration.run-150"><a href="#ImageGeneration.run-150"><span class="linenos">150</span></a><span class="sd">            size: The size of the generated image.</span>
+</span><span id="ImageGeneration.run-151"><a href="#ImageGeneration.run-151"><span class="linenos">151</span></a><span class="sd">            quality: The quality of the generated image.</span>
+</span><span id="ImageGeneration.run-152"><a href="#ImageGeneration.run-152"><span class="linenos">152</span></a><span class="sd">            n: The number of images to generate.</span>
+</span><span id="ImageGeneration.run-153"><a href="#ImageGeneration.run-153"><span class="linenos">153</span></a>
+</span><span id="ImageGeneration.run-154"><a href="#ImageGeneration.run-154"><span class="linenos">154</span></a><span class="sd">        Returns:</span>
+</span><span id="ImageGeneration.run-155"><a href="#ImageGeneration.run-155"><span class="linenos">155</span></a><span class="sd">            str: The image urls.</span>
+</span><span id="ImageGeneration.run-156"><a href="#ImageGeneration.run-156"><span class="linenos">156</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ImageGeneration.run-157"><a href="#ImageGeneration.run-157"><span class="linenos">157</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+</span><span id="ImageGeneration.run-158"><a href="#ImageGeneration.run-158"><span class="linenos">158</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-159"><a href="#ImageGeneration.run-159"><span class="linenos">159</span></a>            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-160"><a href="#ImageGeneration.run-160"><span class="linenos">160</span></a>            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-161"><a href="#ImageGeneration.run-161"><span class="linenos">161</span></a>            <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-162"><a href="#ImageGeneration.run-162"><span class="linenos">162</span></a>            <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
+</span><span id="ImageGeneration.run-163"><a href="#ImageGeneration.run-163"><span class="linenos">163</span></a>        <span class="p">)</span>
+</span><span id="ImageGeneration.run-164"><a href="#ImageGeneration.run-164"><span class="linenos">164</span></a>
+</span><span id="ImageGeneration.run-165"><a href="#ImageGeneration.run-165"><span class="linenos">165</span></a>        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
 </span></pre></div>
 
 

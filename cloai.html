@@ -23,7 +23,7 @@
 
             <h2>Contents</h2>
             <ul>
-  <li><a href="#cloai">cloai</a>
+  <li><a href="#cli-openai">CLI OpenAI</a>
   <ul>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a></li>
@@ -55,16 +55,16 @@
                     <h1 class="modulename">
 cloai    </h1>
 
-                        <div class="docstring"><h1 id="cloai">cloai</h1>
+                        <div class="docstring"><h1 id="cli-openai">CLI OpenAI</h1>
 
-<p>cloai is a Python command-line interface for interacting with the OpenAI API. It provides a set of commands to interact with various OpenAI services such as Speech-to-Text (STT), Text-to-Speech (TTS), and Image Generation.</p>
+<p>CLI OpenAI (cloai) is a command-line interface for interacting with the OpenAI API. It provides a set of commands to interact with various OpenAI services such as GPT, Speech-to-Text (STT), Text-to-Speech (TTS), and Image Generation.</p>
 
 <h2 id="installation">Installation</h2>
 
 <p>To install cloai, you can use the following command:</p>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code>poetry<span class="w"> </span>add<span class="w"> </span>git+https://github.com/cmi-dair/cloai
+<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>cloai
 </code></pre>
 </div>
 
@@ -77,9 +77,11 @@ cloai    </h1>
 <p>Here is a brief overview of the main commands:</p>
 
 <ul>
+<li><p><code>cloai gpt --help</code>: Shows the usages of the GPT command. The GPT command is used to generate text with OpenAI's GPT models. As there are several usage
+options, the help command is the best way to learn how to use it.</p></li>
+<li><p><code>cloai dalle &lt;prompt&gt;</code>: Generates images with OpenAI's DALL-E. The <code>prompt</code> argument is the text prompt to generate the image from.</p></li>
 <li><p><code>cloai stt &lt;filename&gt;</code>: Transcribes audio files with OpenAI's STT models. The <code>filename</code> argument is the file to transcribe. It can be any format that ffmpeg supports. Use the <code>--clip</code> option to clip the file if it is too large.</p></li>
 <li><p><code>cloai tts &lt;text&gt;</code>: Generates audio files with OpenAI's Text to Speech models. The <code>text</code> argument is the text to convert to speech.</p></li>
-<li><p><code>cloai image &lt;prompt&gt;</code>: Generates images with OpenAI's DALL-E. The <code>prompt</code> argument is the text prompt to generate the image from.</p></li>
 </ul>
 
 <p>Each command has additional options that can be viewed by running <code>cloai &lt;command&gt; --help</code>.</p>

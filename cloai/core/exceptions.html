@@ -54,6 +54,18 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#LoggedValueError">LoggedValueError</a>
+                            <ul class="memberlist">
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#OpenAIError">OpenAIError</a>
+                            <ul class="memberlist">
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -102,6 +114,14 @@
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="k">class</span> <span class="nc">InvalidArgumentError</span><span class="p">(</span><span class="n">LoggedException</span><span class="p">):</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when the arguments are invalid.&quot;&quot;&quot;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="k">class</span> <span class="nc">LoggedValueError</span><span class="p">(</span><span class="n">LoggedException</span><span class="p">):</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a value is invalid.&quot;&quot;&quot;</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="k">class</span> <span class="nc">OpenAIError</span><span class="p">(</span><span class="n">LoggedException</span><span class="p">):</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when an OpenAI error occurs.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -109,7 +129,7 @@
                 <section id="logger">
                     <div class="attr variable">
             <span class="name">logger</span>        =
-<span class="default_value">&lt;Logger cloai (DEBUG)&gt;</span>
+<span class="default_value">&lt;Logger cloai (INFO)&gt;</span>
 
         
     </div>
@@ -258,6 +278,78 @@
                                 <dd id="InvalidArgumentError.with_traceback" class="function">with_traceback</dd>
                 <dd id="InvalidArgumentError.add_note" class="function">add_note</dd>
                 <dd id="InvalidArgumentError.args" class="variable">args</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="LoggedValueError">
+                            <input id="LoggedValueError-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">LoggedValueError</span><wbr>(<span class="base"><a href="#LoggedException">LoggedException</a></span>):
+
+                <label class="view-source-button" for="LoggedValueError-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#LoggedValueError"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="LoggedValueError-29"><a href="#LoggedValueError-29"><span class="linenos">29</span></a><span class="k">class</span> <span class="nc">LoggedValueError</span><span class="p">(</span><span class="n">LoggedException</span><span class="p">):</span>
+</span><span id="LoggedValueError-30"><a href="#LoggedValueError-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a value is invalid.&quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Raised when a value is invalid.</p>
+</div>
+
+
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#LoggedException">LoggedException</a></dt>
+                                <dd id="LoggedValueError.__init__" class="function"><a href="#LoggedException.__init__">LoggedException</a></dd>
+
+            </div>
+            <div><dt>builtins.BaseException</dt>
+                                <dd id="LoggedValueError.with_traceback" class="function">with_traceback</dd>
+                <dd id="LoggedValueError.add_note" class="function">add_note</dd>
+                <dd id="LoggedValueError.args" class="variable">args</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="OpenAIError">
+                            <input id="OpenAIError-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">OpenAIError</span><wbr>(<span class="base"><a href="#LoggedException">LoggedException</a></span>):
+
+                <label class="view-source-button" for="OpenAIError-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#OpenAIError"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="OpenAIError-33"><a href="#OpenAIError-33"><span class="linenos">33</span></a><span class="k">class</span> <span class="nc">OpenAIError</span><span class="p">(</span><span class="n">LoggedException</span><span class="p">):</span>
+</span><span id="OpenAIError-34"><a href="#OpenAIError-34"><span class="linenos">34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when an OpenAI error occurs.&quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Raised when an OpenAI error occurs.</p>
+</div>
+
+
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#LoggedException">LoggedException</a></dt>
+                                <dd id="OpenAIError.__init__" class="function"><a href="#LoggedException.__init__">LoggedException</a></dd>
+
+            </div>
+            <div><dt>builtins.BaseException</dt>
+                                <dd id="OpenAIError.with_traceback" class="function">with_traceback</dd>
+                <dd id="OpenAIError.add_note" class="function">add_note</dd>
+                <dd id="OpenAIError.args" class="variable">args</dd>
 
             </div>
                                 </dl>
