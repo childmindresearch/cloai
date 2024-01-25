@@ -39,4 +39,4 @@ cloai is licensed under the terms of the [L-GPLv2.1 license](LICENSE).
 
 ## Support
 
-If you encounter any issues or have any questions, please report them on our [issues page](https://github.com/cmi-dair/cloai/issues).
+If you encounter any issues or have any questions, please report them on our [issues page](https://github.com/childmindresearch/cloai/issues).
