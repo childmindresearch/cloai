@@ -12,7 +12,7 @@ logger = config.get_logger()
 
 
 PARSER_DEFAULTS = {
-    "epilog": "Please report issues at https://github.com/cmi-dair/cloai.",
+    "epilog": "Please report issues at https://github.com/childmindresearch/cloai.",
     "formatter_class": argparse.ArgumentDefaultsHelpFormatter,
 }
 
