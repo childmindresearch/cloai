@@ -20,7 +20,7 @@ openai = "^1.6.0"
 requests = "^2.31.0"
 pyyaml = "^6.0.1"
 python-docx = "^1.1.0"
-pypdf = "^3.17.3"
+pypdf = ">=3.17.3,<5.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
