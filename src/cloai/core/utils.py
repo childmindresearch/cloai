@@ -6,10 +6,10 @@ import pathlib
 import uuid
 from typing import TYPE_CHECKING
 
+import aiohttp
 import docx
 import ffmpeg
 import pypdf
-import requests
 
 from cloai.core import config
 
@@ -60,18 +60,21 @@ def clip_audio(
     yield from files
 
 
-def download_file(filename: str | pathlib.Path, url: str) -> None:
+async def download_file(filename: str | pathlib.Path, url: str) -> None:
     """Downloads a file from a URL.
 
     Args:
         filename: The name of the file to download.
         url: The URL to download the file from.
     """
-    response = requests.get(url, timeout=10)
-    response.raise_for_status()
-
-    with pathlib.Path(filename).open("wb") as file:
-        file.write(response.content)
+    async with aiohttp.ClientSession() as session, session.get(url) as response:
+        response.raise_for_status()
+        with pathlib.Path(filename).open("wb") as file:
+            while True:
+                chunk = await response.content.read(1024)
+                if not chunk:
+                    break
+                file.write(chunk)
 
 
 def get_audio_duration(filename: str | pathlib.Path) -> float:

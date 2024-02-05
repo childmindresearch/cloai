@@ -17,7 +17,7 @@ class ConcreteOpenAiBaseClass(openai_api.OpenAIBaseClass):
 
 
 @pytest.mark.asyncio()
-async def test_openai_base_class(mock_openai: mock.MagicMock) -> None:
+async def test_openai_base_class(mock_openai: mock.AsyncMock) -> None:
     """Tests the OpenAIBaseClass."""
     concrete_openai_base_class = ConcreteOpenAiBaseClass()
 
@@ -27,7 +27,7 @@ async def test_openai_base_class(mock_openai: mock.MagicMock) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_text_to_speech(mock_openai: mock.MagicMock) -> None:
+async def test_text_to_speech(mock_openai: mock.AsyncMock) -> None:
     """Tests the TextToSpeech class."""
     text_to_speech = openai_api.TextToSpeech()
 
@@ -39,7 +39,7 @@ async def test_text_to_speech(mock_openai: mock.MagicMock) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_speech_to_text(mock_openai: mock.MagicMock) -> None:
+async def test_speech_to_text(mock_openai: mock.AsyncMock) -> None:
     """Tests the SpeechToText class."""
     speech_to_text = openai_api.SpeechToText()
 
@@ -52,7 +52,7 @@ async def test_speech_to_text(mock_openai: mock.MagicMock) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_image_generation(mock_openai: mock.MagicMock) -> None:
+async def test_image_generation(mock_openai: mock.AsyncMock) -> None:
     """Tests the ImageGeneration class."""
     image_generation = openai_api.ImageGeneration()
 
