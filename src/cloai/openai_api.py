@@ -3,12 +3,15 @@ from __future__ import annotations
 
 import abc
 import logging
-import pathlib
-from typing import Any, Literal, TypedDict
+from typing import TYPE_CHECKING, Any, Literal, TypedDict
 
+import aiofiles
 import openai
 
 from cloai.core import config, exceptions
+
+if TYPE_CHECKING:
+    import pathlib
 
 settings = config.get_settings()
 OPENAI_API_KEY = settings.OPENAI_API_KEY
@@ -121,7 +124,7 @@ class SpeechToText(OpenAIBaseClass):
         Returns:
             The model's response.
         """
-        with pathlib.Path(audio_file).open("rb") as audio:
+        async with aiofiles.open(audio_file, "rb") as audio:
             return await self.client.audio.transcriptions.create(
                 model=model,
                 file=audio,

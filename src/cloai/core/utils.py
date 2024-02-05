@@ -6,6 +6,7 @@ import pathlib
 import uuid
 from typing import TYPE_CHECKING
 
+import aiofiles
 import aiohttp
 import docx
 import ffmpeg
@@ -69,12 +70,12 @@ async def download_file(filename: str | pathlib.Path, url: str) -> None:
     """
     async with aiohttp.ClientSession() as session, session.get(url) as response:
         response.raise_for_status()
-        with pathlib.Path(filename).open("wb") as file:
+        async with aiofiles.open(filename, "wb") as file:
             while True:
                 chunk = await response.content.read(1024)
                 if not chunk:
                     break
-                file.write(chunk)
+                await file.write(chunk)
 
 
 def get_audio_duration(filename: str | pathlib.Path) -> float:
