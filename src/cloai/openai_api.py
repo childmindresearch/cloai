@@ -127,7 +127,7 @@ class SpeechToText(OpenAIBaseClass):
         async with aiofiles.open(audio_file, "rb") as audio:
             return await self.client.audio.transcriptions.create(
                 model=model,
-                file=audio,
+                file=audio,  # type: ignore[arg-type]
                 response_format="text",
             )  # type: ignore[return-value] # response_format overrides output type.
 
