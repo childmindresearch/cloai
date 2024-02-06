@@ -21,24 +21,23 @@ def pytest_configure() -> None:
 @pytest.fixture()
 def mock_openai(mocker: pytest_mock.MockFixture) -> mock.MagicMock:
     """Mocks the OpenAI client."""
-    mock_speech_create = mocker.MagicMock()
-    mock_transcriptions_create = mocker.MagicMock()
-    mock_audio_speech = mocker.MagicMock(
-        speech=mocker.MagicMock(create=mock_speech_create),
-        transcriptions=mocker.MagicMock(create=mock_transcriptions_create),
+    mock_audio = mocker.AsyncMock(
+        audio=mocker.AsyncMock(
+            speech=mocker.MagicMock(create=mocker.MagicMock()),
+            transcriptions=mocker.MagicMock(create=mocker.MagicMock()),
+        ),
     )
-    mock_audio = mocker.MagicMock(audio=mock_audio_speech)
-    mock_images = mocker.MagicMock(generate=mocker.MagicMock())
+    mock_images = mocker.MagicMock(generate=mocker.AsyncMock())
     mock_chat = mocker.MagicMock(
-        completions=mocker.MagicMock(create=mocker.MagicMock()),
+        completions=mocker.MagicMock(create=mocker.AsyncMock()),
     )
-    mock_client = mocker.MagicMock(
-        spec=openai_api.openai.OpenAI,
+    mock_client = mocker.AsyncMock(
+        spec=openai_api.openai.AsyncOpenAI,
         audio=mock_audio,
         images=mock_images,
         chat=mock_chat,
     )
     return mocker.patch(
-        "cloai.openai_api.openai.OpenAI",
+        "cloai.openai_api.openai.AsyncOpenAI",
         return_value=mock_client,
     )

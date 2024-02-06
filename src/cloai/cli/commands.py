@@ -254,9 +254,14 @@ async def image_generation(  # noqa: PLR0913
         for _ in range(n)
     ]
     urls = [url[0] for url in await asyncio.gather(*url_promises)]
-    for index, url in enumerate(urls):
-        if url is None:
-            logger.warning("Image %s failed to generate, skipping.", index)
-            continue
-        file = pathlib.Path(f"{output_base_name}_{index}.png")
-        utils.download_file(file, url)
+    if all(url is None for url in urls):
+        msg = "No images were generated."
+        raise exceptions.OpenAIError(msg)
+    urls_not_none = [url for url in urls if url is not None]
+
+    await asyncio.gather(
+        *[
+            utils.download_file(f"{output_base_name}_{index}.png", url)
+            for index, url in enumerate(urls_not_none)
+        ],
+    )

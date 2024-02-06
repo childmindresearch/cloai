@@ -1,6 +1,9 @@
 """Tests for the CLI utility functions."""
+import pathlib
 import tempfile
 
+import aioresponses
+import pytest
 import pytest_mock
 
 from cloai.core import utils
@@ -25,19 +28,15 @@ def test_clip_audio(mocker: pytest_mock.MockerFixture) -> None:
     )
 
 
-def test_download_audio(mocker: pytest_mock.MockerFixture) -> None:
-    """Tests that a file is downloaded."""
-    magic = mocker.MagicMock()
-    mock_requests = mocker.patch("cloai.core.utils.requests")
-    mock_requests.get.return_value = magic
-    magic.raise_for_status.return_value = None
-    magic.content = b"mock_content"
+@pytest.mark.asyncio()
+async def test_download_file(tmp_path: pathlib.Path) -> None:
+    """Tests that the file is downloaded successfully."""
+    test_url = "http://example.com/testfile"
+    test_file_contents = b"This is a test file"
+    test_file_path = tmp_path / "downloaded_file"
+    with aioresponses.aioresponses() as mock_response:
+        mock_response.get(test_url, status=200, body=test_file_contents)
 
-    with tempfile.NamedTemporaryFile() as audio_file:
-        utils.download_file(audio_file.name, "mock_url")
+        await utils.download_file(test_file_path, test_url)
 
-        mock_requests.get.assert_called_once_with("mock_url", timeout=10)
-
-    mock_requests.get.assert_called_once_with("mock_url", timeout=10)
-    magic.raise_for_status.assert_called_once_with()
-    assert magic.content == b"mock_content"
+        assert test_file_path.read_bytes() == test_file_contents
