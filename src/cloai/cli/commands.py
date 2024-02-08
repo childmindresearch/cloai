@@ -214,7 +214,8 @@ async def text_to_speech(
     """
     logger.debug("Converting text to speech.")
     tts = openai_api.TextToSpeech()
-    await tts.run(text, output_file, model=model, voice=voice)
+    audio_bytes = await tts.run(text, model=model, voice=voice)
+    await utils.save_file(output_file, audio_bytes)
 
 
 async def image_generation(  # noqa: PLR0913
