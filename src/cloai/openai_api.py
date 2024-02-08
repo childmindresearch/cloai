@@ -3,12 +3,15 @@ from __future__ import annotations
 
 import abc
 import logging
-import pathlib
-from typing import Any, Literal, TypedDict
+from typing import TYPE_CHECKING, Any, Literal, TypedDict
 
+import aiofiles
 import openai
 
 from cloai.core import config, exceptions
+
+if TYPE_CHECKING:
+    import pathlib
 
 settings = config.get_settings()
 OPENAI_API_KEY = settings.OPENAI_API_KEY
@@ -36,7 +39,7 @@ class OpenAIBaseClass(abc.ABC):
 
     def __init__(self) -> None:
         """Initializes a new instance of the OpenAIBaseClass class."""
-        self.client = openai.OpenAI(api_key=OPENAI_API_KEY.get_secret_value())
+        self.client = openai.AsyncOpenAI(api_key=OPENAI_API_KEY.get_secret_value())
 
     @abc.abstractmethod
     async def run(self, *_args: Any, **_kwargs: Any) -> Any:  # noqa: ANN401
@@ -65,7 +68,7 @@ class ChatCompletion(OpenAIBaseClass):
         """
         system_message = Message(role="system", content=system_prompt)
         user_message = Message(role="user", content=user_prompt)
-        response = self.client.chat.completions.create(
+        response = await self.client.chat.completions.create(
             model=model,
             messages=[system_message, user_message],  # type: ignore[list-item]
         )
@@ -96,7 +99,7 @@ class TextToSpeech(OpenAIBaseClass):
         Returns:
             The model's response.
         """
-        response = self.client.audio.speech.create(
+        response = await self.client.audio.speech.create(
             model=model,
             voice=voice,
             input=text,
@@ -121,10 +124,10 @@ class SpeechToText(OpenAIBaseClass):
         Returns:
             The model's response.
         """
-        with pathlib.Path(audio_file).open("rb") as audio:
-            return self.client.audio.transcriptions.create(
+        async with aiofiles.open(audio_file, "rb") as audio:
+            return await self.client.audio.transcriptions.create(
                 model=model,
-                file=audio,
+                file=audio,  # type: ignore[arg-type]
                 response_format="text",
             )  # type: ignore[return-value] # response_format overrides output type.
 
@@ -153,7 +156,7 @@ class ImageGeneration(OpenAIBaseClass):
         Returns:
             str: The image urls.
         """
-        response = self.client.images.generate(
+        response = await self.client.images.generate(
             model=model,
             prompt=prompt,
             size=size,
