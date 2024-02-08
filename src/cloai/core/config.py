@@ -1,12 +1,10 @@
 """Configuration for the cloai module."""
-from __future__ import annotations
-
 import enum
 import functools
 import logging
 import pathlib
 from importlib import metadata
-from typing import Literal
+from typing import Literal, Optional
 
 import pydantic
 import pydantic_settings
@@ -88,7 +86,7 @@ class Settings(pydantic_settings.BaseSettings):
     LOGGER_NAME: str = "cloai"
     LOGGER_VERBOSITY: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
-    OPENAI_API_KEY: pydantic.SecretStr | None = pydantic.Field(
+    OPENAI_API_KEY: Optional[pydantic.SecretStr] = pydantic.Field(  # noqa: UP007 Disable because pydantic and future annotations don't play well together.
         None,
         json_schema_extra={
             "env": "OPENAI_API_KEY",
