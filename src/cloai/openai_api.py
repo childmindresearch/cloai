@@ -34,9 +34,17 @@ class OpenAIBaseClass(abc.ABC):
         client: The OpenAI client used to interact with the model.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, api_key: str | None = None) -> None:
         """Initializes a new instance of the OpenAIBaseClass class."""
-        self.client = openai.AsyncOpenAI(api_key=OPENAI_API_KEY.get_secret_value())
+        if api_key:
+            key = api_key
+        elif OPENAI_API_KEY:
+            key = OPENAI_API_KEY.get_secret_value()
+        else:
+            msg = "No API key provided."
+            raise exceptions.OpenAIError(msg)
+
+        self.client = openai.AsyncOpenAI(api_key=key)
 
     @abc.abstractmethod
     async def run(self, *_args: Any, **_kwargs: Any) -> Any:  # noqa: ANN401

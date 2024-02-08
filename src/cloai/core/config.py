@@ -86,8 +86,8 @@ class Settings(pydantic_settings.BaseSettings):
     LOGGER_NAME: str = "cloai"
     LOGGER_VERBOSITY: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
 
-    OPENAI_API_KEY: pydantic.SecretStr = pydantic.Field(
-        ...,
+    OPENAI_API_KEY: pydantic.SecretStr | None = pydantic.Field(
+        None,
         json_schema_extra={
             "env": "OPENAI_API_KEY",
             "description": "The API key for OpenAI.",
