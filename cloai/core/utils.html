@@ -37,6 +37,9 @@
                     <a class="function" href="#clip_audio">clip_audio</a>
             </li>
             <li>
+                    <a class="function" href="#save_file">save_file</a>
+            </li>
+            <li>
                     <a class="function" href="#download_file">download_file</a>
             </li>
             <li>
@@ -140,91 +143,102 @@
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>    <span class="k">yield from</span> <span class="n">files</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">save_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves content to a file asynchronously.</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">    Args:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        filename: The name of the file to download.</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        url: The URL to download the file from.</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        filename: The name of the file to save the content to.</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        content: The content to save to the file.</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">,</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="n">aiofiles</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>                <span class="n">chunk</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>                    <span class="k">break</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>                <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">    Args:</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">        filename: The name of the audio file.</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">    Returns:</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        float: The duration of the audio file.</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">    Args:</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        filename: The name of the file.</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">    Returns:</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        int: The size of the file.</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">aiofiles</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">    Args:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        filename: The name of the file to download.</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        url: The URL to download the file from.</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">,</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="n">aiofiles</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>                <span class="n">chunk</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>                    <span class="k">break</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>                <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">    Args:</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        filename: The name of the audio file.</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">    Returns:</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        float: The duration of the audio file.</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="k">def</span> <span class="nf">pdf_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a PDF file to text.</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">    Args:</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        file_path: The path to the PDF file.</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    Returns:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        str: The extracted text from the PDF file.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="n">reader</span> <span class="o">=</span> <span class="n">pypdf</span><span class="o">.</span><span class="n">PdfReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="p">[</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>                <span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="n">page_num</span><span class="p">]</span><span class="o">.</span><span class="n">extract_text</span><span class="p">()</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>                <span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">))</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>            <span class="p">],</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="p">)</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="k">def</span> <span class="nf">docx_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a docx file to text.</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">    Args:</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        file_path: The path to the docx file.</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">    Returns:</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        str: The extracted text from the docx file.</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">])</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="k">def</span> <span class="nf">txt_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a txt file to text.</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">    Args:</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        file_path: The path to the txt file.</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">    Returns:</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        str: The extracted text from the txt file.</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>        <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">    Args:</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">        filename: The name of the file.</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">    Returns:</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">        int: The size of the file.</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="k">def</span> <span class="nf">pdf_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a PDF file to text.</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">    Args:</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        file_path: The path to the PDF file.</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">    Returns:</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        str: The extracted text from the PDF file.</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>        <span class="n">reader</span> <span class="o">=</span> <span class="n">pypdf</span><span class="o">.</span><span class="n">PdfReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="p">[</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>                <span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="n">page_num</span><span class="p">]</span><span class="o">.</span><span class="n">extract_text</span><span class="p">()</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>                <span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">))</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>            <span class="p">],</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="p">)</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="k">def</span> <span class="nf">docx_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a docx file to text.</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">    Args:</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        file_path: The path to the docx file.</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">    Returns:</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">        str: The extracted text from the docx file.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>    <span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">])</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="k">def</span> <span class="nf">txt_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a txt file to text.</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">    Args:</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        file_path: The path to the txt file.</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">    Returns:</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        str: The extracted text from the txt file.</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -307,6 +321,41 @@
 
 
                 </section>
+                <section id="save_file">
+                            <input id="save_file-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">async def</span>
+        <span class="name">save_file</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span>, </span><span class="param"><span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+
+                <label class="view-source-button" for="save_file-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#save_file"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="save_file-65"><a href="#save_file-65"><span class="linenos">65</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">save_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="save_file-66"><a href="#save_file-66"><span class="linenos">66</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves content to a file asynchronously.</span>
+</span><span id="save_file-67"><a href="#save_file-67"><span class="linenos">67</span></a>
+</span><span id="save_file-68"><a href="#save_file-68"><span class="linenos">68</span></a><span class="sd">    Args:</span>
+</span><span id="save_file-69"><a href="#save_file-69"><span class="linenos">69</span></a><span class="sd">        filename: The name of the file to save the content to.</span>
+</span><span id="save_file-70"><a href="#save_file-70"><span class="linenos">70</span></a><span class="sd">        content: The content to save to the file.</span>
+</span><span id="save_file-71"><a href="#save_file-71"><span class="linenos">71</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="save_file-72"><a href="#save_file-72"><span class="linenos">72</span></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">aiofiles</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="save_file-73"><a href="#save_file-73"><span class="linenos">73</span></a>        <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Saves content to a file asynchronously.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>filename:</strong>  The name of the file to save the content to.</li>
+<li><strong>content:</strong>  The content to save to the file.</li>
+</ul>
+</div>
+
+
+                </section>
                 <section id="download_file">
                             <input id="download_file-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -318,21 +367,21 @@
 
     </div>
     <a class="headerlink" href="#download_file"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="download_file-65"><a href="#download_file-65"><span class="linenos">65</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="download_file-66"><a href="#download_file-66"><span class="linenos">66</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
-</span><span id="download_file-67"><a href="#download_file-67"><span class="linenos">67</span></a>
-</span><span id="download_file-68"><a href="#download_file-68"><span class="linenos">68</span></a><span class="sd">    Args:</span>
-</span><span id="download_file-69"><a href="#download_file-69"><span class="linenos">69</span></a><span class="sd">        filename: The name of the file to download.</span>
-</span><span id="download_file-70"><a href="#download_file-70"><span class="linenos">70</span></a><span class="sd">        url: The URL to download the file from.</span>
-</span><span id="download_file-71"><a href="#download_file-71"><span class="linenos">71</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="download_file-72"><a href="#download_file-72"><span class="linenos">72</span></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">,</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
-</span><span id="download_file-73"><a href="#download_file-73"><span class="linenos">73</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-</span><span id="download_file-74"><a href="#download_file-74"><span class="linenos">74</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="n">aiofiles</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="download_file-75"><a href="#download_file-75"><span class="linenos">75</span></a>            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-</span><span id="download_file-76"><a href="#download_file-76"><span class="linenos">76</span></a>                <span class="n">chunk</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
-</span><span id="download_file-77"><a href="#download_file-77"><span class="linenos">77</span></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
-</span><span id="download_file-78"><a href="#download_file-78"><span class="linenos">78</span></a>                    <span class="k">break</span>
-</span><span id="download_file-79"><a href="#download_file-79"><span class="linenos">79</span></a>                <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="download_file-76"><a href="#download_file-76"><span class="linenos">76</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="download_file-77"><a href="#download_file-77"><span class="linenos">77</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Downloads a file from a URL.</span>
+</span><span id="download_file-78"><a href="#download_file-78"><span class="linenos">78</span></a>
+</span><span id="download_file-79"><a href="#download_file-79"><span class="linenos">79</span></a><span class="sd">    Args:</span>
+</span><span id="download_file-80"><a href="#download_file-80"><span class="linenos">80</span></a><span class="sd">        filename: The name of the file to download.</span>
+</span><span id="download_file-81"><a href="#download_file-81"><span class="linenos">81</span></a><span class="sd">        url: The URL to download the file from.</span>
+</span><span id="download_file-82"><a href="#download_file-82"><span class="linenos">82</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="download_file-83"><a href="#download_file-83"><span class="linenos">83</span></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">,</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+</span><span id="download_file-84"><a href="#download_file-84"><span class="linenos">84</span></a>        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span><span id="download_file-85"><a href="#download_file-85"><span class="linenos">85</span></a>        <span class="k">async</span> <span class="k">with</span> <span class="n">aiofiles</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="download_file-86"><a href="#download_file-86"><span class="linenos">86</span></a>            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span id="download_file-87"><a href="#download_file-87"><span class="linenos">87</span></a>                <span class="n">chunk</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+</span><span id="download_file-88"><a href="#download_file-88"><span class="linenos">88</span></a>                <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
+</span><span id="download_file-89"><a href="#download_file-89"><span class="linenos">89</span></a>                    <span class="k">break</span>
+</span><span id="download_file-90"><a href="#download_file-90"><span class="linenos">90</span></a>                <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -359,17 +408,17 @@
 
     </div>
     <a class="headerlink" href="#get_audio_duration"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_audio_duration-82"><a href="#get_audio_duration-82"><span class="linenos">82</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="get_audio_duration-83"><a href="#get_audio_duration-83"><span class="linenos">83</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
-</span><span id="get_audio_duration-84"><a href="#get_audio_duration-84"><span class="linenos">84</span></a>
-</span><span id="get_audio_duration-85"><a href="#get_audio_duration-85"><span class="linenos">85</span></a><span class="sd">    Args:</span>
-</span><span id="get_audio_duration-86"><a href="#get_audio_duration-86"><span class="linenos">86</span></a><span class="sd">        filename: The name of the audio file.</span>
-</span><span id="get_audio_duration-87"><a href="#get_audio_duration-87"><span class="linenos">87</span></a>
-</span><span id="get_audio_duration-88"><a href="#get_audio_duration-88"><span class="linenos">88</span></a><span class="sd">    Returns:</span>
-</span><span id="get_audio_duration-89"><a href="#get_audio_duration-89"><span class="linenos">89</span></a><span class="sd">        float: The duration of the audio file.</span>
-</span><span id="get_audio_duration-90"><a href="#get_audio_duration-90"><span class="linenos">90</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_audio_duration-91"><a href="#get_audio_duration-91"><span class="linenos">91</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="get_audio_duration-92"><a href="#get_audio_duration-92"><span class="linenos">92</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_audio_duration-93"><a href="#get_audio_duration-93"><span class="linenos"> 93</span></a><span class="k">def</span> <span class="nf">get_audio_duration</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="get_audio_duration-94"><a href="#get_audio_duration-94"><span class="linenos"> 94</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the duration of the audio file.</span>
+</span><span id="get_audio_duration-95"><a href="#get_audio_duration-95"><span class="linenos"> 95</span></a>
+</span><span id="get_audio_duration-96"><a href="#get_audio_duration-96"><span class="linenos"> 96</span></a><span class="sd">    Args:</span>
+</span><span id="get_audio_duration-97"><a href="#get_audio_duration-97"><span class="linenos"> 97</span></a><span class="sd">        filename: The name of the audio file.</span>
+</span><span id="get_audio_duration-98"><a href="#get_audio_duration-98"><span class="linenos"> 98</span></a>
+</span><span id="get_audio_duration-99"><a href="#get_audio_duration-99"><span class="linenos"> 99</span></a><span class="sd">    Returns:</span>
+</span><span id="get_audio_duration-100"><a href="#get_audio_duration-100"><span class="linenos">100</span></a><span class="sd">        float: The duration of the audio file.</span>
+</span><span id="get_audio_duration-101"><a href="#get_audio_duration-101"><span class="linenos">101</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_audio_duration-102"><a href="#get_audio_duration-102"><span class="linenos">102</span></a>    <span class="n">probe</span> <span class="o">=</span> <span class="n">ffmpeg</span><span class="o">.</span><span class="n">probe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="get_audio_duration-103"><a href="#get_audio_duration-103"><span class="linenos">103</span></a>    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">probe</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">])</span>
 </span></pre></div>
 
 
@@ -401,16 +450,16 @@
 
     </div>
     <a class="headerlink" href="#get_file_size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_file_size-95"><a href="#get_file_size-95"><span class="linenos"> 95</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="get_file_size-96"><a href="#get_file_size-96"><span class="linenos"> 96</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
-</span><span id="get_file_size-97"><a href="#get_file_size-97"><span class="linenos"> 97</span></a>
-</span><span id="get_file_size-98"><a href="#get_file_size-98"><span class="linenos"> 98</span></a><span class="sd">    Args:</span>
-</span><span id="get_file_size-99"><a href="#get_file_size-99"><span class="linenos"> 99</span></a><span class="sd">        filename: The name of the file.</span>
-</span><span id="get_file_size-100"><a href="#get_file_size-100"><span class="linenos">100</span></a>
-</span><span id="get_file_size-101"><a href="#get_file_size-101"><span class="linenos">101</span></a><span class="sd">    Returns:</span>
-</span><span id="get_file_size-102"><a href="#get_file_size-102"><span class="linenos">102</span></a><span class="sd">        int: The size of the file.</span>
-</span><span id="get_file_size-103"><a href="#get_file_size-103"><span class="linenos">103</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_file_size-104"><a href="#get_file_size-104"><span class="linenos">104</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_file_size-106"><a href="#get_file_size-106"><span class="linenos">106</span></a><span class="k">def</span> <span class="nf">get_file_size</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="get_file_size-107"><a href="#get_file_size-107"><span class="linenos">107</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the size of the file.</span>
+</span><span id="get_file_size-108"><a href="#get_file_size-108"><span class="linenos">108</span></a>
+</span><span id="get_file_size-109"><a href="#get_file_size-109"><span class="linenos">109</span></a><span class="sd">    Args:</span>
+</span><span id="get_file_size-110"><a href="#get_file_size-110"><span class="linenos">110</span></a><span class="sd">        filename: The name of the file.</span>
+</span><span id="get_file_size-111"><a href="#get_file_size-111"><span class="linenos">111</span></a>
+</span><span id="get_file_size-112"><a href="#get_file_size-112"><span class="linenos">112</span></a><span class="sd">    Returns:</span>
+</span><span id="get_file_size-113"><a href="#get_file_size-113"><span class="linenos">113</span></a><span class="sd">        int: The size of the file.</span>
+</span><span id="get_file_size-114"><a href="#get_file_size-114"><span class="linenos">114</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_file_size-115"><a href="#get_file_size-115"><span class="linenos">115</span></a>    <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
 </span></pre></div>
 
 
@@ -442,23 +491,23 @@
 
     </div>
     <a class="headerlink" href="#pdf_to_str"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="pdf_to_str-107"><a href="#pdf_to_str-107"><span class="linenos">107</span></a><span class="k">def</span> <span class="nf">pdf_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="pdf_to_str-108"><a href="#pdf_to_str-108"><span class="linenos">108</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a PDF file to text.</span>
-</span><span id="pdf_to_str-109"><a href="#pdf_to_str-109"><span class="linenos">109</span></a>
-</span><span id="pdf_to_str-110"><a href="#pdf_to_str-110"><span class="linenos">110</span></a><span class="sd">    Args:</span>
-</span><span id="pdf_to_str-111"><a href="#pdf_to_str-111"><span class="linenos">111</span></a><span class="sd">        file_path: The path to the PDF file.</span>
-</span><span id="pdf_to_str-112"><a href="#pdf_to_str-112"><span class="linenos">112</span></a>
-</span><span id="pdf_to_str-113"><a href="#pdf_to_str-113"><span class="linenos">113</span></a><span class="sd">    Returns:</span>
-</span><span id="pdf_to_str-114"><a href="#pdf_to_str-114"><span class="linenos">114</span></a><span class="sd">        str: The extracted text from the PDF file.</span>
-</span><span id="pdf_to_str-115"><a href="#pdf_to_str-115"><span class="linenos">115</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="pdf_to_str-116"><a href="#pdf_to_str-116"><span class="linenos">116</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="pdf_to_str-117"><a href="#pdf_to_str-117"><span class="linenos">117</span></a>        <span class="n">reader</span> <span class="o">=</span> <span class="n">pypdf</span><span class="o">.</span><span class="n">PdfReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-</span><span id="pdf_to_str-118"><a href="#pdf_to_str-118"><span class="linenos">118</span></a>        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-</span><span id="pdf_to_str-119"><a href="#pdf_to_str-119"><span class="linenos">119</span></a>            <span class="p">[</span>
-</span><span id="pdf_to_str-120"><a href="#pdf_to_str-120"><span class="linenos">120</span></a>                <span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="n">page_num</span><span class="p">]</span><span class="o">.</span><span class="n">extract_text</span><span class="p">()</span>
-</span><span id="pdf_to_str-121"><a href="#pdf_to_str-121"><span class="linenos">121</span></a>                <span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">))</span>
-</span><span id="pdf_to_str-122"><a href="#pdf_to_str-122"><span class="linenos">122</span></a>            <span class="p">],</span>
-</span><span id="pdf_to_str-123"><a href="#pdf_to_str-123"><span class="linenos">123</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="pdf_to_str-118"><a href="#pdf_to_str-118"><span class="linenos">118</span></a><span class="k">def</span> <span class="nf">pdf_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="pdf_to_str-119"><a href="#pdf_to_str-119"><span class="linenos">119</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a PDF file to text.</span>
+</span><span id="pdf_to_str-120"><a href="#pdf_to_str-120"><span class="linenos">120</span></a>
+</span><span id="pdf_to_str-121"><a href="#pdf_to_str-121"><span class="linenos">121</span></a><span class="sd">    Args:</span>
+</span><span id="pdf_to_str-122"><a href="#pdf_to_str-122"><span class="linenos">122</span></a><span class="sd">        file_path: The path to the PDF file.</span>
+</span><span id="pdf_to_str-123"><a href="#pdf_to_str-123"><span class="linenos">123</span></a>
+</span><span id="pdf_to_str-124"><a href="#pdf_to_str-124"><span class="linenos">124</span></a><span class="sd">    Returns:</span>
+</span><span id="pdf_to_str-125"><a href="#pdf_to_str-125"><span class="linenos">125</span></a><span class="sd">        str: The extracted text from the PDF file.</span>
+</span><span id="pdf_to_str-126"><a href="#pdf_to_str-126"><span class="linenos">126</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="pdf_to_str-127"><a href="#pdf_to_str-127"><span class="linenos">127</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="pdf_to_str-128"><a href="#pdf_to_str-128"><span class="linenos">128</span></a>        <span class="n">reader</span> <span class="o">=</span> <span class="n">pypdf</span><span class="o">.</span><span class="n">PdfReader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</span><span id="pdf_to_str-129"><a href="#pdf_to_str-129"><span class="linenos">129</span></a>        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+</span><span id="pdf_to_str-130"><a href="#pdf_to_str-130"><span class="linenos">130</span></a>            <span class="p">[</span>
+</span><span id="pdf_to_str-131"><a href="#pdf_to_str-131"><span class="linenos">131</span></a>                <span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="n">page_num</span><span class="p">]</span><span class="o">.</span><span class="n">extract_text</span><span class="p">()</span>
+</span><span id="pdf_to_str-132"><a href="#pdf_to_str-132"><span class="linenos">132</span></a>                <span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">pages</span><span class="p">))</span>
+</span><span id="pdf_to_str-133"><a href="#pdf_to_str-133"><span class="linenos">133</span></a>            <span class="p">],</span>
+</span><span id="pdf_to_str-134"><a href="#pdf_to_str-134"><span class="linenos">134</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -490,17 +539,17 @@
 
     </div>
     <a class="headerlink" href="#docx_to_str"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="docx_to_str-126"><a href="#docx_to_str-126"><span class="linenos">126</span></a><span class="k">def</span> <span class="nf">docx_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="docx_to_str-127"><a href="#docx_to_str-127"><span class="linenos">127</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a docx file to text.</span>
-</span><span id="docx_to_str-128"><a href="#docx_to_str-128"><span class="linenos">128</span></a>
-</span><span id="docx_to_str-129"><a href="#docx_to_str-129"><span class="linenos">129</span></a><span class="sd">    Args:</span>
-</span><span id="docx_to_str-130"><a href="#docx_to_str-130"><span class="linenos">130</span></a><span class="sd">        file_path: The path to the docx file.</span>
-</span><span id="docx_to_str-131"><a href="#docx_to_str-131"><span class="linenos">131</span></a>
-</span><span id="docx_to_str-132"><a href="#docx_to_str-132"><span class="linenos">132</span></a><span class="sd">    Returns:</span>
-</span><span id="docx_to_str-133"><a href="#docx_to_str-133"><span class="linenos">133</span></a><span class="sd">        str: The extracted text from the docx file.</span>
-</span><span id="docx_to_str-134"><a href="#docx_to_str-134"><span class="linenos">134</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="docx_to_str-135"><a href="#docx_to_str-135"><span class="linenos">135</span></a>    <span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-</span><span id="docx_to_str-136"><a href="#docx_to_str-136"><span class="linenos">136</span></a>    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">])</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="docx_to_str-137"><a href="#docx_to_str-137"><span class="linenos">137</span></a><span class="k">def</span> <span class="nf">docx_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="docx_to_str-138"><a href="#docx_to_str-138"><span class="linenos">138</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a docx file to text.</span>
+</span><span id="docx_to_str-139"><a href="#docx_to_str-139"><span class="linenos">139</span></a>
+</span><span id="docx_to_str-140"><a href="#docx_to_str-140"><span class="linenos">140</span></a><span class="sd">    Args:</span>
+</span><span id="docx_to_str-141"><a href="#docx_to_str-141"><span class="linenos">141</span></a><span class="sd">        file_path: The path to the docx file.</span>
+</span><span id="docx_to_str-142"><a href="#docx_to_str-142"><span class="linenos">142</span></a>
+</span><span id="docx_to_str-143"><a href="#docx_to_str-143"><span class="linenos">143</span></a><span class="sd">    Returns:</span>
+</span><span id="docx_to_str-144"><a href="#docx_to_str-144"><span class="linenos">144</span></a><span class="sd">        str: The extracted text from the docx file.</span>
+</span><span id="docx_to_str-145"><a href="#docx_to_str-145"><span class="linenos">145</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="docx_to_str-146"><a href="#docx_to_str-146"><span class="linenos">146</span></a>    <span class="n">document</span> <span class="o">=</span> <span class="n">docx</span><span class="o">.</span><span class="n">Document</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</span><span id="docx_to_str-147"><a href="#docx_to_str-147"><span class="linenos">147</span></a>    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">paragraph</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="n">document</span><span class="o">.</span><span class="n">paragraphs</span><span class="p">])</span>
 </span></pre></div>
 
 
@@ -532,17 +581,17 @@
 
     </div>
     <a class="headerlink" href="#txt_to_str"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="txt_to_str-139"><a href="#txt_to_str-139"><span class="linenos">139</span></a><span class="k">def</span> <span class="nf">txt_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="txt_to_str-140"><a href="#txt_to_str-140"><span class="linenos">140</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a txt file to text.</span>
-</span><span id="txt_to_str-141"><a href="#txt_to_str-141"><span class="linenos">141</span></a>
-</span><span id="txt_to_str-142"><a href="#txt_to_str-142"><span class="linenos">142</span></a><span class="sd">    Args:</span>
-</span><span id="txt_to_str-143"><a href="#txt_to_str-143"><span class="linenos">143</span></a><span class="sd">        file_path: The path to the txt file.</span>
-</span><span id="txt_to_str-144"><a href="#txt_to_str-144"><span class="linenos">144</span></a>
-</span><span id="txt_to_str-145"><a href="#txt_to_str-145"><span class="linenos">145</span></a><span class="sd">    Returns:</span>
-</span><span id="txt_to_str-146"><a href="#txt_to_str-146"><span class="linenos">146</span></a><span class="sd">        str: The extracted text from the txt file.</span>
-</span><span id="txt_to_str-147"><a href="#txt_to_str-147"><span class="linenos">147</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="txt_to_str-148"><a href="#txt_to_str-148"><span class="linenos">148</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-</span><span id="txt_to_str-149"><a href="#txt_to_str-149"><span class="linenos">149</span></a>        <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="txt_to_str-150"><a href="#txt_to_str-150"><span class="linenos">150</span></a><span class="k">def</span> <span class="nf">txt_to_str</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="txt_to_str-151"><a href="#txt_to_str-151"><span class="linenos">151</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a txt file to text.</span>
+</span><span id="txt_to_str-152"><a href="#txt_to_str-152"><span class="linenos">152</span></a>
+</span><span id="txt_to_str-153"><a href="#txt_to_str-153"><span class="linenos">153</span></a><span class="sd">    Args:</span>
+</span><span id="txt_to_str-154"><a href="#txt_to_str-154"><span class="linenos">154</span></a><span class="sd">        file_path: The path to the txt file.</span>
+</span><span id="txt_to_str-155"><a href="#txt_to_str-155"><span class="linenos">155</span></a>
+</span><span id="txt_to_str-156"><a href="#txt_to_str-156"><span class="linenos">156</span></a><span class="sd">    Returns:</span>
+</span><span id="txt_to_str-157"><a href="#txt_to_str-157"><span class="linenos">157</span></a><span class="sd">        str: The extracted text from the txt file.</span>
+</span><span id="txt_to_str-158"><a href="#txt_to_str-158"><span class="linenos">158</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="txt_to_str-159"><a href="#txt_to_str-159"><span class="linenos">159</span></a>    <span class="k">with</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span><span id="txt_to_str-160"><a href="#txt_to_str-160"><span class="linenos">160</span></a>        <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </span></pre></div>
 
 
