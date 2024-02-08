@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 from cloai.cli import parser
-from cloai.core import exceptions
+from cloai.core import config, exceptions
 
 if TYPE_CHECKING:
     import pytest_mock
@@ -99,7 +99,7 @@ def test__add_stt_parser() -> None:
     """Tests the _add_stt_parser function."""
     subparsers = argparse.ArgumentParser().add_subparsers()
     parser._add_stt_parser(subparsers)
-    expected_n_arguments = 4
+    expected_n_arguments = 5
 
     stt_parser = subparsers.choices["whisper"]
     arguments = stt_parser._actions
@@ -180,6 +180,7 @@ async def test_run_command_with_whisper(mocker: pytest_mock.MockFixture) -> None
         "filename": "test.wav",
         "clip": False,
         "model": "whisper-1",
+        "language": "ENGLISH",
     }
     args = argparse.Namespace(**arg_dict)
     mock = mocker.patch("cloai.cli.commands.speech_to_text")
@@ -190,6 +191,7 @@ async def test_run_command_with_whisper(mocker: pytest_mock.MockFixture) -> None
         filename=arg_dict["filename"],
         clip=False,
         model=arg_dict["model"],
+        language=config.WhisperLanguages.ENGLISH,
     )
 
 

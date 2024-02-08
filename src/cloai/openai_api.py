@@ -5,7 +5,6 @@ import abc
 import logging
 from typing import TYPE_CHECKING, Any, Literal, TypedDict
 
-import aiofiles
 import openai
 
 from cloai.core import config, exceptions
@@ -114,22 +113,28 @@ class SpeechToText(OpenAIBaseClass):
         self,
         audio_file: pathlib.Path | str,
         model: str = "whisper-1",
+        language: config.WhisperLanguages | str = config.WhisperLanguages.ENGLISH,
     ) -> str:
         """Runs the Speech-To-Text model.
 
         Args:
             audio_file: The audio to convert to text.
             model: The name of the Speech-To-Text model to use.
+            language: The language of the audio. Can be both provided through the
+                config.WhisperLanguages enum, which guarantees support, or as a string.
 
         Returns:
             The model's response.
         """
-        async with aiofiles.open(audio_file, "rb") as audio:
-            return await self.client.audio.transcriptions.create(
-                model=model,
-                file=audio,  # type: ignore[arg-type]
-                response_format="text",
-            )  # type: ignore[return-value] # response_format overrides output type.
+        if isinstance(language, config.WhisperLanguages):
+            language = language.value
+
+        return await self.client.audio.transcriptions.create(
+            model=model,
+            file=audio_file,
+            response_format="text",
+            language=language,
+        )  # type: ignore[return-value] # response_format overrides output type.
 
 
 class ImageGeneration(OpenAIBaseClass):

@@ -169,14 +169,15 @@ async def speech_to_text(
     model: str,
     *,
     clip: bool = False,
+    language: config.WhisperLanguages = config.WhisperLanguages.ENGLISH,
 ) -> str:
     """Transcribes audio files with OpenAI's TTS models.
 
     Args:
         filename: The file to transcribe. Can be any format that ffmpeg supports.
         model: The transcription model to use.
-        voice: The voice to use.
         clip: Whether to clip the file if it is too large, defaults to False.
+        language: The language used in the audio file.
     """
     logger.debug("Transcribing audio.")
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -189,7 +190,9 @@ async def speech_to_text(
             files = [temp_file]
 
         stt = openai_api.SpeechToText()
-        transcription_promises = [stt.run(filename, model=model) for filename in files]
+        transcription_promises = [
+            stt.run(filename, model=model, language=language) for filename in files
+        ]
         transcriptions = await asyncio.gather(*transcription_promises)
 
         return " ".join(transcriptions)
