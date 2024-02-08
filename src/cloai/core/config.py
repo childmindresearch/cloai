@@ -1,4 +1,5 @@
 """Configuration for the cloai module."""
+import enum
 import functools
 import logging
 import pathlib
@@ -15,6 +16,68 @@ def get_version() -> str:
         return metadata.version("cloai")
     except metadata.PackageNotFoundError:
         return "unknown"
+
+
+class WhisperLanguages(str, enum.Enum):
+    """The languages for the whisper model."""
+
+    AFRIKAANS = "af"
+    ARABIC = "ar"
+    ARMENIAN = "hy"
+    AZERBAIJANI = "az"
+    BELARUSIAN = "be"
+    BOSNIAN = "bs"
+    BULGARIAN = "bg"
+    CATALAN = "ca"
+    CHINESE = "zh"
+    CROATIAN = "hr"
+    CZECH = "cs"
+    DANISH = "da"
+    DUTCH = "nl"
+    ENGLISH = "en"
+    ESTONIAN = "et"
+    FINNISH = "fi"
+    FRENCH = "fr"
+    GALICIAN = "gl"
+    GERMAN = "de"
+    GREEK = "el"
+    HEBREW = "he"
+    HINDI = "hi"
+    HUNGARIAN = "hu"
+    ICELANDIC = "is"
+    INDONESIAN = "id"
+    ITALIAN = "it"
+    JAPANESE = "ja"
+    KANNADA = "kn"
+    KAZAKH = "kk"
+    KOREAN = "ko"
+    LATVIAN = "lv"
+    LITHUANIAN = "lt"
+    MACEDONIAN = "mk"
+    MALAY = "ms"
+    MARATHI = "mr"
+    MAORI = "mi"
+    NEPALI = "ne"
+    NORWEGIAN = "no"
+    PERSIAN = "fa"
+    POLISH = "pl"
+    PORTUGUESE = "pt"
+    ROMANIAN = "ro"
+    RUSSIAN = "ru"
+    SERBIAN = "sr"
+    SLOVAK = "sk"
+    SLOVENIAN = "sl"
+    SPANISH = "es"
+    SWAHILI = "sw"
+    SWEDISH = "sv"
+    TAGALOG = "tl"
+    TAMIL = "ta"
+    THAI = "th"
+    TURKISH = "tr"
+    UKRAINIAN = "uk"
+    URDU = "ur"
+    VIETNAMESE = "vi"
+    WELSH = "cy"
 
 
 class Settings(pydantic_settings.BaseSettings):

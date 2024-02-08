@@ -120,6 +120,7 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
             filename=args.filename,
             model=args.model,
             clip=args.clip,
+            language=config.WhisperLanguages[args.language],
         )
     msg = f"Unknown command {args.command}."
     raise exceptions.InvalidArgumentError(msg)
@@ -234,6 +235,13 @@ def _add_stt_parser(
         type=lambda x: x.lower(),
         choices=["whisper-1"],
         default="whisper-1",
+    )
+    stt_parser.add_argument(
+        "--language",
+        help="The language of the audio file.",
+        type=lambda x: x.upper(),
+        choices=[language.name for language in config.WhisperLanguages],
+        default="ENGLISH",
     )
 
 
