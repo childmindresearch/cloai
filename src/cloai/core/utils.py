@@ -61,6 +61,17 @@ def clip_audio(
     yield from files
 
 
+async def save_file(filename: str | pathlib.Path, content: bytes) -> None:
+    """Saves content to a file asynchronously.
+
+    Args:
+        filename: The name of the file to save the content to.
+        content: The content to save to the file.
+    """
+    async with aiofiles.open(filename, "wb") as file:
+        await file.write(content)
+
+
 async def download_file(filename: str | pathlib.Path, url: str) -> None:
     """Downloads a file from a URL.
 

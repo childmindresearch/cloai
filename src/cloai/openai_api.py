@@ -81,10 +81,9 @@ class TextToSpeech(OpenAIBaseClass):
     async def run(
         self,
         text: str,
-        output_file: pathlib.Path | str,
         model: str = "tts-1",
         voice: Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"] = "onyx",
-    ) -> None:
+    ) -> bytes:
         """Runs the Text-To-Speech model.
 
         Args:
@@ -101,7 +100,7 @@ class TextToSpeech(OpenAIBaseClass):
             voice=voice,
             input=text,
         )
-        response.stream_to_file(output_file)
+        return response.content
 
 
 class SpeechToText(OpenAIBaseClass):
