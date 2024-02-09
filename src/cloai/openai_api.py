@@ -1,6 +1,4 @@
 """This module contains interactions with OpenAI models."""
-from __future__ import annotations
-
 import abc
 import logging
 import pathlib

@@ -1,6 +1,4 @@
 """Contains the core business logic of the OpenAI CLI."""
-from __future__ import annotations
-
 import asyncio
 import logging
 import pathlib
