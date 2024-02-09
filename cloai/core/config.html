@@ -275,7 +275,7 @@
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">import</span> <span class="nn">logging</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">import</span> <span class="nn">pathlib</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">metadata</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">import</span> <span class="nn">pydantic</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">import</span> <span class="nn">pydantic_settings</span>
@@ -357,7 +357,7 @@
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="n">LOGGER_NAME</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cloai&quot;</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="n">LOGGER_VERBOSITY</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="n">OPENAI_API_KEY</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pydantic</span><span class="o">.</span><span class="n">SecretStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>  <span class="c1"># noqa: UP007 Disable because pydantic and future annotations don&#39;t play well together.</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="n">OPENAI_API_KEY</span><span class="p">:</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">SecretStr</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="kc">None</span><span class="p">,</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>            <span class="s2">&quot;env&quot;</span><span class="p">:</span> <span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">,</span>
@@ -1277,7 +1277,7 @@
 </span><span id="Settings-87"><a href="#Settings-87"><span class="linenos"> 87</span></a>    <span class="n">LOGGER_NAME</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cloai&quot;</span>
 </span><span id="Settings-88"><a href="#Settings-88"><span class="linenos"> 88</span></a>    <span class="n">LOGGER_VERBOSITY</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>
 </span><span id="Settings-89"><a href="#Settings-89"><span class="linenos"> 89</span></a>
-</span><span id="Settings-90"><a href="#Settings-90"><span class="linenos"> 90</span></a>    <span class="n">OPENAI_API_KEY</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pydantic</span><span class="o">.</span><span class="n">SecretStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>  <span class="c1"># noqa: UP007 Disable because pydantic and future annotations don&#39;t play well together.</span>
+</span><span id="Settings-90"><a href="#Settings-90"><span class="linenos"> 90</span></a>    <span class="n">OPENAI_API_KEY</span><span class="p">:</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">SecretStr</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>
 </span><span id="Settings-91"><a href="#Settings-91"><span class="linenos"> 91</span></a>        <span class="kc">None</span><span class="p">,</span>
 </span><span id="Settings-92"><a href="#Settings-92"><span class="linenos"> 92</span></a>        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span>
 </span><span id="Settings-93"><a href="#Settings-93"><span class="linenos"> 93</span></a>            <span class="s2">&quot;env&quot;</span><span class="p">:</span> <span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">,</span>
@@ -1319,7 +1319,7 @@
                             </div>
                             <div id="Settings.OPENAI_API_KEY" class="classattr">
                                 <div class="attr variable">
-            <span class="name">OPENAI_API_KEY</span><span class="annotation">: Optional[pydantic.types.SecretStr]</span>
+            <span class="name">OPENAI_API_KEY</span><span class="annotation">: pydantic.types.SecretStr | None</span>
 
         
     </div>
