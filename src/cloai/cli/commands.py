@@ -201,7 +201,7 @@ async def speech_to_text(
 async def text_to_speech(
     text: str,
     output_file: str,
-    model: str,
+    model: Literal["tts-1", "tts-1-hd"],
     voice: Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
 ) -> None:
     """Converts text to speech with OpenAI's TTS models.

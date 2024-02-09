@@ -29,7 +29,9 @@ def mock_openai(mocker: pytest_mock.MockFixture) -> mock.MagicMock:
     )
     mock_images = mocker.MagicMock(generate=mocker.AsyncMock())
     mock_chat = mocker.MagicMock(
-        completions=mocker.MagicMock(create=mocker.AsyncMock()),
+        completions=mocker.MagicMock(
+            create=mocker.AsyncMock(),
+        ),
     )
     mock_client = mocker.AsyncMock(
         spec=openai_api.openai.AsyncOpenAI,

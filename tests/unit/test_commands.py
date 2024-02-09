@@ -129,7 +129,7 @@ def test_determine_system_prompt_with_preset() -> None:
 
 
 @pytest.mark.asyncio()
-async def test_run_method(mock_openai: mock.MagicMock) -> None:
+async def test_chat_completion_run_method(mock_openai: mock.MagicMock) -> None:
     """Tests the run method."""
     cc = commands.ChatCompletion(
         user_prompt="user",

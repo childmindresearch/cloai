@@ -61,3 +61,15 @@ async def test_image_generation(mock_openai: mock.AsyncMock) -> None:
     assert image_generation.client is not None
     assert mock_openai.call_count == 1
     assert mock_openai.return_value.images.generate.call_count == 1
+
+
+@pytest.mark.asyncio()
+async def test_chat_completion(mock_openai: mock.AsyncMock) -> None:
+    """Tests the ChatCompletion class."""
+    chat_completion = openai_api.ChatCompletion()
+
+    await chat_completion.run("", "")
+
+    assert chat_completion.client is not None
+    assert mock_openai.call_count == 1
+    assert mock_openai.return_value.chat.completions.create.call_count == 1

@@ -4,9 +4,11 @@ from __future__ import annotations
 import abc
 import logging
 import pathlib
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal, TypedDict, TypeVar
 
+import instructor
 import openai
+import pydantic
 
 from cloai.core import config, exceptions
 
@@ -16,6 +18,8 @@ LOGGER_NAME = settings.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
 
+T = TypeVar("T")
+
 
 class Message(TypedDict):
     """A message object."""
@@ -24,27 +28,34 @@ class Message(TypedDict):
     content: str
 
 
-class OpenAIBaseClass(abc.ABC):
+class OpenAIBaseClass(pydantic.BaseModel, abc.ABC):
     """An abstract base class for OpenAI models.
 
     This class initializes the OpenAI client and requires a run method to be
     implemented.
 
     Attributes:
+        api_key: The OpenAI API key.
         client: The OpenAI client used to interact with the model.
     """
 
-    def __init__(self, api_key: str | None = None) -> None:
-        """Initializes a new instance of the OpenAIBaseClass class."""
-        if api_key:
-            key = api_key
-        elif OPENAI_API_KEY:
-            key = OPENAI_API_KEY.get_secret_value()
-        else:
-            msg = "No API key provided."
-            raise exceptions.OpenAIError(msg)
+    model_config = pydantic.ConfigDict(
+        arbitrary_types_allowed=True,
+    )
 
-        self.client = openai.AsyncOpenAI(api_key=key)
+    api_key: pydantic.SecretStr | None = OPENAI_API_KEY
+    client: openai.AsyncOpenAI = pydantic.Field(init=False, default=None)
+
+    def model_post_init(self, __context: Any) -> None:  # noqa: ANN401
+        """Initializes a new instance of the OpenAIBaseClass class.
+
+        Args:
+            api_key: The OpenAI API key.
+        """
+        if self.api_key is None:
+            msg = "No OpenAI API key provided."
+            raise exceptions.OpenAIError(msg)
+        self.client = openai.AsyncOpenAI(api_key=self.api_key.get_secret_value())
 
     @abc.abstractmethod
     async def run(self, *_args: Any, **_kwargs: Any) -> Any:  # noqa: ANN401
@@ -59,7 +70,7 @@ class ChatCompletion(OpenAIBaseClass):
         self,
         user_prompt: str,
         system_prompt: str,
-        model: Literal["gpt-4", "gpt-3.5-turbo", "gpt-4-1106-preview"] = "gpt-4",
+        model: str = "gpt-4",
     ) -> str:
         """Runs the Chat Completion model.
 
@@ -83,13 +94,54 @@ class ChatCompletion(OpenAIBaseClass):
         return response.choices[0].message.content
 
 
+class ChatCompletionInstructor(OpenAIBaseClass):
+    """A class for running the Chat Completion models using the instructor library.
+
+    This class is intended to only be exposed to the user through the Python interface.
+    """
+
+    def __init__(self) -> None:
+        """Patches the OpenAI library to use instructor."""
+        super().__init__()
+        self.client = instructor.patch(self.client)
+
+    async def run(  # noqa: PLR0913
+        self,
+        user_prompt: str,
+        system_prompt: str,
+        response_model: T,
+        model: str = "gpt-4",
+        max_retries: int = 1,
+    ) -> T:
+        """Runs the Chat Completion model.
+
+        Args:
+            user_prompt: The user's prompt.
+            system_prompt: The system's prompt.
+            response_model: The response model to return.
+            model: The name of the Chat Completion model to use.
+            max_retries: The maximum number of retries to attempt.
+
+        Returns:
+            The model's response.
+        """
+        system_message = Message(role="system", content=system_prompt)
+        user_message = Message(role="user", content=user_prompt)
+        return await self.client.chat.completions.create(  # type: ignore[call-overload]
+            model=model,
+            messages=[system_message, user_message],  # type: ignore[list-item]
+            response_model=response_model,
+            max_retries=max_retries,
+        )
+
+
 class TextToSpeech(OpenAIBaseClass):
     """A class for running the Text-To-Speech models."""
 
     async def run(
         self,
         text: str,
-        model: str = "tts-1",
+        model: Literal["tts-1", "tts-1-hd"] = "tts-1",
         voice: Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"] = "onyx",
     ) -> bytes:
         """Runs the Text-To-Speech model.
