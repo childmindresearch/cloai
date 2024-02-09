@@ -1,19 +1,14 @@
 """Tests for the parser module."""
-from __future__ import annotations
-
 import argparse
 import os
 import pathlib
 import sys
-from typing import TYPE_CHECKING
 
 import pytest
+import pytest_mock
 
 from cloai.cli import parser
 from cloai.core import config, exceptions
-
-if TYPE_CHECKING:
-    import pytest_mock
 
 
 @pytest.fixture(autouse=True)
