@@ -76,7 +76,7 @@ async def test_chat_completion(mock_openai: mock.AsyncMock) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_get_embeddings(mock_openai: mock.MagicMock) -> None:
+async def test_get_embeddings(mock_openai: mock.AsyncMock) -> None:
     """Tests the Embeddings class."""
     get_embeddings = openai_api.Embeddings()
 

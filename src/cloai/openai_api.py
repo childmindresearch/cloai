@@ -253,9 +253,9 @@ class Embeddings(OpenAIBaseClass):
         async with aiofiles.open(text_file, mode="r") as file:
             text = await file.read()
             text = text.replace("\n", " ")
-        response = await self.client.embeddings.create(
-            input=text,
-            output_file=output_file,
-            model=model,
-        ).data[0]
-        return response.embedding
+            response = await self.client.embeddings.create(
+                input=text,
+                output_file=output_file,
+                model=model,
+            )
+        return response.data[0].embedding
