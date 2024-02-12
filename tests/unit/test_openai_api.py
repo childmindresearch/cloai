@@ -73,3 +73,20 @@ async def test_chat_completion(mock_openai: mock.AsyncMock) -> None:
     assert chat_completion.client is not None
     assert mock_openai.call_count == 1
     assert mock_openai.return_value.chat.completions.create.call_count == 1
+
+
+@pytest.mark.asyncio()
+async def test_get_embeddings(mock_openai: mock.MagicMock) -> None:
+    """Tests the Embeddings class."""
+    get_embeddings = openai_api.Embeddings()
+
+    with tempfile.NamedTemporaryFile() as text_file:
+        await get_embeddings.run(
+            text_file.name,
+            output_file="",
+            model="text-embedding-3-small",
+        )
+
+    assert get_embeddings.client is not None
+    assert mock_openai.call_count == 1
+    assert mock_openai.return_value.embeddings.create.call_count == 1

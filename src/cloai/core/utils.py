@@ -9,6 +9,7 @@ import aiohttp
 import docx
 import ffmpeg
 import pypdf
+from aiocsv import AsyncWriter
 
 from cloai.core import config
 
@@ -69,6 +70,20 @@ async def save_file(filename: str | pathlib.Path, content: bytes) -> None:
     """
     async with aiofiles.open(filename, "wb") as file:
         await file.write(content)
+
+
+async def save_csv(filename: str | pathlib.Path, content: list[int]) -> None:
+    """Saves content to a csv file asynchronously.
+
+    Args:
+    ----
+        filename: The name of the file to save the content to.
+        content: The content to save to the file.
+
+    """
+    async with aiofiles.open(filename, "w") as file:
+        writer = AsyncWriter(file)
+        await writer.writerow(content)
 
 
 async def download_file(filename: str | pathlib.Path, url: str) -> None:

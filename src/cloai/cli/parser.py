@@ -341,6 +341,42 @@ def _add_image_generation_parser(
     )
 
 
+def _add_embeddings_parser(
+    subparsers: argparse._SubParsersAction,
+) -> None:
+    """Get the argument parser for the "embeddings" command.
+
+    Args:
+        subparsers: The subparsers object to add the "embeddings" command to.
+
+    Returns:
+        argparse.ArgumentParser: The argument parser for the "embeddings" command.
+    """
+    embeddings_parser = subparsers.add_parser(
+        "embeddings",
+        description="Generates embeddings with OpenAI's Text Embedding models.",
+        help="Generates embeddings with OpenAI's Text Embedding models.",
+        **PARSER_DEFAULTS,  # type: ignore[arg-type]
+    )
+    embeddings_parser.add_argument(
+        "text_file",
+        help="The text file to generate embeddings from.",
+        type=pathlib.Path,
+    )
+    embeddings_parser.add_argument(
+        "output_file",
+        help="The name of the output file.",
+        type=pathlib.Path,
+    )
+    embeddings_parser.add_argument(
+        "-m",
+        "--model",
+        help=("The model to use."),
+        choices=["text-embedding-3-small", "text-embedding-3-large"],
+        default="text-embedding-3-small",
+    )
+
+
 def _arg_validation(args: argparse.Namespace) -> argparse.Namespace:
     """Validate the parsed arguments.
 

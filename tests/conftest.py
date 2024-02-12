@@ -33,11 +33,13 @@ def mock_openai(mocker: pytest_mock.MockFixture) -> mock.MagicMock:
             create=mocker.AsyncMock(),
         ),
     )
+    mock_embeddings = mocker.MagicMock(create=mocker.AsyncMock())
     mock_client = mocker.AsyncMock(
         spec=openai_api.openai.AsyncOpenAI,
         audio=mock_audio,
         images=mock_images,
         chat=mock_chat,
+        embeddings=mock_embeddings,
     )
     return mocker.patch(
         "cloai.openai_api.openai.AsyncOpenAI",

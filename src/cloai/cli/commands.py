@@ -267,3 +267,27 @@ async def image_generation(  # noqa: PLR0913
             for index, url in enumerate(urls_not_none)
         ],
     )
+
+
+async def get_embeddings(
+    text_file: str,
+    output_file: str,
+    model: Literal[
+        "text-embedding-3-small",
+        "text-embedding-3-large",
+    ] = "text-embedding-3-small",
+) -> None:
+    """Get the embeddings using OpenAI's Embeddings models.
+
+    Args:
+        text_file: the text file to embed.
+        model: the name of the Embeddings model to use.
+        output_file: the name of the output file.
+    """
+    get_embeddings = openai_api.Embeddings()
+    embeddings = await get_embeddings.run(
+        text_file,
+        output_file=output_file,
+        model=model,
+    )
+    await utils.save_csv(output_file, embeddings)

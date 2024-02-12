@@ -149,6 +149,34 @@ def test__add_tts_parser() -> None:
     assert arguments[4].default == "onyx"
 
 
+def test__add_embeddings_parser() -> None:
+    """Tests the _add_embeddings_parser function."""
+    subparsers = argparse.ArgumentParser().add_subparsers()
+    parser._add_embeddings_parser(subparsers)
+    expected_n_arguments = 4
+    embeddings_parser = subparsers.choices["embeddings"]
+    arguments = embeddings_parser._actions
+
+    assert "embeddings" in subparsers.choices
+    assert (
+        embeddings_parser.description
+        == "Generates embeddings with OpenAI's Text Embedding models."
+    )
+
+    assert len(arguments) == expected_n_arguments
+
+    assert arguments[0].dest == "help"
+
+    assert arguments[1].dest == "text_file"
+    assert arguments[1].type == pathlib.Path
+
+    assert arguments[2].dest == "output_file"
+    assert arguments[2].type == pathlib.Path
+
+    assert arguments[3].dest == "model"
+    assert arguments[3].default == "text-embedding-3-small"
+
+
 @pytest.mark.asyncio()
 async def test_run_command_without_arguments() -> None:
     """Tests the run_command function with no arguments."""
