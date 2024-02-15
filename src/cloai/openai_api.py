@@ -239,7 +239,7 @@ class Embedding(OpenAIBaseClass):
         ] = "text-embedding-3-large",
         *,
         replace_new_line: bool = True,
-    ) -> list[int]:
+    ) -> list[float]:
         """Runs the Embedding model.
 
         Args:

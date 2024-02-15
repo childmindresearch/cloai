@@ -72,7 +72,7 @@ async def save_file(filename: str | pathlib.Path, content: bytes) -> None:
         await file.write(content)
 
 
-async def save_csv(filename: str | pathlib.Path, content: list[int]) -> None:
+async def save_csv(filename: str | pathlib.Path, content: list[float]) -> None:
     """Saves content to a csv file asynchronously.
 
     Args:
