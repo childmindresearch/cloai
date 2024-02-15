@@ -48,7 +48,7 @@ async def test_download_file(tmp_path: pathlib.Path) -> None:
 async def test_save_csv(tmp_path: pathlib.Path) -> None:
     """Tests that the content is saved to a csv file asynchronously."""
     test_filename = tmp_path / "test.csv"
-    test_content = [1, 2, 3, 4, 5]
+    test_content = [1.0, 2.0, 3.0, 4.0, 5.0]
 
     await utils.save_csv(test_filename, test_content)
 
