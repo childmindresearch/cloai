@@ -4,7 +4,6 @@ import logging
 import pathlib
 from typing import Any, Literal, TypedDict, TypeVar
 
-import aiofiles
 import instructor
 import openai
 import pydantic
@@ -228,34 +227,33 @@ class ImageGeneration(OpenAIBaseClass):
         return [data.url for data in response.data]
 
 
-class Embeddings(OpenAIBaseClass):
-    """A class for running the Embeddings models."""
+class Embedding(OpenAIBaseClass):
+    """A class for running the Embedding models."""
 
     async def run(
         self,
-        text_file: pathlib.Path | str,
-        output_file: pathlib.Path | str,
+        text: str,
         model: Literal[
             "text-embedding-3-small",
             "text-embedding-3-large",
-        ] = "text-embedding-3-small",
+        ] = "text-embedding-3-large",
+        *,
+        replace_new_line: bool = True,
     ) -> list[int]:
-        """Runs the Embeddings model.
+        """Runs the Embedding model.
 
         Args:
-            text_file: the text file to embed.
-            model: the name of the Embeddings model to use.
-            output_file: the name of the output file.
+            text: the string to embed.
+            model: the name of the Embedding model to use.
+            replace_new_line: Whether to remove new lines, defaults to true.
 
         Returns:
             The embedding (list of numbers)
         """
-        async with aiofiles.open(text_file, mode="r") as file:
-            text = await file.read()
+        if replace_new_line is True:
             text = text.replace("\n", " ")
-            response = await self.client.embeddings.create(
-                input=text,
-                output_file=output_file,
-                model=model,
-            )
+        response = await self.client.embeddings.create(
+            input=text,
+            model=model,
+        )
         return response.data[0].embedding

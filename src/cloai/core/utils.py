@@ -4,12 +4,12 @@ import pathlib
 import uuid
 from collections.abc import Generator
 
+import aiocsv
 import aiofiles
 import aiohttp
 import docx
 import ffmpeg
 import pypdf
-from aiocsv import AsyncWriter
 
 from cloai.core import config
 
@@ -82,7 +82,7 @@ async def save_csv(filename: str | pathlib.Path, content: list[int]) -> None:
 
     """
     async with aiofiles.open(filename, "w") as file:
-        writer = AsyncWriter(file)
+        writer = aiocsv.AsyncWriter(file)
         await writer.writerow(content)
 
 

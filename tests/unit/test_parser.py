@@ -149,18 +149,18 @@ def test__add_tts_parser() -> None:
     assert arguments[4].default == "onyx"
 
 
-def test__add_embeddings_parser() -> None:
-    """Tests the _add_embeddings_parser function."""
+def test__add_embedding_parser() -> None:
+    """Tests the _add_embedding_parser function."""
     subparsers = argparse.ArgumentParser().add_subparsers()
-    parser._add_embeddings_parser(subparsers)
-    expected_n_arguments = 4
-    embeddings_parser = subparsers.choices["embeddings"]
-    arguments = embeddings_parser._actions
+    parser._add_embedding_parser(subparsers)
+    expected_n_arguments = 5
+    embedding_parser = subparsers.choices["embedding"]
+    arguments = embedding_parser._actions
 
-    assert "embeddings" in subparsers.choices
+    assert "embedding" in subparsers.choices
     assert (
-        embeddings_parser.description
-        == "Generates embeddings with OpenAI's Text Embedding models."
+        embedding_parser.description
+        == "Generates embedding with OpenAI's Text Embedding models."
     )
 
     assert len(arguments) == expected_n_arguments
@@ -174,7 +174,10 @@ def test__add_embeddings_parser() -> None:
     assert arguments[2].type == pathlib.Path
 
     assert arguments[3].dest == "model"
-    assert arguments[3].default == "text-embedding-3-small"
+    assert arguments[3].default == "text-embedding-3-large"
+
+    assert arguments[4].dest == "replace_new_lines"
+    assert arguments[4].default is True
 
 
 @pytest.mark.asyncio()

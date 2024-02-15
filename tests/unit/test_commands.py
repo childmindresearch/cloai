@@ -3,6 +3,7 @@ import pathlib
 from unittest import mock
 
 import pytest
+from pytest_mock import plugin
 
 from cloai.cli import commands
 from cloai.core import exceptions
@@ -145,3 +146,29 @@ async def test_chat_completion_run_method(mock_openai: mock.MagicMock) -> None:
             0
         ].message.content
     )
+
+
+# commands test to make sure input/output files are handled correctly
+@pytest.mark.asyncio()
+async def test_get_embedding(
+    mocker: plugin.MockerFixture,
+    tmp_path: pathlib.Path,
+    mock_openai: mock.AsyncMock,
+) -> None:
+    """Tests the get_embedding command."""
+    text_file = tmp_path / "test_text.txt"
+    expected_text = "test text"
+    text_file.write_text(expected_text)
+    output_file = tmp_path / "test_output.csv"
+    expected_embedding = mock_openai.return_value.embeddings.create.return_value.data[
+        0
+    ].embedding
+    mock_save_csv = mocker.patch("cloai.core.utils.save_csv")
+
+    await commands.get_embedding(text_file, output_file)
+
+    assert (
+        mock_openai.return_value.embeddings.create.call_args[1]["input"]
+        == expected_text
+    )
+    mock_save_csv.assert_called_once_with(output_file, expected_embedding)
