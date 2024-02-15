@@ -56,4 +56,4 @@ async def test_save_csv(tmp_path: pathlib.Path) -> None:
         async for row in aiocsv.AsyncReader(file):
             content = row
 
-    assert content == ["1", "2", "3", "4", "5"]
+    assert content == ["1.0", "2.0", "3.0", "4.0", "5.0"]

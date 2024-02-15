@@ -126,7 +126,7 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
             text_file=args.text_file,
             output_file=args.output_file,
             model=args.model,
-            replace_new_line=args.replace_new_line,
+            replace_new_lines=args.replace_new_lines,
         )
         return None
     msg = f"Unknown command {args.command}."

@@ -238,19 +238,19 @@ class Embedding(OpenAIBaseClass):
             "text-embedding-3-large",
         ] = "text-embedding-3-large",
         *,
-        replace_new_line: bool = True,
+        replace_new_lines: bool = True,
     ) -> list[float]:
         """Runs the Embedding model.
 
         Args:
             text: the string to embed.
             model: the name of the Embedding model to use.
-            replace_new_line: Whether to remove new lines, defaults to true.
+            replace_new_lines: Whether to remove new lines, defaults to true.
 
         Returns:
             The embedding (list of numbers)
         """
-        if replace_new_line is True:
+        if replace_new_lines is True:
             text = text.replace("\n", " ")
         response = await self.client.embeddings.create(
             input=text,
