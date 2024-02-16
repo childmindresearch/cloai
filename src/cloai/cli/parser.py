@@ -126,7 +126,7 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
             text_file=args.text_file,
             output_file=args.output_file,
             model=args.model,
-            replace_new_lines=args.replace_new_lines,
+            keep_new_lines=args.keep_new_lines,
         )
         return None
     msg = f"Unknown command {args.command}."
@@ -385,11 +385,11 @@ def _add_embedding_parser(
         default="text-embedding-3-large",
     )
     embedding_parser.add_argument(
-        "-r",
-        "--replace_new_lines",
-        help=("Whether to remove new lines, defaults to true."),
-        type=bool,
-        default=True,
+        "--keep-new-lines",
+        dest="keep_new_lines",
+        help=("Keeps line breaks in text if specified."),
+        action=argparse.BooleanOptionalAction,
+        default=False,
     )
 
 

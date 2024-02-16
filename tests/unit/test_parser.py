@@ -176,8 +176,8 @@ def test__add_embedding_parser() -> None:
     assert arguments[3].dest == "model"
     assert arguments[3].default == "text-embedding-3-large"
 
-    assert arguments[4].dest == "replace_new_lines"
-    assert arguments[4].default is True
+    assert arguments[4].dest == "keep_new_lines"
+    assert arguments[4].default is False
 
 
 @pytest.mark.asyncio()

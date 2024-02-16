@@ -278,7 +278,7 @@ async def get_embedding(
         "text-embedding-3-large",
     ] = "text-embedding-3-large",
     *,
-    replace_new_lines: bool = True,
+    keep_new_lines: bool = False,
 ) -> None:
     """Get the embedding using OpenAI's Embedding models.
 
@@ -287,7 +287,8 @@ async def get_embedding(
         model: the name of the Embedding model to use,
         defaults to text-embedding-3-large.
         output_file: the name of the CSV output file.
-        replace_new_lines: Whether to remove new lines, defaults to true.
+        keep_new_lines: Whether to keep or remove line breaks,
+        defaults to False.
     """
     async with aiofiles.open(text_file, mode="r") as file:
         text = await file.read()
@@ -297,6 +298,6 @@ async def get_embedding(
     embedding = await get_embedding.run(
         text=text,
         model=model,
-        replace_new_lines=replace_new_lines,
+        keep_new_lines=keep_new_lines,
     )
     await utils.save_csv(output_file, embedding)
