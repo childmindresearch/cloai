@@ -177,6 +177,24 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#Embedding">Embedding</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Embedding.run">run</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Embedding.model_config">model_config</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Embedding.model_fields">model_fields</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Embedding.model_computed_fields">model_computed_fields</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -427,6 +445,39 @@
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>        <span class="p">)</span>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="k">class</span> <span class="nc">Embedding</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Embedding models.&quot;&quot;&quot;</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>        <span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>            <span class="s2">&quot;text-embedding-3-small&quot;</span><span class="p">,</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>            <span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">,</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">,</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="o">*</span><span class="p">,</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="n">keep_new_lines</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Embedding model.</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        Args:</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">            text: the string to embed.</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">            model: the name of the Embedding model to use.</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">            keep_new_lines: Whether to keep or remove line breaks,</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">            defaults to False.</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">        Returns:</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="sd">            The embedding (list of numbers)</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>        <span class="k">if</span> <span class="n">keep_new_lines</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">embeddings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>        <span class="p">)</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">embedding</span>
 </span></pre></div>
 
 
@@ -1702,6 +1753,194 @@ config.WhisperLanguages enum, which guarantees support, or as a string.</li>
                                 <dd id="ImageGeneration.api_key" class="variable"><a href="#OpenAIBaseClass.api_key">api_key</a></dd>
                 <dd id="ImageGeneration.client" class="variable"><a href="#OpenAIBaseClass.client">client</a></dd>
                 <dd id="ImageGeneration.model_post_init" class="function"><a href="#OpenAIBaseClass.model_post_init">model_post_init</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="Embedding">
+                            <input id="Embedding-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">Embedding</span><wbr>(<span class="base"><a href="#OpenAIBaseClass">OpenAIBaseClass</a></span>):
+
+                <label class="view-source-button" for="Embedding-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Embedding"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Embedding-231"><a href="#Embedding-231"><span class="linenos">231</span></a><span class="k">class</span> <span class="nc">Embedding</span><span class="p">(</span><span class="n">OpenAIBaseClass</span><span class="p">):</span>
+</span><span id="Embedding-232"><a href="#Embedding-232"><span class="linenos">232</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for running the Embedding models.&quot;&quot;&quot;</span>
+</span><span id="Embedding-233"><a href="#Embedding-233"><span class="linenos">233</span></a>
+</span><span id="Embedding-234"><a href="#Embedding-234"><span class="linenos">234</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="Embedding-235"><a href="#Embedding-235"><span class="linenos">235</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Embedding-236"><a href="#Embedding-236"><span class="linenos">236</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="Embedding-237"><a href="#Embedding-237"><span class="linenos">237</span></a>        <span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+</span><span id="Embedding-238"><a href="#Embedding-238"><span class="linenos">238</span></a>            <span class="s2">&quot;text-embedding-3-small&quot;</span><span class="p">,</span>
+</span><span id="Embedding-239"><a href="#Embedding-239"><span class="linenos">239</span></a>            <span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">,</span>
+</span><span id="Embedding-240"><a href="#Embedding-240"><span class="linenos">240</span></a>        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">,</span>
+</span><span id="Embedding-241"><a href="#Embedding-241"><span class="linenos">241</span></a>        <span class="o">*</span><span class="p">,</span>
+</span><span id="Embedding-242"><a href="#Embedding-242"><span class="linenos">242</span></a>        <span class="n">keep_new_lines</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="Embedding-243"><a href="#Embedding-243"><span class="linenos">243</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+</span><span id="Embedding-244"><a href="#Embedding-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Embedding model.</span>
+</span><span id="Embedding-245"><a href="#Embedding-245"><span class="linenos">245</span></a>
+</span><span id="Embedding-246"><a href="#Embedding-246"><span class="linenos">246</span></a><span class="sd">        Args:</span>
+</span><span id="Embedding-247"><a href="#Embedding-247"><span class="linenos">247</span></a><span class="sd">            text: the string to embed.</span>
+</span><span id="Embedding-248"><a href="#Embedding-248"><span class="linenos">248</span></a><span class="sd">            model: the name of the Embedding model to use.</span>
+</span><span id="Embedding-249"><a href="#Embedding-249"><span class="linenos">249</span></a><span class="sd">            keep_new_lines: Whether to keep or remove line breaks,</span>
+</span><span id="Embedding-250"><a href="#Embedding-250"><span class="linenos">250</span></a><span class="sd">            defaults to False.</span>
+</span><span id="Embedding-251"><a href="#Embedding-251"><span class="linenos">251</span></a>
+</span><span id="Embedding-252"><a href="#Embedding-252"><span class="linenos">252</span></a><span class="sd">        Returns:</span>
+</span><span id="Embedding-253"><a href="#Embedding-253"><span class="linenos">253</span></a><span class="sd">            The embedding (list of numbers)</span>
+</span><span id="Embedding-254"><a href="#Embedding-254"><span class="linenos">254</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Embedding-255"><a href="#Embedding-255"><span class="linenos">255</span></a>        <span class="k">if</span> <span class="n">keep_new_lines</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+</span><span id="Embedding-256"><a href="#Embedding-256"><span class="linenos">256</span></a>            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+</span><span id="Embedding-257"><a href="#Embedding-257"><span class="linenos">257</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">embeddings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="Embedding-258"><a href="#Embedding-258"><span class="linenos">258</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+</span><span id="Embedding-259"><a href="#Embedding-259"><span class="linenos">259</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="Embedding-260"><a href="#Embedding-260"><span class="linenos">260</span></a>        <span class="p">)</span>
+</span><span id="Embedding-261"><a href="#Embedding-261"><span class="linenos">261</span></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">embedding</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>A class for running the Embedding models.</p>
+</div>
+
+
+                            <div id="Embedding.run" class="classattr">
+                                        <input id="Embedding.run-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">async def</span>
+        <span class="name">run</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;text-embedding-3-small&#39;</span><span class="p">,</span> <span class="s1">&#39;text-embedding-3-large&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;text-embedding-3-large&#39;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">keep_new_lines</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span><span class="return-annotation">) -> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>:</span></span>
+
+                <label class="view-source-button" for="Embedding.run-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Embedding.run"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Embedding.run-234"><a href="#Embedding.run-234"><span class="linenos">234</span></a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+</span><span id="Embedding.run-235"><a href="#Embedding.run-235"><span class="linenos">235</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Embedding.run-236"><a href="#Embedding.run-236"><span class="linenos">236</span></a>        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="Embedding.run-237"><a href="#Embedding.run-237"><span class="linenos">237</span></a>        <span class="n">model</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span>
+</span><span id="Embedding.run-238"><a href="#Embedding.run-238"><span class="linenos">238</span></a>            <span class="s2">&quot;text-embedding-3-small&quot;</span><span class="p">,</span>
+</span><span id="Embedding.run-239"><a href="#Embedding.run-239"><span class="linenos">239</span></a>            <span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">,</span>
+</span><span id="Embedding.run-240"><a href="#Embedding.run-240"><span class="linenos">240</span></a>        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">,</span>
+</span><span id="Embedding.run-241"><a href="#Embedding.run-241"><span class="linenos">241</span></a>        <span class="o">*</span><span class="p">,</span>
+</span><span id="Embedding.run-242"><a href="#Embedding.run-242"><span class="linenos">242</span></a>        <span class="n">keep_new_lines</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="Embedding.run-243"><a href="#Embedding.run-243"><span class="linenos">243</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+</span><span id="Embedding.run-244"><a href="#Embedding.run-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Embedding model.</span>
+</span><span id="Embedding.run-245"><a href="#Embedding.run-245"><span class="linenos">245</span></a>
+</span><span id="Embedding.run-246"><a href="#Embedding.run-246"><span class="linenos">246</span></a><span class="sd">        Args:</span>
+</span><span id="Embedding.run-247"><a href="#Embedding.run-247"><span class="linenos">247</span></a><span class="sd">            text: the string to embed.</span>
+</span><span id="Embedding.run-248"><a href="#Embedding.run-248"><span class="linenos">248</span></a><span class="sd">            model: the name of the Embedding model to use.</span>
+</span><span id="Embedding.run-249"><a href="#Embedding.run-249"><span class="linenos">249</span></a><span class="sd">            keep_new_lines: Whether to keep or remove line breaks,</span>
+</span><span id="Embedding.run-250"><a href="#Embedding.run-250"><span class="linenos">250</span></a><span class="sd">            defaults to False.</span>
+</span><span id="Embedding.run-251"><a href="#Embedding.run-251"><span class="linenos">251</span></a>
+</span><span id="Embedding.run-252"><a href="#Embedding.run-252"><span class="linenos">252</span></a><span class="sd">        Returns:</span>
+</span><span id="Embedding.run-253"><a href="#Embedding.run-253"><span class="linenos">253</span></a><span class="sd">            The embedding (list of numbers)</span>
+</span><span id="Embedding.run-254"><a href="#Embedding.run-254"><span class="linenos">254</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Embedding.run-255"><a href="#Embedding.run-255"><span class="linenos">255</span></a>        <span class="k">if</span> <span class="n">keep_new_lines</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+</span><span id="Embedding.run-256"><a href="#Embedding.run-256"><span class="linenos">256</span></a>            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+</span><span id="Embedding.run-257"><a href="#Embedding.run-257"><span class="linenos">257</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">embeddings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span><span id="Embedding.run-258"><a href="#Embedding.run-258"><span class="linenos">258</span></a>            <span class="nb">input</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+</span><span id="Embedding.run-259"><a href="#Embedding.run-259"><span class="linenos">259</span></a>            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+</span><span id="Embedding.run-260"><a href="#Embedding.run-260"><span class="linenos">260</span></a>        <span class="p">)</span>
+</span><span id="Embedding.run-261"><a href="#Embedding.run-261"><span class="linenos">261</span></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">embedding</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Runs the Embedding model.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>text:</strong>  the string to embed.</li>
+<li><strong>model:</strong>  the name of the Embedding model to use.</li>
+<li><strong>keep_new_lines:</strong>  Whether to keep or remove line breaks,</li>
+<li>defaults to False.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>The embedding (list of numbers)</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="Embedding.model_config" class="classattr">
+                                <div class="attr variable">
+            <span class="name">model_config</span>        =
+<span class="default_value">{&#39;arbitrary_types_allowed&#39;: True}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Embedding.model_config"></a>
+    
+    
+
+                            </div>
+                            <div id="Embedding.model_fields" class="classattr">
+                                <div class="attr variable">
+            <span class="name">model_fields</span>        =
+<input id="Embedding.model_fields-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+            <label class="view-value-button pdoc-button" for="Embedding.model_fields-view-value"></label><span class="default_value">{&#39;api_key&#39;: FieldInfo(annotation=Union[SecretStr, NoneType], required=False, default=SecretStr(&#39;**********&#39;)), &#39;client&#39;: FieldInfo(annotation=AsyncOpenAI, required=False, init=False)}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Embedding.model_fields"></a>
+    
+    
+
+                            </div>
+                            <div id="Embedding.model_computed_fields" class="classattr">
+                                <div class="attr variable">
+            <span class="name">model_computed_fields</span>        =
+<span class="default_value">{}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Embedding.model_computed_fields"></a>
+    
+    
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>pydantic.main.BaseModel</dt>
+                                <dd id="Embedding.__init__" class="function">BaseModel</dd>
+                <dd id="Embedding.model_extra" class="variable">model_extra</dd>
+                <dd id="Embedding.model_fields_set" class="variable">model_fields_set</dd>
+                <dd id="Embedding.model_construct" class="function">model_construct</dd>
+                <dd id="Embedding.model_copy" class="function">model_copy</dd>
+                <dd id="Embedding.model_dump" class="function">model_dump</dd>
+                <dd id="Embedding.model_dump_json" class="function">model_dump_json</dd>
+                <dd id="Embedding.model_json_schema" class="function">model_json_schema</dd>
+                <dd id="Embedding.model_parametrized_name" class="function">model_parametrized_name</dd>
+                <dd id="Embedding.model_rebuild" class="function">model_rebuild</dd>
+                <dd id="Embedding.model_validate" class="function">model_validate</dd>
+                <dd id="Embedding.model_validate_json" class="function">model_validate_json</dd>
+                <dd id="Embedding.model_validate_strings" class="function">model_validate_strings</dd>
+                <dd id="Embedding.dict" class="function">dict</dd>
+                <dd id="Embedding.json" class="function">json</dd>
+                <dd id="Embedding.parse_obj" class="function">parse_obj</dd>
+                <dd id="Embedding.parse_raw" class="function">parse_raw</dd>
+                <dd id="Embedding.parse_file" class="function">parse_file</dd>
+                <dd id="Embedding.from_orm" class="function">from_orm</dd>
+                <dd id="Embedding.construct" class="function">construct</dd>
+                <dd id="Embedding.copy" class="function">copy</dd>
+                <dd id="Embedding.schema" class="function">schema</dd>
+                <dd id="Embedding.schema_json" class="function">schema_json</dd>
+                <dd id="Embedding.validate" class="function">validate</dd>
+                <dd id="Embedding.update_forward_refs" class="function">update_forward_refs</dd>
+
+            </div>
+            <div><dt><a href="#OpenAIBaseClass">OpenAIBaseClass</a></dt>
+                                <dd id="Embedding.api_key" class="variable"><a href="#OpenAIBaseClass.api_key">api_key</a></dd>
+                <dd id="Embedding.client" class="variable"><a href="#OpenAIBaseClass.client">client</a></dd>
+                <dd id="Embedding.model_post_init" class="function"><a href="#OpenAIBaseClass.model_post_init">model_post_init</a></dd>
 
             </div>
                                 </dl>
