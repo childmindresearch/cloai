@@ -2,6 +2,8 @@
 import pathlib
 import tempfile
 
+import aiocsv
+import aiofiles
 import aioresponses
 import pytest
 import pytest_mock
@@ -40,3 +42,18 @@ async def test_download_file(tmp_path: pathlib.Path) -> None:
         await utils.download_file(test_file_path, test_url)
 
         assert test_file_path.read_bytes() == test_file_contents
+
+
+@pytest.mark.asyncio()
+async def test_save_csv(tmp_path: pathlib.Path) -> None:
+    """Tests that the content is saved to a csv file asynchronously."""
+    test_filename = tmp_path / "test.csv"
+    test_content = [1.0, 2.0, 3.0, 4.0, 5.0]
+
+    await utils.save_csv(test_filename, test_content)
+
+    async with aiofiles.open(test_filename, "r") as file:
+        async for row in aiocsv.AsyncReader(file):
+            content = row
+
+    assert content == ["1.0", "2.0", "3.0", "4.0", "5.0"]

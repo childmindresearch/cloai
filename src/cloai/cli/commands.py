@@ -5,6 +5,7 @@ import pathlib
 import tempfile
 from typing import Literal
 
+import aiofiles
 import ffmpeg
 import yaml
 
@@ -267,3 +268,36 @@ async def image_generation(  # noqa: PLR0913
             for index, url in enumerate(urls_not_none)
         ],
     )
+
+
+async def get_embedding(
+    text_file: pathlib.Path,
+    output_file: pathlib.Path,
+    model: Literal[
+        "text-embedding-3-small",
+        "text-embedding-3-large",
+    ] = "text-embedding-3-large",
+    *,
+    keep_new_lines: bool = False,
+) -> None:
+    """Get the embedding using OpenAI's Embedding models.
+
+    Args:
+        text_file: the text file to embed.
+        model: the name of the Embedding model to use,
+        defaults to text-embedding-3-large.
+        output_file: the name of the CSV output file.
+        keep_new_lines: Whether to keep or remove line breaks,
+        defaults to False.
+    """
+    async with aiofiles.open(text_file, mode="r") as file:
+        text = await file.read()
+
+    get_embedding = openai_api.Embedding()
+
+    embedding = await get_embedding.run(
+        text=text,
+        model=model,
+        keep_new_lines=keep_new_lines,
+    )
+    await utils.save_csv(output_file, embedding)

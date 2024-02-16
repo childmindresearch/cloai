@@ -70,6 +70,7 @@ def create_parser() -> argparse.ArgumentParser:
     _add_stt_parser(subparsers)
     _add_tts_parser(subparsers)
     _add_image_generation_parser(subparsers)
+    _add_embedding_parser(subparsers)
     return parser
 
 
@@ -120,6 +121,14 @@ async def run_command(args: argparse.Namespace) -> str | bytes | None:
             clip=args.clip,
             language=config.WhisperLanguages[args.language],
         )
+    if args.command == "embedding":
+        await commands.get_embedding(
+            text_file=args.text_file,
+            output_file=args.output_file,
+            model=args.model,
+            keep_new_lines=args.keep_new_lines,
+        )
+        return None
     msg = f"Unknown command {args.command}."
     raise exceptions.InvalidArgumentError(msg)
 
@@ -144,7 +153,7 @@ def _add_chat_completion_parser(
 
     user_group = chat_parser.add_argument_group(
         "User Prompts",
-        """The prompts povided by the user. One must be provided and these
+        """The prompts provided by the user. One must be provided and these
         arguments are mutually exclusive.""",
     )
     user_group_exclusive = user_group.add_mutually_exclusive_group(required=True)
@@ -338,6 +347,49 @@ def _add_image_generation_parser(
         help="The number of images to generate.",
         type=_positive_int,
         default=1,
+    )
+
+
+def _add_embedding_parser(
+    subparsers: argparse._SubParsersAction,
+) -> None:
+    """Get the argument parser for the "embedding" command.
+
+    Args:
+        subparsers: The subparsers object to add the "embedding" command to.
+
+    Returns:
+        argparse.ArgumentParser: The argument parser for the "embedding" command.
+    """
+    embedding_parser = subparsers.add_parser(
+        "embedding",
+        description="Generates embedding with OpenAI's Text Embedding models.",
+        help="Generates embedding with OpenAI's Text Embedding models.",
+        **PARSER_DEFAULTS,  # type: ignore[arg-type]
+    )
+    embedding_parser.add_argument(
+        "text_file",
+        help="The text file to generate an embedding from.",
+        type=pathlib.Path,
+    )
+    embedding_parser.add_argument(
+        "output_file",
+        help="The name of the CSV output file.",
+        type=pathlib.Path,
+    )
+    embedding_parser.add_argument(
+        "-m",
+        "--model",
+        help=("The model to use."),
+        choices=["text-embedding-3-small", "text-embedding-3-large"],
+        default="text-embedding-3-large",
+    )
+    embedding_parser.add_argument(
+        "--keep-new-lines",
+        dest="keep_new_lines",
+        help=("Keeps line breaks in text if specified."),
+        action=argparse.BooleanOptionalAction,
+        default=False,
     )
 
 

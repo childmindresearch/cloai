@@ -4,6 +4,7 @@ import pathlib
 import uuid
 from collections.abc import Generator
 
+import aiocsv
 import aiofiles
 import aiohttp
 import docx
@@ -69,6 +70,20 @@ async def save_file(filename: str | pathlib.Path, content: bytes) -> None:
     """
     async with aiofiles.open(filename, "wb") as file:
         await file.write(content)
+
+
+async def save_csv(filename: str | pathlib.Path, content: list[float]) -> None:
+    """Saves content to a csv file asynchronously.
+
+    Args:
+    ----
+        filename: The name of the file to save the content to.
+        content: The content to save to the file.
+
+    """
+    async with aiofiles.open(filename, "w") as file:
+        writer = aiocsv.AsyncWriter(file)
+        await writer.writerow(content)
 
 
 async def download_file(filename: str | pathlib.Path, url: str) -> None:

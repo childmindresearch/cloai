@@ -225,3 +225,36 @@ class ImageGeneration(OpenAIBaseClass):
         )
 
         return [data.url for data in response.data]
+
+
+class Embedding(OpenAIBaseClass):
+    """A class for running the Embedding models."""
+
+    async def run(
+        self,
+        text: str,
+        model: Literal[
+            "text-embedding-3-small",
+            "text-embedding-3-large",
+        ] = "text-embedding-3-large",
+        *,
+        keep_new_lines: bool = False,
+    ) -> list[float]:
+        """Runs the Embedding model.
+
+        Args:
+            text: the string to embed.
+            model: the name of the Embedding model to use.
+            keep_new_lines: Whether to keep or remove line breaks,
+            defaults to False.
+
+        Returns:
+            The embedding (list of numbers)
+        """
+        if keep_new_lines is False:
+            text = text.replace("\n", " ")
+        response = await self.client.embeddings.create(
+            input=text,
+            model=model,
+        )
+        return response.data[0].embedding
