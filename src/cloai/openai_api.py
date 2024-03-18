@@ -1,4 +1,5 @@
 """This module contains interactions with OpenAI models."""
+
 import abc
 import logging
 import pathlib

@@ -1,4 +1,5 @@
 """Contains the core business logic of the OpenAI CLI."""
+
 import asyncio
 import logging
 import pathlib

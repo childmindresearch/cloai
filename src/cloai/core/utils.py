@@ -1,4 +1,5 @@
 """Utility functions for cloai."""
+
 import math
 import pathlib
 import uuid

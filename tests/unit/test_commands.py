@@ -1,4 +1,5 @@
 """Tests for the commands module."""
+
 import pathlib
 from unittest import mock
 
