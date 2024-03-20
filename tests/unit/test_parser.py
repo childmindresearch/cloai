@@ -1,4 +1,5 @@
 """Tests for the parser module."""
+
 import argparse
 import os
 import pathlib

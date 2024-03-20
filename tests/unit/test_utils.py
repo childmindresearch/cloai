@@ -1,4 +1,5 @@
 """Tests for the CLI utility functions."""
+
 import pathlib
 import tempfile
 

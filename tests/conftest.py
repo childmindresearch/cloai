@@ -1,4 +1,5 @@
 """Test configurations."""
+
 import dataclasses
 import os
 from unittest import mock

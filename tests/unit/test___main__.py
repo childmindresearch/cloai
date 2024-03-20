@@ -1,4 +1,5 @@
 """Tests for the entrypoint."""
+
 import os
 
 import pytest

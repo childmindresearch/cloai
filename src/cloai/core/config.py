@@ -1,4 +1,5 @@
 """Configuration for the cloai module."""
+
 import enum
 import functools
 import logging

@@ -1,4 +1,5 @@
 """Command line interface for the OpenAI API."""
+
 import argparse
 import pathlib
 import sys

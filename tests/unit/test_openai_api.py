@@ -1,4 +1,5 @@
 """Unit tests for the OpenAI API module."""
+
 import tempfile
 from typing import Any
 from unittest import mock
