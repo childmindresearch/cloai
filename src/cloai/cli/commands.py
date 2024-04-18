@@ -8,14 +8,13 @@ from typing import Literal
 
 import aiofiles
 import ffmpeg
-import yaml
 
 from cloai import openai_api
+from cloai.cli import prompts
 from cloai.core import config, exceptions, utils
 
 settings = config.get_settings()
 logger = logging.getLogger(settings.LOGGER_NAME)
-PROMPT_FILE = settings.PROMPT_FILE
 MAX_FILE_SIZE = 24_500_000  # Max size is 25MB, but we leave some room for error.
 
 
@@ -155,9 +154,7 @@ class ChatCompletion:
         if system_prompt_file:
             return self._read_file(system_prompt_file)
         if system_preset:
-            with PROMPT_FILE.open() as file:
-                prompts = yaml.safe_load(file)
-                return prompts["system"][system_preset]
+            return getattr(prompts.Prompts, system_preset)
         if system_prompt:
             return system_prompt
         msg = "No system prompt provided."
