@@ -29,7 +29,7 @@ aiocsv = "^1.2.5"
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.4.3,<9.0.0"
 mypy = "^1.8.0"
-pre-commit = {version = "^3.6.0", python = ">=3.9"}
+pre-commit = "^3.6.0"
 pytest-cov = "^4.1.0"
 ruff = ">=0.1.7,<0.4.0"
 pytest-mock = "^3.12.0"
