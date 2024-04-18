@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "cloai"
-version = "0.0.1a15"
+version = "0.1.0"
 description = "A CLI for OpenAI's API"
 authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 license = "LGPL-2.1"
@@ -18,7 +18,6 @@ pydantic = "^2.5.2"
 ffmpeg-python = "^0.2.0"
 openai = "^1.6.0"
 requests = "^2.31.0"
-pyyaml = "^6.0.1"
 python-docx = "^1.1.0"
 pypdf = ">=3.17.3,<5.0.0"
 aiohttp = "^3.9.3"
