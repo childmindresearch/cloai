@@ -171,7 +171,7 @@ def docx_to_str(file_path: str | pathlib.Path) -> str:
         str: The extracted text from the docx file.
 
     """
-    document = docx.Document(file_path)
+    document = docx.Document(str(file_path))
     return " ".join([paragraph.text for paragraph in document.paragraphs])
 
 
