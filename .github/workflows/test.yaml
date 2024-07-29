@@ -24,6 +24,7 @@ jobs:
         cache: pip
     - name: Install dependencies
       run: |
+        poetry config --local virtualenvs.create false
         poetry run pip install uv
         poetry run uv pip install --system --resolution=${{ matrix.resolution }} .
         poetry install --only dev
