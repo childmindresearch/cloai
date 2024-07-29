@@ -69,10 +69,10 @@ def test__add_image_generation_parser() -> None:
     assert arguments[0].dest == "help"
 
     assert arguments[1].dest == "prompt"
-    assert arguments[1].type == str
+    assert arguments[1].type is str
 
     assert arguments[2].dest == "base_image_name"
-    assert arguments[2].type == str
+    assert arguments[2].type is str
 
     assert arguments[3].dest == "model"
     assert arguments[3].help == (
@@ -138,7 +138,7 @@ def test__add_tts_parser() -> None:
     assert arguments[0].dest == "help"
 
     assert arguments[1].dest == "text"
-    assert arguments[1].type == str
+    assert arguments[1].type is str
 
     assert arguments[2].dest == "output_file"
     assert arguments[2].type == pathlib.Path

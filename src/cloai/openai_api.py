@@ -104,7 +104,7 @@ class ChatCompletionInstructor(OpenAIBaseClass):
         super().__init__()
         self.client = instructor.patch(self.client)
 
-    async def run(  # noqa: PLR0913
+    async def run(
         self,
         user_prompt: str,
         system_prompt: str,
@@ -196,7 +196,7 @@ class SpeechToText(OpenAIBaseClass):
 class ImageGeneration(OpenAIBaseClass):
     """A class for running the Image Generation models."""
 
-    async def run(  # noqa: PLR0913
+    async def run(
         self,
         prompt: str,
         model: str = "dall-e-3",
