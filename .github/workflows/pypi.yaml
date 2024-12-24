@@ -36,9 +36,9 @@ jobs:
 
     - name: Build package.
       run: |
-        pipx install poetry
-        poetry install --only main
-        poetry build
+        pip install poetry
+        uv sync
+        uv build
 
     - name: Publish to PyPi.
       uses: pypa/gh-action-pypi-publish@release/v1
