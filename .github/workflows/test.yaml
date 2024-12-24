@@ -25,7 +25,7 @@ jobs:
         cache: pip
     - name: Install dependencies
       run: |
-        uv sync --resolution=${{ matrix.resolution }} .
+        uv sync --resolution=${{ matrix.resolution }}
     - name: Run tests
       id: run-tests
       run: >
@@ -42,7 +42,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
 
   integration:
-    runs-on: [actuated-8cpu-16gb, gpu]
+    runs-on: gpu
     steps:
     - uses: actions/checkout@v4
     - name: Install uv
