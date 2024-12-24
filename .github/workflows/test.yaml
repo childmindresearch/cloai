@@ -8,30 +8,70 @@ on:
 
 jobs:
   unit:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python_version: ['3.10', '3.11', '3.12']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python_version: ['3.10', '3.11', '3.12', '3.13']
         resolution: [lowest-direct, highest]
     steps:
     - uses: actions/checkout@v4
-    - name: Install poetry
-      run: pipx install poetry
+    - name: Install uv
+      run: pip install uv
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python_version }}
         cache: pip
     - name: Install dependencies
       run: |
-        poetry env use ${{ matrix.python_version }}
-        poetry run pip install uv
-        poetry run uv pip install --resolution=${{ matrix.resolution }} .
-        poetry install --only dev
+        uv sync --resolution=${{ matrix.resolution }} .
     - name: Run tests
       id: run-tests
       run: >
-        poetry run pytest \
+        uv run pytest . -k unit \
+          --junitxml=pytest.xml \
+          --cov-report=term-missing:skip-covered \
+          --cov-report=xml:coverage.xml \
+          --cov=src tests \
+          --log-level=DEBUG \
+          --verbose
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+  integration:
+    runs-on: [actuated-8cpu-16gb, gpu]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install uv
+      run: pip install uv
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.13
+        cache: pip
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - uses: self-actuated/nvidia-run@master
+    - name: Install Ollama
+      run: |
+        curl -fsSL https://ollama.com/install.sh | sudo -E sh
+    - name: Start serving
+      run: |
+        ollama serve &
+        sleep 5
+        time curl -i http://localhost:11434
+
+    - name: Pull llama2
+      run: |
+        ollama pull llama3.2:3b-instruct-fp16
+    - name: Run tests
+      id: run-tests
+      run: >
+        uv run pytest . -k integration \
           --junitxml=pytest.xml \
           --cov-report=term-missing:skip-covered \
           --cov-report=xml:coverage.xml \
@@ -53,12 +93,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Install poetry
-      run: pipx install poetry
+    - name: Install uv
+      run: pipx install uv
     - uses: actions/setup-python@v5
       with:
         python-version-file: pyproject.toml
-        cache: poetry
+        cache: pip
     - run: |-
-        poetry install
-        poetry run mypy .
+        uv sync
+        uv run mypy .

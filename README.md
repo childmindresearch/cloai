@@ -1,6 +1,8 @@
-# CLI OpenAI
+# Cloai
 
-CLI OpenAI (cloai) is a command-line interface for interacting with the OpenAI API. It provides a set of commands to interact with various OpenAI services such as GPT, Speech-to-Text (STT), Text-to-Speech (TTS), and Image Generation.
+Cloai is a generic interface to large language models. It enables the usage of
+various prompting techniques (currently: chain of verification, chain of density,
+instructor) across a wide variety of models, whilst using an identical interface.
 
 ## Installation
 
@@ -12,22 +14,86 @@ pip install cloai
 
 ## Usage
 
-Before running cloai, make sure the environment variable `OPENAI_API_KEY` is set to your OpenAI API key.
+First, instantiate a client with a large language model provider. Cloai currently
+supports OpenAI, Azure OpenAI, AWS Bedrock (Anthropic only), and Ollama:
 
-To use the CLI, run `cloai --help` in your terminal. This will display a list of available commands and their descriptions.
+#### OpenAI Client
 
-Here is a brief overview of the main commands:
+```python
+import cloai
 
-- `cloai gpt --help`: Shows the usages of the GPT command. The GPT command is used to generate text with OpenAI's GPT models. As there are several usage
-  options, the help command is the best way to learn how to use it.
+client = cloai.OpenAiLlm(api_key="your_key", model="gpt-4o")
+```
 
-- `cloai dalle <prompt>`: Generates images with OpenAI's DALL-E. The `prompt` argument is the text prompt to generate the image from.
+#### Ollama Client
 
-- `cloai stt <filename>`: Transcribes audio files with OpenAI's STT models. The `filename` argument is the file to transcribe. It can be any format that ffmpeg supports. Use the `--clip` option to clip the file if it is too large.
+```python
+import cloai
+import instructor
 
-- `cloai tts <text>`: Generates audio files with OpenAI's Text to Speech models. The `text` argument is the text to convert to speech.
+client = cloai.OpenAiLlm(
+  api_key="your_key", model="llama3.2",
+  base_url="http://localhost:11434/v1",
+  instructor_mode=instructor.Mode.JSON
+)
+```
 
-Each command has additional options that can be viewed by running `cloai <command> --help`.
+#### Azure OpenAI Client
+```python
+import cloai
+
+client = cloai.AzureLlm(
+  api_key="your_key",
+  endpoint="your_endpoint",
+  api_version="version_number",
+  deployment="your_deployment"
+)
+```
+
+#### AWS Bedrock (Anthropic)
+```python
+import cloai
+
+client = cloai.AnthropicBedrockLlm(
+  model="anthropic.claude-3-5-sonnet-20241022-v2:0",
+  aws_access_key="YOUR_ACCESS_KEY",
+  aws_secret_key="YOUR_SECRET_KEY",
+  region="REGION",
+)[llm.py](src/cloai/llm/llm.py)
+```
+
+Once your client is created, you can construct the generic interface and make use of
+all the methods, regardless of which LLM you are using. Please be aware that cloai
+uses asynchronous clients so you will have to await the promises. If you are in a
+synchronous environment, see `asyncio.run()`.
+
+```python
+import cloai
+import pydantic
+
+model = cloai.LargeLanguageModel(client=client)
+
+# Standard prompt
+result = await model.run(system_prompt, user_prompt)
+
+# Instructor
+class Response(pydantic.BaseModel):
+    is_scary: bool
+
+result = await model.call_instructor(
+  response_model=Response,
+  system_prompt="Tell the user if a movie is scary.",
+  user_prompt="Scary movie 3."
+)
+
+# Chain of verification
+result = model.chain_of_verification(system_prompt, user_prompt)
+
+# Chain of density
+result = model.chain_of_density(text)
+```
+
+
 
 ## Contributing
 
