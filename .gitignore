@@ -1,3 +1,4 @@
+.env
 uv.lock
 .DS_Store
 .ruff_cache

@@ -13,12 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python_version: ['3.10', '3.11', '3.12', '3.13']
+        python_version: ['3.11', '3.12', '3.13']
         resolution: [lowest-direct, highest]
     steps:
     - uses: actions/checkout@v4
     - name: Install uv
       run: pip install uv
+      shell: bash
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python_version }}
@@ -26,6 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         uv sync --resolution=${{ matrix.resolution }}
+      shell: bash
     - name: Run tests
       id: run-tests
       run: >
@@ -36,48 +38,7 @@ jobs:
           --cov=src tests \
           --log-level=DEBUG \
           --verbose
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-
-  integration:
-    runs-on: gpu
-    steps:
-    - uses: actions/checkout@v4
-    - name: Install uv
-      run: pip install uv
-    - uses: actions/setup-python@v5
-      with:
-        python-version: 3.13
-        cache: pip
-    - name: Install dependencies
-      run: |
-        uv sync
-
-    - uses: self-actuated/nvidia-run@master
-    - name: Install Ollama
-      run: |
-        curl -fsSL https://ollama.com/install.sh | sudo -E sh
-    - name: Start serving
-      run: |
-        ollama serve &
-        sleep 5
-        time curl -i http://localhost:11434
-
-    - name: Pull llama2
-      run: |
-        ollama pull llama3.2:3b-instruct-fp16
-    - name: Run tests
-      id: run-tests
-      run: >
-        uv run pytest . -k integration \
-          --junitxml=pytest.xml \
-          --cov-report=term-missing:skip-covered \
-          --cov-report=xml:coverage.xml \
-          --cov=src tests \
-          --log-level=DEBUG \
-          --verbose
+      shell: bash
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:

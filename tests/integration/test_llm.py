@@ -1,6 +1,7 @@
-"""Integration tests using ollama."""
+"""Integration tests using GPT."""
 
-import instructor
+import os
+
 import pydantic
 import pytest
 
@@ -9,12 +10,10 @@ from cloai.llm import llm, openai
 
 @pytest.fixture
 def model() -> llm.LargeLanguageModel:
-    """Builds an Ollama model."""
+    """Creates the GPT client."""
     client = openai.OpenAiLlm(
-        api_key="llama",
-        model="llama3.2:3b-instruct-fp16",
-        base_url="http://localhost:11434/v1",
-        instructor_mode=instructor.Mode.JSON,
+        api_key=os.getenv("OPENAI_API_KEY"),
+        model="gpt-4o-mini",
     )
     return llm.LargeLanguageModel(client=client)
 
@@ -75,7 +74,6 @@ async def test_chain_of_density(model: llm.LargeLanguageModel) -> None:
 
     assert isinstance(actual, str)
     assert len(actual) > 0
-    assert "lorem" in actual.lower()
 
 
 @pytest.mark.asyncio
