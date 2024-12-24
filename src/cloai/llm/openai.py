@@ -145,7 +145,7 @@ class OpenAiLlm(_OpenAiBase):
         model: chat_model.ChatModel | str,
         api_key: str,
         base_url: str | None = None,
-        instructor_mode: instructor.Mode = instructor.Mode.TOOLS,
+        instructor_mode: instructor.Mode = instructor.Mode.JSON,
     ) -> None:
         """Initialize the OpenAI Language Model client.
 
@@ -153,8 +153,7 @@ class OpenAiLlm(_OpenAiBase):
             model: The model to use for the language model.
             api_key: The OpenAI API key.
             base_url: The URL for the endpoint, defaults to OpenAI's endpoint.
-            instructor_mode: The instructor mode to use. Should be set to JSON for
-                ollama models.
+            instructor_mode: The instructor mode to use.
         """
         self.client = openai.AsyncOpenAI(api_key=api_key, base_url=base_url)
         self.model = model
