@@ -1,48 +1,46 @@
-name: Publish to PyPi
-
-permissions:
-  actions: write
+name: Release to PyPi
 
 on:
-  workflow_run:
-    workflows: [Python Tests]
-    types:
-    - completed
-    branches:
-    - main
+  release:
+    types: [created]
 
 jobs:
-  pypi-release:
-    name: PyPi Release
+  release-build:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 0 }}
+    - name: Install uv
+      run: pipx install uv
     - uses: actions/setup-python@v5
       with:
         python-version-file: pyproject.toml
+        cache: pip
+    - name: Install dependencies
+      run: uv sync
 
-    - name: Skip if version did not change.
-      run: |
-        version_change=$(git diff -r HEAD^1 pyproject.toml | grep -E "^(\+|-)version =")
-        if [[ -z "$version_change" ]]; then
-          gh run cancel ${{ github.run_id }}
-          gh run watch ${{ github.run_id }}
-        fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: build release distributions
+      run: uv build
 
-    - name: Build package.
-      run: |
-        pip install uv
-        uv sync
-        uv build
-
-    - name: Publish to PyPi.
-      uses: pypa/gh-action-pypi-publish@release/v1
+    - name: upload distribution
+      uses: actions/upload-artifact@v4
       with:
-        user: __token__
-        password: ${{ secrets.PYPI_TOKEN }}
-        verbose: true
+        name: release-dists
+        path: dist/
+
+  pypi-publish:
+    runs-on: ubuntu-latest
+    needs:
+    - release-build
+    permissions:
+      id-token: write
+
+    steps:
+    - name: Retrieve release distributions
+      uses: actions/download-artifact@v4
+      with:
+        name: release-dists
+        path: dist/
+
+    - name: Publish release distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
