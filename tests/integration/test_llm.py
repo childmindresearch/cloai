@@ -12,7 +12,7 @@ from cloai.llm import bedrock, llm, openai
 def openai_model() -> llm.LargeLanguageModel:
     """Creates the GPT client."""
     client = openai.OpenAiLlm(
-        api_key=os.getenv("OPENAI_API_KEY"),
+        api_key=os.getenv("OPENAI_API_KEY"),  # type: ignore[arg-type] # Let this error if the developer hasn't set it.
         model="gpt-4o-mini",
     )
     return llm.LargeLanguageModel(client=client)
@@ -23,8 +23,8 @@ def bedrock_anthropic_model() -> llm.LargeLanguageModel:
     """Creates the AWS Anthropic client."""
     client = bedrock.AnthropicBedrockLlm(
         model="anthropic.claude-3-5-sonnet-20241022-v2:0",
-        aws_access_key=os.getenv("AWS_ACCESS_KEY"),
-        aws_secret_key=os.getenv("AWS_SECRET_KEY"),
+        aws_access_key=os.getenv("AWS_ACCESS_KEY"),  # type: ignore[arg-type] # Let this error if the developer hasn't set it.
+        aws_secret_key=os.getenv("AWS_SECRET_KEY"),  # type: ignore[arg-type] # Let this error if the developer hasn't set it.
         region="us-west-2",
     )
     return llm.LargeLanguageModel(client=client)
