@@ -11,7 +11,7 @@ from cloai.llm.utils import LlmBaseClass
 
 T = TypeVar("T")
 
-logger = logs.get_logger(0)
+logger = logs.get_logger()
 
 
 class _GeneratedStatement(pydantic.BaseModel):
