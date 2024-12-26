@@ -5,11 +5,11 @@ import os
 import pydantic
 import pytest
 
-from cloai.llm import llm, openai
+from cloai.llm import bedrock, llm, openai
 
 
 @pytest.fixture
-def model() -> llm.LargeLanguageModel:
+def openai_model() -> llm.LargeLanguageModel:
     """Creates the GPT client."""
     client = openai.OpenAiLlm(
         api_key=os.getenv("OPENAI_API_KEY"),
@@ -18,6 +18,36 @@ def model() -> llm.LargeLanguageModel:
     return llm.LargeLanguageModel(client=client)
 
 
+@pytest.fixture
+def bedrock_anthropic_model() -> llm.LargeLanguageModel:
+    """Creates the AWS Anthropic client."""
+    client = bedrock.AnthropicBedrockLlm(
+        model="anthropic.claude-3-5-sonnet-20241022-v2:0",
+        aws_access_key=os.getenv("AWS_ACCESS_KEY"),
+        aws_secret_key=os.getenv("AWS_SECRET_KEY"),
+        region="us-west-2",
+    )
+    return llm.LargeLanguageModel(client=client)
+
+
+@pytest.fixture
+def model(
+    request: pytest.FixtureRequest,
+    openai_model: llm.LargeLanguageModel,
+    bedrock_anthropic_model: llm.LargeLanguageModel,
+) -> llm.LargeLanguageModel:
+    """Fetches the LLM."""
+    name = request.param
+    if name == "openai":
+        return openai_model
+    if name == "bedrock":
+        return bedrock_anthropic_model
+
+    msg = "Wrong model name."
+    raise ValueError(msg)
+
+
+@pytest.mark.parametrize("model", ["openai", "bedrock"], indirect=True)
 @pytest.mark.asyncio
 async def test_run(model: llm.LargeLanguageModel) -> None:
     """Test the run command."""
@@ -30,6 +60,7 @@ async def test_run(model: llm.LargeLanguageModel) -> None:
     assert len(actual) > 0
 
 
+@pytest.mark.parametrize("model", ["openai", "bedrock"], indirect=True)
 @pytest.mark.asyncio
 async def test_call_instructor(model: llm.LargeLanguageModel) -> None:
     """Test the call_instructor command."""
@@ -49,6 +80,7 @@ async def test_call_instructor(model: llm.LargeLanguageModel) -> None:
     assert isinstance(actual, Response)
 
 
+@pytest.mark.parametrize("model", ["openai", "bedrock"], indirect=True)
 @pytest.mark.asyncio
 async def test_chain_of_density(model: llm.LargeLanguageModel) -> None:
     """Test the chain_of_density command."""
@@ -76,8 +108,9 @@ async def test_chain_of_density(model: llm.LargeLanguageModel) -> None:
     assert len(actual) > 0
 
 
+@pytest.mark.parametrize("model", ["openai", "bedrock"], indirect=True)
 @pytest.mark.asyncio
-async def test_chain_of_verification(model: llm.LargeLanguageModel) -> None:
+async def test_chain_of_verification_str(model: llm.LargeLanguageModel) -> None:
     """Test the chain_of_verification command."""
     text = "Lea is 9 years old. She likes riding horses."
 
@@ -85,7 +118,32 @@ async def test_chain_of_verification(model: llm.LargeLanguageModel) -> None:
         system_prompt="What animal does the person in question like?",
         user_prompt=text,
         create_new_statements=True,
+        response_model=str,
     )
 
     assert isinstance(actual, str)
     assert "horse" in actual.lower()
+
+
+@pytest.mark.parametrize("model", ["openai", "bedrock"], indirect=True)
+@pytest.mark.asyncio
+async def test_chain_of_verification_model(model: llm.LargeLanguageModel) -> None:
+    """Test the chain_of_verification command."""
+    text = "Lea is 9 years old. She likes riding horses."
+
+    class Response(pydantic.BaseModel):
+        animal: str
+        child_name: str
+        child_age: int
+
+    actual = await model.chain_of_verification(
+        system_prompt="What is the child's name, age, and what animal does they like?",
+        user_prompt=text,
+        create_new_statements=True,
+        response_model=Response,
+    )
+
+    assert isinstance(actual, Response)
+    assert "horse" in actual.animal.lower()
+    assert "lea" in actual.child_name.lower()
+    assert actual.child_age == 9  # noqa: PLR2004

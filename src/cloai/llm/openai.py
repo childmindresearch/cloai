@@ -1,13 +1,15 @@
 """Tools for Large Language Models with an OpenAI interface."""
 
 import abc
-from typing import overload
+from typing import TypeVar
 
 import instructor
 import openai
 from openai.types import chat_model
 
 from cloai.llm import utils
+
+T = TypeVar("T")
 
 
 class _OpenAiBase(utils.LlmBaseClass, abc.ABC):
@@ -47,41 +49,22 @@ class _OpenAiBase(utils.LlmBaseClass, abc.ABC):
             raise ValueError(msg)
         return response.choices[0].message.content
 
-    @overload
     async def call_instructor(
         self,
-        response_model: type[utils.InstructorResponse],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int = ...,
-    ) -> utils.InstructorResponse: ...
-
-    @overload
-    async def call_instructor(
-        self,
-        response_model: type[list[utils.InstructorResponse]],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int = ...,
-    ) -> list[utils.InstructorResponse]: ...
-
-    async def call_instructor(
-        self,
-        response_model: type[utils.InstructorResponse]
-        | type[list[utils.InstructorResponse]],
+        response_model: type[T],
         system_prompt: str,
         user_prompt: str,
         max_tokens: int = 4096,
-    ) -> utils.InstructorResponse | list[utils.InstructorResponse]:
+    ) -> T:
         """Run a type-safe large language model query.
 
         Args:
-            response_model: The Pydantic response model.
+            response_model: The output type.
             system_prompt: The system prompt.
             user_prompt: The user prompt.
             max_tokens: The maximum number of tokens to allow.
         """
-        return await self._instructor.chat.completions.create(
+        return await self._instructor.chat.completions.create(  # type: ignore[type-var]
             response_model=response_model,
             messages=[
                 {
@@ -145,7 +128,7 @@ class OpenAiLlm(_OpenAiBase):
         model: chat_model.ChatModel | str,
         api_key: str,
         base_url: str | None = None,
-        instructor_mode: instructor.Mode = instructor.Mode.JSON,
+        instructor_mode: instructor.Mode = instructor.Mode.TOOLS,
     ) -> None:
         """Initialize the OpenAI Language Model client.
 

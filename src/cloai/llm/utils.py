@@ -1,11 +1,9 @@
 """Utilities for defining large language models."""
 
 import abc
-from typing import TypeVar, overload
+from typing import TypeVar
 
-import pydantic
-
-InstructorResponse = TypeVar("InstructorResponse", bound=pydantic.BaseModel)
+T = TypeVar("T")
 
 
 class LlmBaseClass(abc.ABC):
@@ -15,29 +13,12 @@ class LlmBaseClass(abc.ABC):
     async def run(self, system_prompt: str, user_prompt: str) -> str:
         """Abstract method for calling a large langauge model."""
 
-    @overload
-    async def call_instructor(
-        self,
-        response_model: type[InstructorResponse],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int,
-    ) -> InstructorResponse: ...
-
-    @overload
-    async def call_instructor(
-        self,
-        response_model: type[list[InstructorResponse]],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int,
-    ) -> list[InstructorResponse]: ...
     @abc.abstractmethod
     async def call_instructor(
         self,
-        response_model: type[InstructorResponse] | type[list[InstructorResponse]],
+        response_model: type[T],
         system_prompt: str,
         user_prompt: str,
         max_tokens: int,
-    ) -> InstructorResponse | list[InstructorResponse]:
+    ) -> T:
         """Abstract method for calling a large language model with instructor."""
