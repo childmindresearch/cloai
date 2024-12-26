@@ -1,6 +1,6 @@
 """Tools for Large Language Models on AWS Bedrock."""
 
-from typing import Literal, overload
+from typing import Literal, TypeVar
 
 import anthropic
 import instructor
@@ -16,6 +16,8 @@ ANTHROPIC_BEDROCK_MODELS = Literal[
     "anthropic.claude-3-5-haiku-20241022-v1:0",
     "anthropic.claude-3-haiku-20240307-v1:0",
 ]
+
+T = TypeVar("T")
 
 
 class AnthropicBedrockLlm(utils.LlmBaseClass):
@@ -63,32 +65,13 @@ class AnthropicBedrockLlm(utils.LlmBaseClass):
 
         return message.content[0].text  # type: ignore[union-attr]
 
-    @overload
     async def call_instructor(
         self,
-        response_model: type[utils.InstructorResponse],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int = ...,
-    ) -> utils.InstructorResponse: ...
-
-    @overload
-    async def call_instructor(
-        self,
-        response_model: type[list[utils.InstructorResponse]],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int = ...,
-    ) -> list[utils.InstructorResponse]: ...
-
-    async def call_instructor(
-        self,
-        response_model: type[utils.InstructorResponse]
-        | type[list[utils.InstructorResponse]],
+        response_model: type[T],
         system_prompt: str,
         user_prompt: str,
         max_tokens: int = 4096,
-    ) -> utils.InstructorResponse | list[utils.InstructorResponse]:
+    ) -> T:
         """Run a type-safe large language model query.
 
         Args:

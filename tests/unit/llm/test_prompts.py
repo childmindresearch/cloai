@@ -51,7 +51,11 @@ def test_substitute_excess_args() -> None:
         (prompts.chain_of_verification_create_statements, {}),
         (
             prompts.chain_of_verification_verify,
-            {"source": "abc", "statements": ["a", "b"]},
+            {"statements": ["a", "b"]},
+        ),
+        (
+            prompts.chain_of_verification_rewrite,
+            {"statements": ["a", "b"], "instructions": "a", "source": "b"},
         ),
     ],
 )

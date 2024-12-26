@@ -54,12 +54,11 @@ def chain_of_verification_create_statements() -> str:
     )
 
 
-def chain_of_verification_verify(statements: Iterable[str], source: str) -> str:
+def chain_of_verification_verify(statements: Iterable[str]) -> str:
     """Chain of verification statement verification prompt.
 
     Args:
         statements: Statements to verify.
-        source: Source material to verify with.
 
     Returns:
         The prompt.
@@ -67,13 +66,43 @@ def chain_of_verification_verify(statements: Iterable[str], source: str) -> str:
     return _substitute(
         _remove_consecutive_whitespace(
             """
-                Based on the following statements, edit the text to comply
-                with all statements. The statements are as follows:
-                ${statements}. Furthermore, ensure that all edits are reflective
-                of the source material: ${source}
+                Based on the following statements and the text provided by the user, return True or False to assess whether the statements
+                are correct or not. The statements are as follows:
+                ${statements}.
             """,
         ),
         statements="\n\n".join(statements),
+    )
+
+
+def chain_of_verification_rewrite(
+    statements: Iterable[str],
+    instructions: str,
+    source: str,
+) -> str:
+    """Chain of verification statement verification prompt.
+
+    Args:
+        statements: Statements to verify.
+        instructions: The original instructions.
+        source: The original source material.
+
+    Returns:
+        The prompt.
+    """
+    return _substitute(
+        """
+Based on the following statements and source material, rewrite the user provided text such that
+all statements can be answered with 'True'. The statements are as follows:
+
+${statements}
+
+The original source material is material is: ${source}
+
+The original instructions were: ${instructions}
+""",
+        statements="\n\n".join(statements),
+        instructions=instructions,
         source=source,
     )
 

@@ -1,13 +1,17 @@
 """This module coalesces all large language models from different microservices."""
 
-import asyncio
-from collections.abc import Iterable
-from typing import Literal, overload
+import json
+from typing import Any, Literal, TypeVar, overload
 
 import pydantic
 
-from cloai.llm import prompts, utils
+from cloai import exceptions, logs
+from cloai.llm import prompts
 from cloai.llm.utils import LlmBaseClass
+
+T = TypeVar("T")
+
+logger = logs.get_logger(0)
 
 
 class _GeneratedStatement(pydantic.BaseModel):
@@ -47,20 +51,14 @@ class _VerificationStatement(pydantic.BaseModel):
     )
 
 
-class _RewrittenText(pydantic.BaseModel):
-    """Class for rewriting text based on verification statements.
+class _VerificationResponse(pydantic.BaseModel):
+    """A class for an LLM verification response.
 
     Required for chain of verification.
     """
 
-    text: str = pydantic.Field(..., description="The edited text.")
-    statements: tuple[_VerificationStatement] = pydantic.Field(
-        ...,
-        description=(
-            "The statements along with whether they are True or False about the "
-            "edited text."
-        ),
-    )
+    statements: tuple[_VerificationStatement]
+    model: Any  # More specific types all seem to run into mypy issues.
 
 
 class LargeLanguageModel(pydantic.BaseModel):
@@ -83,34 +81,20 @@ class LargeLanguageModel(pydantic.BaseModel):
         Returns:
             The output text.
         """
+        logger.debug(
+            "Calling LLM run with: \n\nSystem Prompt: %s\nUser Prompt: %s",
+            system_prompt,
+            user_prompt,
+        )
         return await self.client.run(system_prompt, user_prompt)
 
-    @overload
     async def call_instructor(
         self,
-        response_model: type[utils.InstructorResponse],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int = ...,
-    ) -> utils.InstructorResponse: ...
-
-    @overload
-    async def call_instructor(
-        self,
-        response_model: type[list[utils.InstructorResponse]],
-        system_prompt: str,
-        user_prompt: str,
-        max_tokens: int = ...,
-    ) -> list[utils.InstructorResponse]: ...
-
-    async def call_instructor(
-        self,
-        response_model: type[utils.InstructorResponse]
-        | type[list[utils.InstructorResponse]],
+        response_model: type[T],
         system_prompt: str,
         user_prompt: str,
         max_tokens: int = 4096,
-    ) -> utils.InstructorResponse | list[utils.InstructorResponse]:
+    ) -> T:
         """Run a type-safe large language model query.
 
         Args:
@@ -119,6 +103,11 @@ class LargeLanguageModel(pydantic.BaseModel):
             user_prompt: The user prompt.
             max_tokens: The maximum number of tokens to allow.
         """
+        logger.debug(
+            "Calling instructor with: \n\nSystem Prompt: %s\n\nUser Prompt: %s",
+            system_prompt,
+            user_prompt,
+        )
         return await self.client.call_instructor(
             response_model,
             system_prompt,
@@ -131,11 +120,12 @@ class LargeLanguageModel(pydantic.BaseModel):
         self,
         system_prompt: str,
         user_prompt: str,
+        response_model: type[T],
         statements: list[str] = ...,
-        max_verifications: int = ...,
         *,
+        max_verifications: int = ...,
         create_new_statements: bool,
-    ) -> str:
+    ) -> T:
         pass
 
     @overload
@@ -143,63 +133,95 @@ class LargeLanguageModel(pydantic.BaseModel):
         self,
         system_prompt: str,
         user_prompt: str,
+        response_model: type[T],
         statements: None = None,
-        max_verifications: int = ...,
         *,
+        max_verifications: int = ...,
         create_new_statements: Literal[True],
-    ) -> str:
+    ) -> T:
         pass
 
-    async def chain_of_verification(
+    async def chain_of_verification(  # noqa: PLR0913
         self,
         system_prompt: str,
         user_prompt: str,
+        response_model: type[T],
         statements: list[str] | None = None,
-        max_verifications: int = 3,
         *,
+        max_verifications: int = 3,
         create_new_statements: bool = False,
-    ) -> str:
+        error_on_iteration_limit: bool = False,
+    ) -> T:
         """Runs an LLM prompt that is self-assessed by the LLM.
 
         Args:
             system_prompt: The system prompt for the initial prompt.
             user_prompt: The user prompt for the initial prompt.
-            statements: Statements to verify the results. Defaults to None.
+            response_model: The type of the response to return from Instructor.
+            statements: Statements to verify the results.
             max_verifications: The maximum number of times to verify the results.
-                Defaults to 3.
             create_new_statements: If True, generate new statements from the system
-                prompt. Defaults to False.
+                prompt.
+            error_on_iteration_limit: If True, raise an exception when the
+                iteration limit is reached. Otherwise, returns the last result.
 
         Returns:
             The edited text result.
         """
+        if max_verifications <= 0:
+            msg = "max_verifications must be positive"
+            raise ValueError(msg)
+
         if statements is None and not create_new_statements:
             msg = "If no statements are provided, then they must be generated."
             raise ValueError(msg)
         statements = statements or []
 
-        text_promise = self.run(system_prompt, user_prompt)
         if create_new_statements:
-            statements_promise = self._create_statements(system_prompt)
-            text, new_statements = await asyncio.gather(
-                text_promise,
-                statements_promise,
-            )
+            new_statements = await self._create_statements(system_prompt)
             statements += [statement.statement for statement in new_statements]
-        else:
-            text = await text_promise
+        verification_prompt = prompts.chain_of_verification_verify(statements)
 
-        for _ in range(max_verifications):
-            rewrite = await self._verify(
-                text,
-                statements,
-                user_prompt,
+        rewrite_prompt = prompts.chain_of_verification_rewrite(
+            statements=statements,
+            instructions=system_prompt,
+            source=user_prompt,
+        )
+
+        model = None
+        for idx in range(max_verifications):
+            logger.debug("Running verification iteration %s", idx)
+            if model is None:
+                model = await self.call_instructor(
+                    response_model=response_model,
+                    system_prompt=system_prompt,
+                    user_prompt=user_prompt,
+                )
+            else:
+                model = await self.call_instructor(
+                    response_model=response_model,
+                    system_prompt=rewrite_prompt,
+                    user_prompt=_model_to_string(model),
+                )
+
+            text = _model_to_string(model)
+            verify = await self.call_instructor(
+                response_model=list[_VerificationStatement],
+                system_prompt=verification_prompt,
+                user_prompt=text,
+                max_tokens=4096,
             )
-            if all(verification.correct for verification in rewrite.statements):
-                break
-            text = rewrite.text
 
-        return text
+            if idx == 0:
+                continue
+            if all(verification.correct for verification in verify):
+                break
+        else:
+            if error_on_iteration_limit:
+                msg = "Maximum number of iterations reached."
+                raise exceptions.IterationLimitError(msg)
+
+        return model  # type: ignore[return-value] # model will never be None as the for-loop is always entered.
 
     async def chain_of_density(
         self,
@@ -265,22 +287,41 @@ class LargeLanguageModel(pydantic.BaseModel):
         Returns:
             List of verification statements as strings.
         """
-        return await self.call_instructor(
+        statements = await self.call_instructor(
             list[_GeneratedStatement],
             system_prompt=prompts.chain_of_verification_create_statements(),
             user_prompt=instructions,
             max_tokens=4096,
         )
+        logger.debug("Created statements: %s", statements)
+        return statements
 
-    async def _verify(
-        self,
-        text: str,
-        statements: Iterable[str],
-        source: str,
-    ) -> _RewrittenText:
-        return await self.call_instructor(
-            response_model=_RewrittenText,
-            system_prompt=prompts.chain_of_verification_verify(statements, source),
-            user_prompt=text,
-            max_tokens=4096,
-        )
+
+def _model_to_string(model: Any) -> str:  # noqa: ANN401
+    """Converts a model to a string.
+
+    Used to handle the dual input of both a Pydantic model and an arbitrary class
+    to Instructor.
+
+    Args:
+        model: The instructor model to convert.
+
+    Returns:
+        The string representation of the input.
+    """
+    if isinstance(model, pydantic.BaseModel):
+        return _recursive_pydantic_model_dump(model)
+    return str(model)
+
+
+def _recursive_pydantic_model_dump(model: pydantic.BaseModel) -> str:
+    """Pydantic model_dump with recursion."""
+    dump: dict[str, str] = {}
+    for key in model.model_fields:
+        value = getattr(model, key)
+        if isinstance(value, pydantic.BaseModel):
+            dump[key] = _recursive_pydantic_model_dump(value)
+        else:
+            dump[key] = value
+
+    return json.dumps(dump)
