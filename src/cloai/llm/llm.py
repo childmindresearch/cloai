@@ -310,13 +310,13 @@ def _model_to_string(model: Any) -> str:  # noqa: ANN401
         The string representation of the input.
     """
     if isinstance(model, pydantic.BaseModel):
-        return _recursive_pydantic_model_dump(model)
+        return json.dumps(_recursive_pydantic_model_dump(model))
     return str(model)
 
 
-def _recursive_pydantic_model_dump(model: pydantic.BaseModel) -> str:
+def _recursive_pydantic_model_dump(model: pydantic.BaseModel) -> dict[str, Any]:
     """Pydantic model_dump with recursion."""
-    dump: dict[str, str] = {}
+    dump: dict[str, Any] = {}
     for key in model.model_fields:
         value = getattr(model, key)
         if isinstance(value, pydantic.BaseModel):
@@ -324,4 +324,4 @@ def _recursive_pydantic_model_dump(model: pydantic.BaseModel) -> str:
         else:
             dump[key] = value
 
-    return json.dumps(dump)
+    return dump
