@@ -62,7 +62,6 @@ class AnthropicBedrockLlm(utils.LlmBaseClass):
             system=system_prompt,
             messages=[{"role": "user", "content": user_prompt}],
         )
-
         return message.content[0].text  # type: ignore[union-attr]
 
     async def call_instructor(

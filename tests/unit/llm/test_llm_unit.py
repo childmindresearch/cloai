@@ -32,7 +32,7 @@ def test_recursive_pydantic_model_dump_primitive() -> None:
     assert actual == expected
 
 
-def test_recursive_pydantic_model_dump_recusive() -> None:
+def test_recursive_pydantic_model_dump_recursive() -> None:
     """Test dumping a model containing a model."""
     model = ModelRecursive()
     expected = model.model_dump()

@@ -11,15 +11,17 @@ import pydantic
 import pytest
 import pytest_mock
 
-from cloai.llm import bedrock, openai, utils
+from cloai.llm import bedrock, ollama, openai, utils
 
 TEST_MODEL = "anthropic.claude-3-5-sonnet-20241022-v2:0"
 TEST_SYSTEM_PROMPT = "You are a helpful assistant."
 TEST_USER_PROMPT = "What is 2+2?"
 TEST_RUN_RESPONSE = "Hello world!"
 
-LLM_TYPE = bedrock.AnthropicBedrockLlm | openai.OpenAiLlm | openai.AzureLlm
-llms = ("azure", "anthropic_bedrock", "openai")
+LLM_TYPE = (
+    bedrock.AnthropicBedrockLlm | openai.OpenAiLlm | openai.AzureLlm | ollama.OllamaLlm
+)
+llms = ("azure", "anthropic_bedrock", "openai", "ollama")
 
 
 class _TestResponse(pydantic.BaseModel):
@@ -135,6 +137,17 @@ def openai_llm(
 
 
 @pytest.fixture
+def ollama_llm(mocker: pytest_mock.MockerFixture) -> ollama.OllamaLlm:
+    """Create the mocked anthropic bedrock llm."""
+    response = {"message": {"content": TEST_RUN_RESPONSE}}
+    mocker.patch("ollama.AsyncClient.chat", return_value=response)
+    return ollama.OllamaLlm(
+        model=TEST_MODEL,
+        base_url="somethinglocal",
+    )
+
+
+@pytest.fixture
 def azure_llm(
     mock_azure_client: mock.MagicMock,
     mock_openai_instructor: pytest_mock.MockerFixture,
@@ -154,6 +167,7 @@ def llm(
     openai_llm: openai.OpenAiLlm,
     azure_llm: openai.AzureLlm,
     anthropic_bedrock_llm: bedrock.AnthropicBedrockLlm,
+    ollama_llm: ollama.OllamaLlm,
 ) -> utils.LlmBaseClass:
     """Create the mocked llm."""
     name = request.param
@@ -163,6 +177,8 @@ def llm(
         return anthropic_bedrock_llm
     if name == "azure":
         return azure_llm
+    if name == "ollama":
+        return ollama_llm
     raise NotImplementedError
 
 
