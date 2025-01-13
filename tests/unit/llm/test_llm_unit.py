@@ -13,7 +13,7 @@ class ModelPrimitive(pydantic.BaseModel):
     var1: int = 1
     var2: float = 2.0
     var3: str = "a"
-    var4: list[str] = ("a",)
+    var4: list[str] = ("a",)  # type: ignore[assignment]
 
 
 class ModelRecursive(pydantic.BaseModel):
