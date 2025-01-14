@@ -57,7 +57,7 @@ client = cloai.AnthropicBedrockLlm(
   aws_access_key="YOUR_ACCESS_KEY",
   aws_secret_key="YOUR_SECRET_KEY",
   region="REGION",
-)[llm.py](src/cloai/llm/llm.py)
+)
 ```
 
 Once your client is created, you can construct the generic interface and make use of
