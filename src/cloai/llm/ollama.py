@@ -19,7 +19,12 @@ class OllamaLlm(LlmBaseClass):
         model: str,
         base_url: str,
     ) -> None:
-        """Initialize Ollama client."""
+        """Initialize Ollama client.
+
+        Args:
+            model: The model to run, must already be installed on the host via ollama.
+            base_url: The URL of the Ollama API.
+        """
         self.model = model
         self.client = ollama.AsyncClient(host=base_url)
 
@@ -58,6 +63,9 @@ class OllamaLlm(LlmBaseClass):
             system_prompt: The system prompt.
             user_prompt: The user prompt.
             max_tokens: The maximum number of tokens to allow.
+
+        Returns:
+            The response as the requested object.
         """
         default_max_tokens = 4096
         if max_tokens != default_max_tokens:
