@@ -4,6 +4,7 @@ This mocks all the interfaces to remote servers. As such, they're not great test
 but they are the best we can do without connecting to remote servers on every test.
 """
 
+import json
 import types
 from unittest import mock
 
@@ -217,7 +218,17 @@ async def test_call_instructor_method(
 ) -> None:
     """Test the call_instructor method."""
     expected_response = _TestResponse(answer="4")
-    llm._instructor.chat.completions.create.return_value = expected_response  # type: ignore[call-overload, attr-defined]
+    if isinstance(llm, ollama.OllamaLlm):
+        # Ollama doesn't use instructor and therefore requires custom handling.
+        class Content(pydantic.BaseModel):
+            content: str = json.dumps({"field": _TestResponse(answer="4").model_dump()})
+
+        class Response(pydantic.BaseModel):
+            message: Content = Content()
+
+        llm.client.chat.return_value = Response()
+    else:
+        llm._instructor.chat.completions.create.return_value = expected_response  # type: ignore[call-overload, attr-defined]
 
     result = await llm.call_instructor(
         _TestResponse,

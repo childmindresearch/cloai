@@ -1,6 +1,7 @@
 """Ollama LLM client implementation."""
 
-from typing import TypeVar
+import json
+from typing import Any, TypeVar, get_args, get_origin
 
 import ollama
 import pydantic
@@ -48,6 +49,10 @@ class OllamaLlm(LlmBaseClass):
     ) -> T:
         """Run a type-safe large language model query.
 
+        This function uses Pydantic to convert any arbitrary class to JSON
+        schema. This is unlikely to be fool-proof, but we can deal with issues
+        as they arise.
+
         Args:
             response_model: The Pydantic response model.
             system_prompt: The system prompt.
@@ -59,25 +64,63 @@ class OllamaLlm(LlmBaseClass):
             msg = "max_tokens has not yet been implemented in Ollama."
             raise NotImplementedError(msg)
 
-        if not isinstance(response_model, pydantic.BaseModel):
-            msg = "Ollama is not compatible with non-Pydantic Basemodel inputs yet."
-            raise NotImplementedError(msg)
+        # Use Pydantic for converting an arbitrary class to JSON schema.
+        schema = pydantic.create_model(
+            response_model.__name__,
+            field=(response_model, ...),
+        ).model_json_schema()
 
         response = await self.client.chat(
             model=self.model,
             messages=[
                 {
                     "role": "system",
-                    "content": (
-                        f"{system_prompt}\nYou must respond in JSON format matching "
-                        f"this schema: {response_model.model_json_schema()}"
-                    ),
+                    "content": system_prompt,
                 },
                 {
                     "role": "user",
                     "content": user_prompt,
                 },
             ],
-            format=response_model.model_json_schema(),
+            format=schema,
         )
-        return response_model.model_validate_json(response)
+
+        data = json.loads(response.message.content)["field"]  # type: ignore[arg-type]
+        return _model_and_data_to_object(response_model, data)
+
+
+def _model_and_data_to_object(cls: type[T], data: Any) -> Any:  # noqa: ANN401
+    """Convert JSON data to the specified type.
+
+    Args:
+        cls: The target class type.
+        data: The JSON data to convert.
+
+    Returns:
+        An instance of the target class.
+    """
+    # Pydantic models
+    try:
+        return cls.model_validate(data)  # type: ignore[call-arg, attr-defined]
+    except AttributeError:
+        # Not a Pydantic model.
+        pass
+
+    # Lists/tuples
+    if cls in (list, tuple):
+        return cls(data)  # type: ignore[call-arg]
+
+    if get_origin(cls) in (list, tuple):
+        item_types = get_args(cls)
+        if len(item_types) > 1:
+            msg = "Only one item type may be present in a list/tuple type."
+            raise NotImplementedError(msg)
+        return cls(_model_and_data_to_object(item_types[0], item) for item in data)  # type: ignore[call-arg]
+
+    # Basic Python types
+    if cls in (int, float, str, bool):
+        return cls(data)  # type: ignore[call-arg]
+
+    # If we get here, we don't know how to handle this type
+    msg = f"Unable to convert data to type {cls}"
+    raise ValueError(msg)
