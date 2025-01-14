@@ -29,12 +29,10 @@ client = cloai.OpenAiLlm(api_key="your_key", model="gpt-4o")
 
 ```python
 import cloai
-import instructor
 
-client = cloai.OpenAiLlm(
-  api_key="your_key", model="llama3.2",
+client = cloai.OllamaLlm(
+  model="llama3.2",
   base_url="http://localhost:11434/v1",
-  instructor_mode=instructor.Mode.JSON
 )
 ```
 

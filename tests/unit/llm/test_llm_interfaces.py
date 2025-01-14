@@ -4,6 +4,7 @@ This mocks all the interfaces to remote servers. As such, they're not great test
 but they are the best we can do without connecting to remote servers on every test.
 """
 
+import json
 import types
 from unittest import mock
 
@@ -11,15 +12,17 @@ import pydantic
 import pytest
 import pytest_mock
 
-from cloai.llm import bedrock, openai, utils
+from cloai.llm import bedrock, ollama, openai, utils
 
 TEST_MODEL = "anthropic.claude-3-5-sonnet-20241022-v2:0"
 TEST_SYSTEM_PROMPT = "You are a helpful assistant."
 TEST_USER_PROMPT = "What is 2+2?"
 TEST_RUN_RESPONSE = "Hello world!"
 
-LLM_TYPE = bedrock.AnthropicBedrockLlm | openai.OpenAiLlm | openai.AzureLlm
-llms = ("azure", "anthropic_bedrock", "openai")
+LLM_TYPE = (
+    bedrock.AnthropicBedrockLlm | openai.OpenAiLlm | openai.AzureLlm | ollama.OllamaLlm
+)
+llms = ("azure", "anthropic_bedrock", "openai", "ollama")
 
 
 class _TestResponse(pydantic.BaseModel):
@@ -135,6 +138,17 @@ def openai_llm(
 
 
 @pytest.fixture
+def ollama_llm(mocker: pytest_mock.MockerFixture) -> ollama.OllamaLlm:
+    """Create the mocked anthropic bedrock llm."""
+    response = {"message": {"content": TEST_RUN_RESPONSE}}
+    mocker.patch("ollama.AsyncClient.chat", return_value=response)
+    return ollama.OllamaLlm(
+        model=TEST_MODEL,
+        base_url="somethinglocal",
+    )
+
+
+@pytest.fixture
 def azure_llm(
     mock_azure_client: mock.MagicMock,
     mock_openai_instructor: pytest_mock.MockerFixture,
@@ -154,6 +168,7 @@ def llm(
     openai_llm: openai.OpenAiLlm,
     azure_llm: openai.AzureLlm,
     anthropic_bedrock_llm: bedrock.AnthropicBedrockLlm,
+    ollama_llm: ollama.OllamaLlm,
 ) -> utils.LlmBaseClass:
     """Create the mocked llm."""
     name = request.param
@@ -163,6 +178,8 @@ def llm(
         return anthropic_bedrock_llm
     if name == "azure":
         return azure_llm
+    if name == "ollama":
+        return ollama_llm
     raise NotImplementedError
 
 
@@ -201,7 +218,17 @@ async def test_call_instructor_method(
 ) -> None:
     """Test the call_instructor method."""
     expected_response = _TestResponse(answer="4")
-    llm._instructor.chat.completions.create.return_value = expected_response  # type: ignore[call-overload, attr-defined]
+    if isinstance(llm, ollama.OllamaLlm):
+        # Ollama doesn't use instructor and therefore requires custom handling.
+        class Content(pydantic.BaseModel):
+            content: str = json.dumps({"field": _TestResponse(answer="4").model_dump()})
+
+        class Response(pydantic.BaseModel):
+            message: Content = Content()
+
+        llm.client.chat.return_value = Response()  # type: ignore[attr-defined]
+    else:
+        llm._instructor.chat.completions.create.return_value = expected_response  # type: ignore[call-overload, attr-defined]
 
     result = await llm.call_instructor(
         _TestResponse,
