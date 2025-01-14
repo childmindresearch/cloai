@@ -226,7 +226,7 @@ async def test_call_instructor_method(
         class Response(pydantic.BaseModel):
             message: Content = Content()
 
-        llm.client.chat.return_value = Response()
+        llm.client.chat.return_value = Response()  # type: ignore[attr-defined]
     else:
         llm._instructor.chat.completions.create.return_value = expected_response  # type: ignore[call-overload, attr-defined]
 
