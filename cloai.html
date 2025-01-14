@@ -96,6 +96,27 @@
 
             </li>
             <li>
+                    <a class="class" href="#OllamaLlm">OllamaLlm</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#OllamaLlm.__init__">OllamaLlm</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#OllamaLlm.model">model</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#OllamaLlm.client">client</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#OllamaLlm.run">run</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#OllamaLlm.call_instructor">call_instructor</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#OpenAiLlm">OpenAiLlm</a>
                             <ul class="memberlist">
                         <li>
@@ -159,12 +180,10 @@ supports OpenAI, Azure OpenAI, AWS Bedrock (Anthropic only), and Ollama:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cloai</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">instructor</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n"><a href="#OpenAiLlm">cloai.OpenAiLlm</a></span><span class="p">(</span>
-  <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your_key&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">,</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n"><a href="#OllamaLlm">cloai.OllamaLlm</a></span><span class="p">(</span>
+  <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama3.2&quot;</span><span class="p">,</span>
   <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:11434/v1&quot;</span><span class="p">,</span>
-  <span class="n">instructor_mode</span><span class="o">=</span><span class="n">instructor</span><span class="o">.</span><span class="n">Mode</span><span class="o">.</span><span class="n">JSON</span>
 <span class="p">)</span>
 </code></pre>
 </div>
@@ -246,13 +265,20 @@ synchronous environment, see <code>asyncio.run()</code>.</p>
 
                         <label class="view-source-button" for="mod-cloai-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="sd">&quot;&quot;&quot;.. include:: ../../README.md&quot;&quot;&quot;</span>  <span class="c1"># noqa: D415</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">cloai.llm.bedrock</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnthropicBedrockLlm</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">cloai.llm.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LargeLanguageModel</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">cloai.llm.openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">AzureLlm</span><span class="p">,</span> <span class="n">OpenAiLlm</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;AnthropicBedrockLlm&quot;</span><span class="p">,</span> <span class="s2">&quot;AzureLlm&quot;</span><span class="p">,</span> <span class="s2">&quot;LargeLanguageModel&quot;</span><span class="p">,</span> <span class="s2">&quot;OpenAiLlm&quot;</span><span class="p">)</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;.. include:: ../../README.md&quot;&quot;&quot;</span>  <span class="c1"># noqa: D415</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">cloai.llm.bedrock</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnthropicBedrockLlm</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">cloai.llm.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LargeLanguageModel</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">cloai.llm.ollama</span><span class="w"> </span><span class="kn">import</span> <span class="n">OllamaLlm</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">cloai.llm.openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">AzureLlm</span><span class="p">,</span> <span class="n">OpenAiLlm</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="s2">&quot;AnthropicBedrockLlm&quot;</span><span class="p">,</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="s2">&quot;AzureLlm&quot;</span><span class="p">,</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="s2">&quot;LargeLanguageModel&quot;</span><span class="p">,</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="s2">&quot;OllamaLlm&quot;</span><span class="p">,</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="s2">&quot;OpenAiLlm&quot;</span><span class="p">,</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="p">)</span>
 </span></pre></div>
 
 
@@ -310,36 +336,35 @@ synchronous environment, see <code>asyncio.run()</code>.</p>
 </span><span id="AnthropicBedrockLlm-63"><a href="#AnthropicBedrockLlm-63"><span class="linenos">63</span></a>            <span class="n">system</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
 </span><span id="AnthropicBedrockLlm-64"><a href="#AnthropicBedrockLlm-64"><span class="linenos">64</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">}],</span>
 </span><span id="AnthropicBedrockLlm-65"><a href="#AnthropicBedrockLlm-65"><span class="linenos">65</span></a>        <span class="p">)</span>
-</span><span id="AnthropicBedrockLlm-66"><a href="#AnthropicBedrockLlm-66"><span class="linenos">66</span></a>
-</span><span id="AnthropicBedrockLlm-67"><a href="#AnthropicBedrockLlm-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  <span class="c1"># type: ignore[union-attr]</span>
-</span><span id="AnthropicBedrockLlm-68"><a href="#AnthropicBedrockLlm-68"><span class="linenos">68</span></a>
-</span><span id="AnthropicBedrockLlm-69"><a href="#AnthropicBedrockLlm-69"><span class="linenos">69</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_instructor</span><span class="p">(</span>
-</span><span id="AnthropicBedrockLlm-70"><a href="#AnthropicBedrockLlm-70"><span class="linenos">70</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-71"><a href="#AnthropicBedrockLlm-71"><span class="linenos">71</span></a>        <span class="n">response_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
-</span><span id="AnthropicBedrockLlm-72"><a href="#AnthropicBedrockLlm-72"><span class="linenos">72</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-73"><a href="#AnthropicBedrockLlm-73"><span class="linenos">73</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-74"><a href="#AnthropicBedrockLlm-74"><span class="linenos">74</span></a>        <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-75"><a href="#AnthropicBedrockLlm-75"><span class="linenos">75</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AnthropicBedrockLlm-76"><a href="#AnthropicBedrockLlm-76"><span class="linenos">76</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a type-safe large language model query.</span>
-</span><span id="AnthropicBedrockLlm-77"><a href="#AnthropicBedrockLlm-77"><span class="linenos">77</span></a>
-</span><span id="AnthropicBedrockLlm-78"><a href="#AnthropicBedrockLlm-78"><span class="linenos">78</span></a><span class="sd">        Args:</span>
-</span><span id="AnthropicBedrockLlm-79"><a href="#AnthropicBedrockLlm-79"><span class="linenos">79</span></a><span class="sd">            response_model: The Pydantic response model.</span>
-</span><span id="AnthropicBedrockLlm-80"><a href="#AnthropicBedrockLlm-80"><span class="linenos">80</span></a><span class="sd">            system_prompt: The system prompt.</span>
-</span><span id="AnthropicBedrockLlm-81"><a href="#AnthropicBedrockLlm-81"><span class="linenos">81</span></a><span class="sd">            user_prompt: The user prompt.</span>
-</span><span id="AnthropicBedrockLlm-82"><a href="#AnthropicBedrockLlm-82"><span class="linenos">82</span></a><span class="sd">            max_tokens: The maximum number of tokens to allow.</span>
-</span><span id="AnthropicBedrockLlm-83"><a href="#AnthropicBedrockLlm-83"><span class="linenos">83</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnthropicBedrockLlm-84"><a href="#AnthropicBedrockLlm-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instructor</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>  <span class="c1"># type: ignore[type-var]</span>
-</span><span id="AnthropicBedrockLlm-85"><a href="#AnthropicBedrockLlm-85"><span class="linenos">85</span></a>            <span class="n">response_model</span><span class="o">=</span><span class="n">response_model</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-86"><a href="#AnthropicBedrockLlm-86"><span class="linenos">86</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
-</span><span id="AnthropicBedrockLlm-87"><a href="#AnthropicBedrockLlm-87"><span class="linenos">87</span></a>                <span class="p">{</span>
-</span><span id="AnthropicBedrockLlm-88"><a href="#AnthropicBedrockLlm-88"><span class="linenos">88</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-89"><a href="#AnthropicBedrockLlm-89"><span class="linenos">89</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-90"><a href="#AnthropicBedrockLlm-90"><span class="linenos">90</span></a>                <span class="p">},</span>
-</span><span id="AnthropicBedrockLlm-91"><a href="#AnthropicBedrockLlm-91"><span class="linenos">91</span></a>            <span class="p">],</span>
-</span><span id="AnthropicBedrockLlm-92"><a href="#AnthropicBedrockLlm-92"><span class="linenos">92</span></a>            <span class="n">system</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-93"><a href="#AnthropicBedrockLlm-93"><span class="linenos">93</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-94"><a href="#AnthropicBedrockLlm-94"><span class="linenos">94</span></a>            <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm-95"><a href="#AnthropicBedrockLlm-95"><span class="linenos">95</span></a>        <span class="p">)</span>
+</span><span id="AnthropicBedrockLlm-66"><a href="#AnthropicBedrockLlm-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  <span class="c1"># type: ignore[union-attr]</span>
+</span><span id="AnthropicBedrockLlm-67"><a href="#AnthropicBedrockLlm-67"><span class="linenos">67</span></a>
+</span><span id="AnthropicBedrockLlm-68"><a href="#AnthropicBedrockLlm-68"><span class="linenos">68</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_instructor</span><span class="p">(</span>
+</span><span id="AnthropicBedrockLlm-69"><a href="#AnthropicBedrockLlm-69"><span class="linenos">69</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-70"><a href="#AnthropicBedrockLlm-70"><span class="linenos">70</span></a>        <span class="n">response_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
+</span><span id="AnthropicBedrockLlm-71"><a href="#AnthropicBedrockLlm-71"><span class="linenos">71</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-72"><a href="#AnthropicBedrockLlm-72"><span class="linenos">72</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-73"><a href="#AnthropicBedrockLlm-73"><span class="linenos">73</span></a>        <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-74"><a href="#AnthropicBedrockLlm-74"><span class="linenos">74</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="AnthropicBedrockLlm-75"><a href="#AnthropicBedrockLlm-75"><span class="linenos">75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a type-safe large language model query.</span>
+</span><span id="AnthropicBedrockLlm-76"><a href="#AnthropicBedrockLlm-76"><span class="linenos">76</span></a>
+</span><span id="AnthropicBedrockLlm-77"><a href="#AnthropicBedrockLlm-77"><span class="linenos">77</span></a><span class="sd">        Args:</span>
+</span><span id="AnthropicBedrockLlm-78"><a href="#AnthropicBedrockLlm-78"><span class="linenos">78</span></a><span class="sd">            response_model: The Pydantic response model.</span>
+</span><span id="AnthropicBedrockLlm-79"><a href="#AnthropicBedrockLlm-79"><span class="linenos">79</span></a><span class="sd">            system_prompt: The system prompt.</span>
+</span><span id="AnthropicBedrockLlm-80"><a href="#AnthropicBedrockLlm-80"><span class="linenos">80</span></a><span class="sd">            user_prompt: The user prompt.</span>
+</span><span id="AnthropicBedrockLlm-81"><a href="#AnthropicBedrockLlm-81"><span class="linenos">81</span></a><span class="sd">            max_tokens: The maximum number of tokens to allow.</span>
+</span><span id="AnthropicBedrockLlm-82"><a href="#AnthropicBedrockLlm-82"><span class="linenos">82</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnthropicBedrockLlm-83"><a href="#AnthropicBedrockLlm-83"><span class="linenos">83</span></a>        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instructor</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>  <span class="c1"># type: ignore[type-var]</span>
+</span><span id="AnthropicBedrockLlm-84"><a href="#AnthropicBedrockLlm-84"><span class="linenos">84</span></a>            <span class="n">response_model</span><span class="o">=</span><span class="n">response_model</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-85"><a href="#AnthropicBedrockLlm-85"><span class="linenos">85</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span><span id="AnthropicBedrockLlm-86"><a href="#AnthropicBedrockLlm-86"><span class="linenos">86</span></a>                <span class="p">{</span>
+</span><span id="AnthropicBedrockLlm-87"><a href="#AnthropicBedrockLlm-87"><span class="linenos">87</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-88"><a href="#AnthropicBedrockLlm-88"><span class="linenos">88</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-89"><a href="#AnthropicBedrockLlm-89"><span class="linenos">89</span></a>                <span class="p">},</span>
+</span><span id="AnthropicBedrockLlm-90"><a href="#AnthropicBedrockLlm-90"><span class="linenos">90</span></a>            <span class="p">],</span>
+</span><span id="AnthropicBedrockLlm-91"><a href="#AnthropicBedrockLlm-91"><span class="linenos">91</span></a>            <span class="n">system</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-92"><a href="#AnthropicBedrockLlm-92"><span class="linenos">92</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-93"><a href="#AnthropicBedrockLlm-93"><span class="linenos">93</span></a>            <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm-94"><a href="#AnthropicBedrockLlm-94"><span class="linenos">94</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -437,8 +462,7 @@ synchronous environment, see <code>asyncio.run()</code>.</p>
 </span><span id="AnthropicBedrockLlm.run-63"><a href="#AnthropicBedrockLlm.run-63"><span class="linenos">63</span></a>            <span class="n">system</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
 </span><span id="AnthropicBedrockLlm.run-64"><a href="#AnthropicBedrockLlm.run-64"><span class="linenos">64</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">}],</span>
 </span><span id="AnthropicBedrockLlm.run-65"><a href="#AnthropicBedrockLlm.run-65"><span class="linenos">65</span></a>        <span class="p">)</span>
-</span><span id="AnthropicBedrockLlm.run-66"><a href="#AnthropicBedrockLlm.run-66"><span class="linenos">66</span></a>
-</span><span id="AnthropicBedrockLlm.run-67"><a href="#AnthropicBedrockLlm.run-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  <span class="c1"># type: ignore[union-attr]</span>
+</span><span id="AnthropicBedrockLlm.run-66"><a href="#AnthropicBedrockLlm.run-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>  <span class="c1"># type: ignore[union-attr]</span>
 </span></pre></div>
 
 
@@ -471,33 +495,33 @@ synchronous environment, see <code>asyncio.run()</code>.</p>
 
     </div>
     <a class="headerlink" href="#AnthropicBedrockLlm.call_instructor"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnthropicBedrockLlm.call_instructor-69"><a href="#AnthropicBedrockLlm.call_instructor-69"><span class="linenos">69</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_instructor</span><span class="p">(</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-70"><a href="#AnthropicBedrockLlm.call_instructor-70"><span class="linenos">70</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-71"><a href="#AnthropicBedrockLlm.call_instructor-71"><span class="linenos">71</span></a>        <span class="n">response_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-72"><a href="#AnthropicBedrockLlm.call_instructor-72"><span class="linenos">72</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-73"><a href="#AnthropicBedrockLlm.call_instructor-73"><span class="linenos">73</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-74"><a href="#AnthropicBedrockLlm.call_instructor-74"><span class="linenos">74</span></a>        <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-75"><a href="#AnthropicBedrockLlm.call_instructor-75"><span class="linenos">75</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-76"><a href="#AnthropicBedrockLlm.call_instructor-76"><span class="linenos">76</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a type-safe large language model query.</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-77"><a href="#AnthropicBedrockLlm.call_instructor-77"><span class="linenos">77</span></a>
-</span><span id="AnthropicBedrockLlm.call_instructor-78"><a href="#AnthropicBedrockLlm.call_instructor-78"><span class="linenos">78</span></a><span class="sd">        Args:</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-79"><a href="#AnthropicBedrockLlm.call_instructor-79"><span class="linenos">79</span></a><span class="sd">            response_model: The Pydantic response model.</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-80"><a href="#AnthropicBedrockLlm.call_instructor-80"><span class="linenos">80</span></a><span class="sd">            system_prompt: The system prompt.</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-81"><a href="#AnthropicBedrockLlm.call_instructor-81"><span class="linenos">81</span></a><span class="sd">            user_prompt: The user prompt.</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-82"><a href="#AnthropicBedrockLlm.call_instructor-82"><span class="linenos">82</span></a><span class="sd">            max_tokens: The maximum number of tokens to allow.</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-83"><a href="#AnthropicBedrockLlm.call_instructor-83"><span class="linenos">83</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-84"><a href="#AnthropicBedrockLlm.call_instructor-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instructor</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>  <span class="c1"># type: ignore[type-var]</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-85"><a href="#AnthropicBedrockLlm.call_instructor-85"><span class="linenos">85</span></a>            <span class="n">response_model</span><span class="o">=</span><span class="n">response_model</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-86"><a href="#AnthropicBedrockLlm.call_instructor-86"><span class="linenos">86</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-87"><a href="#AnthropicBedrockLlm.call_instructor-87"><span class="linenos">87</span></a>                <span class="p">{</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-88"><a href="#AnthropicBedrockLlm.call_instructor-88"><span class="linenos">88</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-89"><a href="#AnthropicBedrockLlm.call_instructor-89"><span class="linenos">89</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-90"><a href="#AnthropicBedrockLlm.call_instructor-90"><span class="linenos">90</span></a>                <span class="p">},</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-91"><a href="#AnthropicBedrockLlm.call_instructor-91"><span class="linenos">91</span></a>            <span class="p">],</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-92"><a href="#AnthropicBedrockLlm.call_instructor-92"><span class="linenos">92</span></a>            <span class="n">system</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-93"><a href="#AnthropicBedrockLlm.call_instructor-93"><span class="linenos">93</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-94"><a href="#AnthropicBedrockLlm.call_instructor-94"><span class="linenos">94</span></a>            <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
-</span><span id="AnthropicBedrockLlm.call_instructor-95"><a href="#AnthropicBedrockLlm.call_instructor-95"><span class="linenos">95</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnthropicBedrockLlm.call_instructor-68"><a href="#AnthropicBedrockLlm.call_instructor-68"><span class="linenos">68</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_instructor</span><span class="p">(</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-69"><a href="#AnthropicBedrockLlm.call_instructor-69"><span class="linenos">69</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-70"><a href="#AnthropicBedrockLlm.call_instructor-70"><span class="linenos">70</span></a>        <span class="n">response_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-71"><a href="#AnthropicBedrockLlm.call_instructor-71"><span class="linenos">71</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-72"><a href="#AnthropicBedrockLlm.call_instructor-72"><span class="linenos">72</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-73"><a href="#AnthropicBedrockLlm.call_instructor-73"><span class="linenos">73</span></a>        <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-74"><a href="#AnthropicBedrockLlm.call_instructor-74"><span class="linenos">74</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-75"><a href="#AnthropicBedrockLlm.call_instructor-75"><span class="linenos">75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a type-safe large language model query.</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-76"><a href="#AnthropicBedrockLlm.call_instructor-76"><span class="linenos">76</span></a>
+</span><span id="AnthropicBedrockLlm.call_instructor-77"><a href="#AnthropicBedrockLlm.call_instructor-77"><span class="linenos">77</span></a><span class="sd">        Args:</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-78"><a href="#AnthropicBedrockLlm.call_instructor-78"><span class="linenos">78</span></a><span class="sd">            response_model: The Pydantic response model.</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-79"><a href="#AnthropicBedrockLlm.call_instructor-79"><span class="linenos">79</span></a><span class="sd">            system_prompt: The system prompt.</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-80"><a href="#AnthropicBedrockLlm.call_instructor-80"><span class="linenos">80</span></a><span class="sd">            user_prompt: The user prompt.</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-81"><a href="#AnthropicBedrockLlm.call_instructor-81"><span class="linenos">81</span></a><span class="sd">            max_tokens: The maximum number of tokens to allow.</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-82"><a href="#AnthropicBedrockLlm.call_instructor-82"><span class="linenos">82</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-83"><a href="#AnthropicBedrockLlm.call_instructor-83"><span class="linenos">83</span></a>        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instructor</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>  <span class="c1"># type: ignore[type-var]</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-84"><a href="#AnthropicBedrockLlm.call_instructor-84"><span class="linenos">84</span></a>            <span class="n">response_model</span><span class="o">=</span><span class="n">response_model</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-85"><a href="#AnthropicBedrockLlm.call_instructor-85"><span class="linenos">85</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-86"><a href="#AnthropicBedrockLlm.call_instructor-86"><span class="linenos">86</span></a>                <span class="p">{</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-87"><a href="#AnthropicBedrockLlm.call_instructor-87"><span class="linenos">87</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-88"><a href="#AnthropicBedrockLlm.call_instructor-88"><span class="linenos">88</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-89"><a href="#AnthropicBedrockLlm.call_instructor-89"><span class="linenos">89</span></a>                <span class="p">},</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-90"><a href="#AnthropicBedrockLlm.call_instructor-90"><span class="linenos">90</span></a>            <span class="p">],</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-91"><a href="#AnthropicBedrockLlm.call_instructor-91"><span class="linenos">91</span></a>            <span class="n">system</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-92"><a href="#AnthropicBedrockLlm.call_instructor-92"><span class="linenos">92</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-93"><a href="#AnthropicBedrockLlm.call_instructor-93"><span class="linenos">93</span></a>            <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+</span><span id="AnthropicBedrockLlm.call_instructor-94"><a href="#AnthropicBedrockLlm.call_instructor-94"><span class="linenos">94</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -1242,6 +1266,292 @@ each summary.</li>
   in Natural Language Processing. Conference on Empirical Methods in
   Natural Language Processing (Vol. 2023, No. 4th New Frontier
   Summarization Workshop, p. 68).</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                </section>
+                <section id="OllamaLlm">
+                            <input id="OllamaLlm-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">OllamaLlm</span><wbr>(<span class="base">cloai.llm.utils.LlmBaseClass</span>):
+
+                <label class="view-source-button" for="OllamaLlm-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#OllamaLlm"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="OllamaLlm-15"><a href="#OllamaLlm-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">OllamaLlm</span><span class="p">(</span><span class="n">LlmBaseClass</span><span class="p">):</span>
+</span><span id="OllamaLlm-16"><a href="#OllamaLlm-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Client for Ollama API.&quot;&quot;&quot;</span>
+</span><span id="OllamaLlm-17"><a href="#OllamaLlm-17"><span class="linenos">17</span></a>
+</span><span id="OllamaLlm-18"><a href="#OllamaLlm-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="OllamaLlm-19"><a href="#OllamaLlm-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="OllamaLlm-20"><a href="#OllamaLlm-20"><span class="linenos">20</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm-21"><a href="#OllamaLlm-21"><span class="linenos">21</span></a>        <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm-22"><a href="#OllamaLlm-22"><span class="linenos">22</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="OllamaLlm-23"><a href="#OllamaLlm-23"><span class="linenos">23</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize Ollama client.</span>
+</span><span id="OllamaLlm-24"><a href="#OllamaLlm-24"><span class="linenos">24</span></a>
+</span><span id="OllamaLlm-25"><a href="#OllamaLlm-25"><span class="linenos">25</span></a><span class="sd">        Args:</span>
+</span><span id="OllamaLlm-26"><a href="#OllamaLlm-26"><span class="linenos">26</span></a><span class="sd">            model: The model to run, must already be installed on the host via ollama.</span>
+</span><span id="OllamaLlm-27"><a href="#OllamaLlm-27"><span class="linenos">27</span></a><span class="sd">            base_url: The URL of the Ollama API.</span>
+</span><span id="OllamaLlm-28"><a href="#OllamaLlm-28"><span class="linenos">28</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="OllamaLlm-29"><a href="#OllamaLlm-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+</span><span id="OllamaLlm-30"><a href="#OllamaLlm-30"><span class="linenos">30</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">base_url</span><span class="p">)</span>
+</span><span id="OllamaLlm-31"><a href="#OllamaLlm-31"><span class="linenos">31</span></a>
+</span><span id="OllamaLlm-32"><a href="#OllamaLlm-32"><span class="linenos">32</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="OllamaLlm-33"><a href="#OllamaLlm-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call Ollama model.&quot;&quot;&quot;</span>
+</span><span id="OllamaLlm-34"><a href="#OllamaLlm-34"><span class="linenos">34</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+</span><span id="OllamaLlm-35"><a href="#OllamaLlm-35"><span class="linenos">35</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+</span><span id="OllamaLlm-36"><a href="#OllamaLlm-36"><span class="linenos">36</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span><span id="OllamaLlm-37"><a href="#OllamaLlm-37"><span class="linenos">37</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm-38"><a href="#OllamaLlm-38"><span class="linenos">38</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm-39"><a href="#OllamaLlm-39"><span class="linenos">39</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm-40"><a href="#OllamaLlm-40"><span class="linenos">40</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm-41"><a href="#OllamaLlm-41"><span class="linenos">41</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm-42"><a href="#OllamaLlm-42"><span class="linenos">42</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm-43"><a href="#OllamaLlm-43"><span class="linenos">43</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm-44"><a href="#OllamaLlm-44"><span class="linenos">44</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm-45"><a href="#OllamaLlm-45"><span class="linenos">45</span></a>            <span class="p">],</span>
+</span><span id="OllamaLlm-46"><a href="#OllamaLlm-46"><span class="linenos">46</span></a>        <span class="p">)</span>
+</span><span id="OllamaLlm-47"><a href="#OllamaLlm-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+</span><span id="OllamaLlm-48"><a href="#OllamaLlm-48"><span class="linenos">48</span></a>
+</span><span id="OllamaLlm-49"><a href="#OllamaLlm-49"><span class="linenos">49</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_instructor</span><span class="p">(</span>
+</span><span id="OllamaLlm-50"><a href="#OllamaLlm-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="OllamaLlm-51"><a href="#OllamaLlm-51"><span class="linenos">51</span></a>        <span class="n">response_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
+</span><span id="OllamaLlm-52"><a href="#OllamaLlm-52"><span class="linenos">52</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm-53"><a href="#OllamaLlm-53"><span class="linenos">53</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm-54"><a href="#OllamaLlm-54"><span class="linenos">54</span></a>        <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">,</span>
+</span><span id="OllamaLlm-55"><a href="#OllamaLlm-55"><span class="linenos">55</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="OllamaLlm-56"><a href="#OllamaLlm-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a type-safe large language model query.</span>
+</span><span id="OllamaLlm-57"><a href="#OllamaLlm-57"><span class="linenos">57</span></a>
+</span><span id="OllamaLlm-58"><a href="#OllamaLlm-58"><span class="linenos">58</span></a><span class="sd">        This function uses Pydantic to convert any arbitrary class to JSON</span>
+</span><span id="OllamaLlm-59"><a href="#OllamaLlm-59"><span class="linenos">59</span></a><span class="sd">        schema. This is unlikely to be fool-proof, but we can deal with issues</span>
+</span><span id="OllamaLlm-60"><a href="#OllamaLlm-60"><span class="linenos">60</span></a><span class="sd">        as they arise.</span>
+</span><span id="OllamaLlm-61"><a href="#OllamaLlm-61"><span class="linenos">61</span></a>
+</span><span id="OllamaLlm-62"><a href="#OllamaLlm-62"><span class="linenos">62</span></a><span class="sd">        Args:</span>
+</span><span id="OllamaLlm-63"><a href="#OllamaLlm-63"><span class="linenos">63</span></a><span class="sd">            response_model: The Pydantic response model.</span>
+</span><span id="OllamaLlm-64"><a href="#OllamaLlm-64"><span class="linenos">64</span></a><span class="sd">            system_prompt: The system prompt.</span>
+</span><span id="OllamaLlm-65"><a href="#OllamaLlm-65"><span class="linenos">65</span></a><span class="sd">            user_prompt: The user prompt.</span>
+</span><span id="OllamaLlm-66"><a href="#OllamaLlm-66"><span class="linenos">66</span></a><span class="sd">            max_tokens: The maximum number of tokens to allow.</span>
+</span><span id="OllamaLlm-67"><a href="#OllamaLlm-67"><span class="linenos">67</span></a>
+</span><span id="OllamaLlm-68"><a href="#OllamaLlm-68"><span class="linenos">68</span></a><span class="sd">        Returns:</span>
+</span><span id="OllamaLlm-69"><a href="#OllamaLlm-69"><span class="linenos">69</span></a><span class="sd">            The response as the requested object.</span>
+</span><span id="OllamaLlm-70"><a href="#OllamaLlm-70"><span class="linenos">70</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="OllamaLlm-71"><a href="#OllamaLlm-71"><span class="linenos">71</span></a>        <span class="n">default_max_tokens</span> <span class="o">=</span> <span class="mi">4096</span>
+</span><span id="OllamaLlm-72"><a href="#OllamaLlm-72"><span class="linenos">72</span></a>        <span class="k">if</span> <span class="n">max_tokens</span> <span class="o">!=</span> <span class="n">default_max_tokens</span><span class="p">:</span>
+</span><span id="OllamaLlm-73"><a href="#OllamaLlm-73"><span class="linenos">73</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;max_tokens has not yet been implemented in Ollama.&quot;</span>
+</span><span id="OllamaLlm-74"><a href="#OllamaLlm-74"><span class="linenos">74</span></a>            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span id="OllamaLlm-75"><a href="#OllamaLlm-75"><span class="linenos">75</span></a>
+</span><span id="OllamaLlm-76"><a href="#OllamaLlm-76"><span class="linenos">76</span></a>        <span class="c1"># Use Pydantic for converting an arbitrary class to JSON schema.</span>
+</span><span id="OllamaLlm-77"><a href="#OllamaLlm-77"><span class="linenos">77</span></a>        <span class="n">schema</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span>
+</span><span id="OllamaLlm-78"><a href="#OllamaLlm-78"><span class="linenos">78</span></a>            <span class="n">response_model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+</span><span id="OllamaLlm-79"><a href="#OllamaLlm-79"><span class="linenos">79</span></a>            <span class="n">field</span><span class="o">=</span><span class="p">(</span><span class="n">response_model</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>
+</span><span id="OllamaLlm-80"><a href="#OllamaLlm-80"><span class="linenos">80</span></a>        <span class="p">)</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">()</span>
+</span><span id="OllamaLlm-81"><a href="#OllamaLlm-81"><span class="linenos">81</span></a>
+</span><span id="OllamaLlm-82"><a href="#OllamaLlm-82"><span class="linenos">82</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+</span><span id="OllamaLlm-83"><a href="#OllamaLlm-83"><span class="linenos">83</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+</span><span id="OllamaLlm-84"><a href="#OllamaLlm-84"><span class="linenos">84</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span><span id="OllamaLlm-85"><a href="#OllamaLlm-85"><span class="linenos">85</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm-86"><a href="#OllamaLlm-86"><span class="linenos">86</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm-87"><a href="#OllamaLlm-87"><span class="linenos">87</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm-88"><a href="#OllamaLlm-88"><span class="linenos">88</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm-89"><a href="#OllamaLlm-89"><span class="linenos">89</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm-90"><a href="#OllamaLlm-90"><span class="linenos">90</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm-91"><a href="#OllamaLlm-91"><span class="linenos">91</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm-92"><a href="#OllamaLlm-92"><span class="linenos">92</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm-93"><a href="#OllamaLlm-93"><span class="linenos">93</span></a>            <span class="p">],</span>
+</span><span id="OllamaLlm-94"><a href="#OllamaLlm-94"><span class="linenos">94</span></a>            <span class="nb">format</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+</span><span id="OllamaLlm-95"><a href="#OllamaLlm-95"><span class="linenos">95</span></a>        <span class="p">)</span>
+</span><span id="OllamaLlm-96"><a href="#OllamaLlm-96"><span class="linenos">96</span></a>
+</span><span id="OllamaLlm-97"><a href="#OllamaLlm-97"><span class="linenos">97</span></a>        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span>
+</span><span id="OllamaLlm-98"><a href="#OllamaLlm-98"><span class="linenos">98</span></a>        <span class="k">return</span> <span class="n">_model_and_data_to_object</span><span class="p">(</span><span class="n">response_model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Client for Ollama API.</p>
+</div>
+
+
+                            <div id="OllamaLlm.__init__" class="classattr">
+                                        <input id="OllamaLlm.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">OllamaLlm</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">model</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span></span>)</span>
+
+                <label class="view-source-button" for="OllamaLlm.__init__-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#OllamaLlm.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="OllamaLlm.__init__-18"><a href="#OllamaLlm.__init__-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="OllamaLlm.__init__-19"><a href="#OllamaLlm.__init__-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="OllamaLlm.__init__-20"><a href="#OllamaLlm.__init__-20"><span class="linenos">20</span></a>        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm.__init__-21"><a href="#OllamaLlm.__init__-21"><span class="linenos">21</span></a>        <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm.__init__-22"><a href="#OllamaLlm.__init__-22"><span class="linenos">22</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="OllamaLlm.__init__-23"><a href="#OllamaLlm.__init__-23"><span class="linenos">23</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize Ollama client.</span>
+</span><span id="OllamaLlm.__init__-24"><a href="#OllamaLlm.__init__-24"><span class="linenos">24</span></a>
+</span><span id="OllamaLlm.__init__-25"><a href="#OllamaLlm.__init__-25"><span class="linenos">25</span></a><span class="sd">        Args:</span>
+</span><span id="OllamaLlm.__init__-26"><a href="#OllamaLlm.__init__-26"><span class="linenos">26</span></a><span class="sd">            model: The model to run, must already be installed on the host via ollama.</span>
+</span><span id="OllamaLlm.__init__-27"><a href="#OllamaLlm.__init__-27"><span class="linenos">27</span></a><span class="sd">            base_url: The URL of the Ollama API.</span>
+</span><span id="OllamaLlm.__init__-28"><a href="#OllamaLlm.__init__-28"><span class="linenos">28</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="OllamaLlm.__init__-29"><a href="#OllamaLlm.__init__-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+</span><span id="OllamaLlm.__init__-30"><a href="#OllamaLlm.__init__-30"><span class="linenos">30</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">base_url</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Initialize Ollama client.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>model:</strong>  The model to run, must already be installed on the host via ollama.</li>
+<li><strong>base_url:</strong>  The URL of the Ollama API.</li>
+</ul>
+</div>
+
+
+                            </div>
+                            <div id="OllamaLlm.model" class="classattr">
+                                <div class="attr variable">
+            <span class="name">model</span>
+
+        
+    </div>
+    <a class="headerlink" href="#OllamaLlm.model"></a>
+    
+    
+
+                            </div>
+                            <div id="OllamaLlm.client" class="classattr">
+                                <div class="attr variable">
+            <span class="name">client</span>
+
+        
+    </div>
+    <a class="headerlink" href="#OllamaLlm.client"></a>
+    
+    
+
+                            </div>
+                            <div id="OllamaLlm.run" class="classattr">
+                                        <input id="OllamaLlm.run-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">async def</span>
+        <span class="name">run</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+
+                <label class="view-source-button" for="OllamaLlm.run-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#OllamaLlm.run"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="OllamaLlm.run-32"><a href="#OllamaLlm.run-32"><span class="linenos">32</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="OllamaLlm.run-33"><a href="#OllamaLlm.run-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call Ollama model.&quot;&quot;&quot;</span>
+</span><span id="OllamaLlm.run-34"><a href="#OllamaLlm.run-34"><span class="linenos">34</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+</span><span id="OllamaLlm.run-35"><a href="#OllamaLlm.run-35"><span class="linenos">35</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+</span><span id="OllamaLlm.run-36"><a href="#OllamaLlm.run-36"><span class="linenos">36</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span><span id="OllamaLlm.run-37"><a href="#OllamaLlm.run-37"><span class="linenos">37</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm.run-38"><a href="#OllamaLlm.run-38"><span class="linenos">38</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm.run-39"><a href="#OllamaLlm.run-39"><span class="linenos">39</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm.run-40"><a href="#OllamaLlm.run-40"><span class="linenos">40</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm.run-41"><a href="#OllamaLlm.run-41"><span class="linenos">41</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm.run-42"><a href="#OllamaLlm.run-42"><span class="linenos">42</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm.run-43"><a href="#OllamaLlm.run-43"><span class="linenos">43</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm.run-44"><a href="#OllamaLlm.run-44"><span class="linenos">44</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm.run-45"><a href="#OllamaLlm.run-45"><span class="linenos">45</span></a>            <span class="p">],</span>
+</span><span id="OllamaLlm.run-46"><a href="#OllamaLlm.run-46"><span class="linenos">46</span></a>        <span class="p">)</span>
+</span><span id="OllamaLlm.run-47"><a href="#OllamaLlm.run-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Call Ollama model.</p>
+</div>
+
+
+                            </div>
+                            <div id="OllamaLlm.call_instructor" class="classattr">
+                                        <input id="OllamaLlm.call_instructor-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">async def</span>
+        <span class="name">call_instructor</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">response_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="o">~</span><span class="n">T</span><span class="p">]</span>,</span><span class="param">	<span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span></span><span class="return-annotation">) -> <span class="o">~</span><span class="n">T</span>:</span></span>
+
+                <label class="view-source-button" for="OllamaLlm.call_instructor-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#OllamaLlm.call_instructor"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="OllamaLlm.call_instructor-49"><a href="#OllamaLlm.call_instructor-49"><span class="linenos">49</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_instructor</span><span class="p">(</span>
+</span><span id="OllamaLlm.call_instructor-50"><a href="#OllamaLlm.call_instructor-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-51"><a href="#OllamaLlm.call_instructor-51"><span class="linenos">51</span></a>        <span class="n">response_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
+</span><span id="OllamaLlm.call_instructor-52"><a href="#OllamaLlm.call_instructor-52"><span class="linenos">52</span></a>        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-53"><a href="#OllamaLlm.call_instructor-53"><span class="linenos">53</span></a>        <span class="n">user_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-54"><a href="#OllamaLlm.call_instructor-54"><span class="linenos">54</span></a>        <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-55"><a href="#OllamaLlm.call_instructor-55"><span class="linenos">55</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="OllamaLlm.call_instructor-56"><a href="#OllamaLlm.call_instructor-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a type-safe large language model query.</span>
+</span><span id="OllamaLlm.call_instructor-57"><a href="#OllamaLlm.call_instructor-57"><span class="linenos">57</span></a>
+</span><span id="OllamaLlm.call_instructor-58"><a href="#OllamaLlm.call_instructor-58"><span class="linenos">58</span></a><span class="sd">        This function uses Pydantic to convert any arbitrary class to JSON</span>
+</span><span id="OllamaLlm.call_instructor-59"><a href="#OllamaLlm.call_instructor-59"><span class="linenos">59</span></a><span class="sd">        schema. This is unlikely to be fool-proof, but we can deal with issues</span>
+</span><span id="OllamaLlm.call_instructor-60"><a href="#OllamaLlm.call_instructor-60"><span class="linenos">60</span></a><span class="sd">        as they arise.</span>
+</span><span id="OllamaLlm.call_instructor-61"><a href="#OllamaLlm.call_instructor-61"><span class="linenos">61</span></a>
+</span><span id="OllamaLlm.call_instructor-62"><a href="#OllamaLlm.call_instructor-62"><span class="linenos">62</span></a><span class="sd">        Args:</span>
+</span><span id="OllamaLlm.call_instructor-63"><a href="#OllamaLlm.call_instructor-63"><span class="linenos">63</span></a><span class="sd">            response_model: The Pydantic response model.</span>
+</span><span id="OllamaLlm.call_instructor-64"><a href="#OllamaLlm.call_instructor-64"><span class="linenos">64</span></a><span class="sd">            system_prompt: The system prompt.</span>
+</span><span id="OllamaLlm.call_instructor-65"><a href="#OllamaLlm.call_instructor-65"><span class="linenos">65</span></a><span class="sd">            user_prompt: The user prompt.</span>
+</span><span id="OllamaLlm.call_instructor-66"><a href="#OllamaLlm.call_instructor-66"><span class="linenos">66</span></a><span class="sd">            max_tokens: The maximum number of tokens to allow.</span>
+</span><span id="OllamaLlm.call_instructor-67"><a href="#OllamaLlm.call_instructor-67"><span class="linenos">67</span></a>
+</span><span id="OllamaLlm.call_instructor-68"><a href="#OllamaLlm.call_instructor-68"><span class="linenos">68</span></a><span class="sd">        Returns:</span>
+</span><span id="OllamaLlm.call_instructor-69"><a href="#OllamaLlm.call_instructor-69"><span class="linenos">69</span></a><span class="sd">            The response as the requested object.</span>
+</span><span id="OllamaLlm.call_instructor-70"><a href="#OllamaLlm.call_instructor-70"><span class="linenos">70</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="OllamaLlm.call_instructor-71"><a href="#OllamaLlm.call_instructor-71"><span class="linenos">71</span></a>        <span class="n">default_max_tokens</span> <span class="o">=</span> <span class="mi">4096</span>
+</span><span id="OllamaLlm.call_instructor-72"><a href="#OllamaLlm.call_instructor-72"><span class="linenos">72</span></a>        <span class="k">if</span> <span class="n">max_tokens</span> <span class="o">!=</span> <span class="n">default_max_tokens</span><span class="p">:</span>
+</span><span id="OllamaLlm.call_instructor-73"><a href="#OllamaLlm.call_instructor-73"><span class="linenos">73</span></a>            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;max_tokens has not yet been implemented in Ollama.&quot;</span>
+</span><span id="OllamaLlm.call_instructor-74"><a href="#OllamaLlm.call_instructor-74"><span class="linenos">74</span></a>            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span id="OllamaLlm.call_instructor-75"><a href="#OllamaLlm.call_instructor-75"><span class="linenos">75</span></a>
+</span><span id="OllamaLlm.call_instructor-76"><a href="#OllamaLlm.call_instructor-76"><span class="linenos">76</span></a>        <span class="c1"># Use Pydantic for converting an arbitrary class to JSON schema.</span>
+</span><span id="OllamaLlm.call_instructor-77"><a href="#OllamaLlm.call_instructor-77"><span class="linenos">77</span></a>        <span class="n">schema</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span>
+</span><span id="OllamaLlm.call_instructor-78"><a href="#OllamaLlm.call_instructor-78"><span class="linenos">78</span></a>            <span class="n">response_model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-79"><a href="#OllamaLlm.call_instructor-79"><span class="linenos">79</span></a>            <span class="n">field</span><span class="o">=</span><span class="p">(</span><span class="n">response_model</span><span class="p">,</span> <span class="o">...</span><span class="p">),</span>
+</span><span id="OllamaLlm.call_instructor-80"><a href="#OllamaLlm.call_instructor-80"><span class="linenos">80</span></a>        <span class="p">)</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">()</span>
+</span><span id="OllamaLlm.call_instructor-81"><a href="#OllamaLlm.call_instructor-81"><span class="linenos">81</span></a>
+</span><span id="OllamaLlm.call_instructor-82"><a href="#OllamaLlm.call_instructor-82"><span class="linenos">82</span></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
+</span><span id="OllamaLlm.call_instructor-83"><a href="#OllamaLlm.call_instructor-83"><span class="linenos">83</span></a>            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-84"><a href="#OllamaLlm.call_instructor-84"><span class="linenos">84</span></a>            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+</span><span id="OllamaLlm.call_instructor-85"><a href="#OllamaLlm.call_instructor-85"><span class="linenos">85</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm.call_instructor-86"><a href="#OllamaLlm.call_instructor-86"><span class="linenos">86</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-87"><a href="#OllamaLlm.call_instructor-87"><span class="linenos">87</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-88"><a href="#OllamaLlm.call_instructor-88"><span class="linenos">88</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm.call_instructor-89"><a href="#OllamaLlm.call_instructor-89"><span class="linenos">89</span></a>                <span class="p">{</span>
+</span><span id="OllamaLlm.call_instructor-90"><a href="#OllamaLlm.call_instructor-90"><span class="linenos">90</span></a>                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-91"><a href="#OllamaLlm.call_instructor-91"><span class="linenos">91</span></a>                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_prompt</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-92"><a href="#OllamaLlm.call_instructor-92"><span class="linenos">92</span></a>                <span class="p">},</span>
+</span><span id="OllamaLlm.call_instructor-93"><a href="#OllamaLlm.call_instructor-93"><span class="linenos">93</span></a>            <span class="p">],</span>
+</span><span id="OllamaLlm.call_instructor-94"><a href="#OllamaLlm.call_instructor-94"><span class="linenos">94</span></a>            <span class="nb">format</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+</span><span id="OllamaLlm.call_instructor-95"><a href="#OllamaLlm.call_instructor-95"><span class="linenos">95</span></a>        <span class="p">)</span>
+</span><span id="OllamaLlm.call_instructor-96"><a href="#OllamaLlm.call_instructor-96"><span class="linenos">96</span></a>
+</span><span id="OllamaLlm.call_instructor-97"><a href="#OllamaLlm.call_instructor-97"><span class="linenos">97</span></a>        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span>
+</span><span id="OllamaLlm.call_instructor-98"><a href="#OllamaLlm.call_instructor-98"><span class="linenos">98</span></a>        <span class="k">return</span> <span class="n">_model_and_data_to_object</span><span class="p">(</span><span class="n">response_model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Run a type-safe large language model query.</p>
+
+<p>This function uses Pydantic to convert any arbitrary class to JSON
+schema. This is unlikely to be fool-proof, but we can deal with issues
+as they arise.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>response_model:</strong>  The Pydantic response model.</li>
+<li><strong>system_prompt:</strong>  The system prompt.</li>
+<li><strong>user_prompt:</strong>  The user prompt.</li>
+<li><strong>max_tokens:</strong>  The maximum number of tokens to allow.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>The response as the requested object.</p>
 </blockquote>
 </div>
 
