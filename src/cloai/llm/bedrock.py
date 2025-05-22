@@ -15,6 +15,8 @@ ANTHROPIC_BEDROCK_MODELS = Literal[
     "anthropic.claude-3-opus-20240229-v1:0",
     "anthropic.claude-3-5-haiku-20241022-v1:0",
     "anthropic.claude-3-haiku-20240307-v1:0",
+    "anthropic.claude-sonnet-4-20250514-v1:0",
+    "anthropic.claude-opus-4-20250514-v1:0",
 ]
 
 T = TypeVar("T")
@@ -31,7 +33,7 @@ class AnthropicBedrockLlm(utils.LlmBaseClass):
 
     def __init__(
         self,
-        model: ANTHROPIC_BEDROCK_MODELS,
+        model: ANTHROPIC_BEDROCK_MODELS | str,
         *,
         aws_access_key: str,
         aws_secret_key: str,
