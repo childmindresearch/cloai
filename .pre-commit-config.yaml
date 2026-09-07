@@ -2,13 +2,13 @@ fail_fast: false
 
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.8.6
+  rev: v0.16.6
   hooks:
   - id: ruff
   - id: ruff-format
 
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.14.0
+  rev: v2.16.0
   hooks:
   - id: pretty-format-yaml
     args:
@@ -22,7 +22,7 @@ repos:
     - --no-sort
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
   - id: check-case-conflict
   - id: end-of-file-fixer
