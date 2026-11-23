@@ -31,8 +31,8 @@ client = cloai.OpenAiLlm(api_key="your_key", model="gpt-4o")
 import cloai
 
 client = cloai.OllamaLlm(
-  model="llama3.2",
-  base_url="http://localhost:11434/v1",
+    model="llama3.2",
+    base_url="http://localhost:11434/v1",
 )
 ```
 
@@ -41,10 +41,10 @@ client = cloai.OllamaLlm(
 import cloai
 
 client = cloai.AzureLlm(
-  api_key="your_key",
-  endpoint="your_endpoint",
-  api_version="version_number",
-  deployment="your_deployment"
+    api_key="your_key",
+    endpoint="your_endpoint",
+    api_version="version_number",
+    deployment="your_deployment",
 )
 ```
 
@@ -53,10 +53,10 @@ client = cloai.AzureLlm(
 import cloai
 
 client = cloai.AnthropicBedrockLlm(
-  model="anthropic.claude-3-5-sonnet-20241022-v2:0",
-  aws_access_key="YOUR_ACCESS_KEY",
-  aws_secret_key="YOUR_SECRET_KEY",
-  region="REGION",
+    model="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    aws_access_key="YOUR_ACCESS_KEY",
+    aws_secret_key="YOUR_SECRET_KEY",
+    region="REGION",
 )
 ```
 
@@ -74,14 +74,16 @@ model = cloai.LargeLanguageModel(client=client)
 # Standard prompt
 result = await model.run(system_prompt, user_prompt)
 
+
 # Instructor
 class Response(pydantic.BaseModel):
     is_scary: bool
 
+
 result = await model.call_instructor(
-  response_model=Response,
-  system_prompt="Tell the user if a movie is scary.",
-  user_prompt="Scary movie 3."
+    response_model=Response,
+    system_prompt="Tell the user if a movie is scary.",
+    user_prompt="Scary movie 3.",
 )
 
 # Chain of verification
